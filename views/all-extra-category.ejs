@@ -1,0 +1,101 @@
+<%- include('header'); -%>
+
+<!-- Breadcrumb -->
+<div class="mb-4 fs-5 rounded p-2 border-bottom py-4">
+  <div class="container">
+    <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+      <ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item">
+          <a href="/all-category">All Categories</a>
+        </li>
+
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- Categories Section -->
+<div class="container mb-5">
+  <h1 class="fs-4 fw-medium mb-5" style="color: #1a63a6">Popular Categories</h1>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-md-6" id="categoryContainer">
+    <% for (var i=0; i < (extraCat.length < 100 ? extraCat.length : 100); i++) {%>
+    <a href="/product/<%= extraCat[i].extra_cat_id  %>?name=<%= extraCat[i].extra_cat_name %>">
+      <div class="col mb-5">
+        <div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+          <div style="height: 20rem">
+            <img src="<%= extraCat[i].extra_cat_image_url %>" class="card-img h-100 rounded-2"
+              style="object-fit: cover" />
+          </div>
+          <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+            <h5 class="card-title text-white text-center">
+              <%= extraCat[i].extra_cat_name %>
+            </h5>
+          </div>
+        </div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+  <div class="text-center">
+    <button id="seeMoreBtn" class="btn btn-primary">See More</button>
+  </div>
+</div>
+
+<!-- Add this script to your HTML -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    var extraCat = [];
+    var currentCategoryIndex = 100;
+    var categoriesPerPage = 20;
+    var extraCat_length = 100;
+    currentCategoryIndex = (currentCategoryIndex >= extraCat_length) ? extraCat_length : currentCategoryIndex;
+
+    function loadCategories() {
+      for (var i = 0;
+        (i < categoriesPerPage) && (currentCategoryIndex < extraCat.length); i++) {
+        console.log('Current Index: ', currentCategoryIndex + i);
+        var category = extraCat[currentCategoryIndex + i];
+        var categoryHtml = `
+						<a href="/product/${category.extra_cat_id}">
+								<div class="col mb-5">
+										<div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+										  <div style="height: 20rem">
+										    <img src="${category.extra_cat_image_url}" class="card-img h-100 rounded-2" style="object-fit: cover" />
+										  </div>
+										  <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+										    <h5 class="card-title text-white text-center">${category.extra_cat_name}</h5>
+										  </div>
+										</div>
+								</div>
+						</a>
+				`;
+        $("#categoryContainer").append(categoryHtml);
+      }
+      if (currentCategoryIndex >= extraCat.length) {
+        $("#seeMoreBtn").hide();
+      }
+      currentCategoryIndex = currentCategoryIndex + categoriesPerPage;
+    }
+
+
+
+    // Handle "See More" button click
+    // Fetch the categories from the server initially
+    $.get('/api/all-extra-category', function (data) {
+      extraCat = data.extraCat;
+      extraCat_length = extraCat.length;
+      loadCategories();
+    });
+
+    // Handle "See More" button click
+    $("#seeMoreBtn").on("click", function () {
+      loadCategories();
+    });
+  });
+</script>
+
+
+<%- include('footer'); -%>

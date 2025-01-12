@@ -1,0 +1,490 @@
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .cart-products {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    .cart-products {
+      width: 80%;
+      /* Reduce width for tablet */
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    .cart-item {
+      padding: 1rem;
+    }
+
+    .cart-item img {
+      width: 50px;
+      height: auto;
+    }
+
+    .place-order {
+      width: 50%;
+      margin: 0 auto;
+      max-width: 400px;
+    }
+  }
+</style>
+<footer class="text-light py-4" style="border-top: 1px solid #f0f0f0; background-color: #f0f0f0;">
+  <div class="container">
+    <div class="d-flex justify-content-between">
+
+      <h5 style="color:#1a63a6; font-weight: 600;">Popular Categories</h5>
+      <a href="/all-extra-category" style="color:#1a63a6">
+        See All
+        <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    </br>
+    <div class="row">
+      <% for (var j = 0; j < (extraCat.length < 5 ? extraCat.length : 5); j++) { %>
+      <% for (var i = 0; i < 6; i++) { %>
+      <div class="col-md-2">
+        <ul class="list-unstyled fs-6">
+          <li><a style="color: #085399" class="footer-category-items"
+              href="/product/<%= extraCat[i+j].extra_cat_id %>?name=<%= extraCat[i+j].extra_cat_name %>"><%= extraCat[i+j].extra_cat_name %></a>
+          </li>
+        </ul>
+      </div>
+      <% } %>
+      <% } %>
+    </div>
+
+</footer>
+
+<!-- Footer Section -->
+<div class="footer"
+  style="background: linear-gradient(180deg, #2D2E2F 0%, #001E2E 9.38%, #001E2E 20.31%, #003F63 100%); height: fit-content;">
+  <div class="container h-100 pb-3">
+    <div class="row h-100 justify-content-between footer-body">
+      <!-- Company Logo -->
+      <div class="col d-flex flex-column mt-5 company-logo">
+        <img src="/images/logo.webp" class="w-50 mb-3" />
+        <p class="fw-light text-white fs-6 w-100">
+          Save71 helps you connect and do business with the people in your life.
+        </p>
+        <div class="fw-light fs-6 text-white d-flex flex-column">
+          <div class="d-flex column-gap-3 align-items-center">
+            <a href="#" class="text-white">
+              <i class="bi bi-youtube fs-2"></i>
+            </a>
+            <a href="#" class="text-white">
+              <i class="bi bi-facebook fs-4"></i>
+            </a>
+            <a href="#" class="text-white">
+              <i class="bi bi-instagram fs-4"></i>
+            </a>
+            <a href="#" class="text-white">
+              <i class="bi bi-twitter-x fs-5"></i>
+            </a>
+            <a href="#" class="text-white">
+              <i class="bi bi-linkedin fs-5"></i>
+            </a>
+          </div>
+          <p class="m-0 mt-3 fs-6">Copyright © <span class="current-year">2023</span> | All Rights Reserved.</p>
+        </div>
+      </div>
+
+      <!-- Infomation -->
+      <div class="col d-flex flex-column mt-5 align-items-center text-white">
+        <h1 class="fs-6 mb-4 w-50 ">Information</h1>
+        <ul class="px-0 text-white fw-light  footer-list w-50 gap-2 d-flex flex-column" style="list-style: disc;">
+          <li class="d-flex w-100">
+            <a class="text-white " href="/">Home</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class=" text-white" href="/aboutUs">About Us</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class=" text-white" href="#">Contact Us</a>
+          </li>
+
+          <li class="d-flex w-100">
+            <a class=" text-white" href="#">Start Selling</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class=" text-white" href="#">News center</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="#">Support</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Other -->
+      <div class="col d-flex flex-column mt-5 align-items-center text-white">
+        <h1 class="fs-6 mb-4 w-50">Rules</h1>
+        <ul class="px-0 text-white fw-light footer-list w-50 gap-2 d-flex flex-column" style="list-style: disc;">
+          <li class="d-flex w-100">
+            <a class=" text-white" href="/policy">Privacy Policy</a>
+          </li>
+          <li class="d-flex w-100 ">
+            <a class="text-white " href="/terms_and_condition">Terms of Use</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="/brand_guidelines">Brand Guideline</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="/notice">Notice</a>
+          </li>
+
+        </ul>
+      </div>
+
+
+
+      <!-- Dashboard -->
+      <div class="col d-flex flex-column mt-5 text-white">
+        <h1 class="fs-6 mb-4 w-50 ">Dashboard</h1>
+        <ul class="px-0 text-white fw-light footer-list w-50 gap-2 d-flex flex-column" style="list-style: disc;">
+          <li class="d-flex w-100">
+            <a class="text-white" href="#">Products</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="#">Selling</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="#">Purchases</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="#">Balance</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="#">Customers</a>
+          </li>
+          <li class="d-flex w-100">
+            <a class="text-white" href="#">Settings & Privacy</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Cart section -->
+<div class="cart bg-white border border-secondary-subtle hidden"
+  style="z-index: 200; overflow-y: auto; max-height: 100vh ;">
+  <div class="w-100 d-flex flex-column position-relative ">
+    <div class="ps-3 d-flex justify-content-between align-items-center" style="background-color: #003F63;">
+      <h1 class=" fs-6 mt-3 text-white">
+        <%= cart==undefined ? "0" : cart.length %> items
+      </h1>
+      <button class="btn p-3 px-4 cart-close h-100 bg-danger text-white"
+        style="border-radius: 0px; border-bottom-left-radius: 50%;">
+        Close
+      </button>
+    </div>
+    <div class="flex grow-1" style="overflow-y: auto; height: 80vh;">
+
+
+      <div class="cart-products w-100">
+        <% if (cart !=undefined) { %>
+        <% for (var i=0; i < (cart==undefined ? 0 : cart.length); i++) { %>
+        <div class="cart-item d-flex flex-column border-bottom p-2 mb-4">
+
+
+          <div class=" w-100 gap-3 d-flex align-items-center mt-2    ">
+            <div class=" align-items-center">
+              <% for (var k = 0; k < images.length; k++) { %>
+              <% if (images[k].product_id === cart[i].product_id) { %>
+              <img src="<%= images[k].product_image_url %>"
+                style="width: 3rem; height: fit-content; object-fit: cover;" />
+              <% } %>
+              <% } %>
+
+            </div>
+            <div class="col d-flex flex-column align-items-start justify-content-start me-4">
+              <p class="m-0" style="font-size: 14px;">
+                <%= cart[i].product_name %>
+              </p>
+
+
+
+
+            </div>
+
+
+            <p class="m-0 text-secondary" style="font-size: 14px;" id="totalPrice_<%= cart[i].order_details_id %>">
+              <%= (cart[i].product_total_price * currRate).toFixed(2) %> <%= currencyCode %>
+            </p>
+
+
+            <div class="col d-flex align-items-center justify-content-center">
+              <a href="/cart_del/<%= cart[i].order_details_id %>"> <i class="bi bi-x fs-4 fw-bold"
+                  style="--clr: #dc3545"></i></a>
+            </div>
+          </div>
+
+          <div class="d-flex mt-2">
+            <button class="border btn p-0 px-1 rounded-0"
+              onclick="increaseQuantity('<%= cart[i].order_details_id %>', '<%= cart[i].product_price %>', '<%= currRate %>', '<%= currencyCode %>')">
+              <i class="bi bi-plus" style="--clr: #0d6efd"></i>
+            </button>
+            <p class="m-0 px-3 py-1 d-flex align-items-center justify-content-center border" style="font-size: 14px; "
+              id="quantity_<%= cart[i].order_details_id %>">
+              <%= cart[i].product_quantity %>
+            </p>
+            <button class="border btn p-0 px-1 rounded-0"
+              onclick="decreaseQuantity('<%= cart[i].order_details_id %>', '<%= cart[i].product_price %>', '<%= currRate %>', '<%= currencyCode %>')">
+              <i class="bi bi-dash" style="--clr: #0d6efd"></i>
+            </button>
+          </div>
+        </div>
+        <% } %>
+        <% } %>
+      </div>
+    </div>
+    <% console.log(cart) %>
+    <% if (cart != undefined && cart.length > 0) { %>
+    <div class="place-order d-flex flex-column gap-2 px-3 justify-content-center py-2" style="">
+      <a href="#" class="btn rounded-3 px-5 rounded-0 py-2 justify-self-center" style="background-color: #1a63a6;">
+        <div class="text-white" id="placeOrderBtn">Place Order</div>
+      </a>
+      <a href="/cancelOrder" class="btn rounded-3 px-5 rounded-0 py-2 justify-self-center"
+        style="background-color: #1a63a6;">
+        <div class="text-white">Cancel Order</div>
+      </a>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+
+
+<!-- Place Order Popup -->
+<div id="placeOrderPopup" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Place Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="deliveryForm">
+          <div class="mb-3">
+            <label for="address" class="form-label">Delivery Address and Instructions:</label>
+            <textarea type="text" id="currentLocationName" name="deliveryAddress" class="form-control"
+              required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="deliveryForm">Confirm</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Script Section -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+  integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js"
+  integrity="sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i" crossorigin="anonymous"></script>
+<script src="/js/index.js"></script>
+
+
+</body>
+
+
+<script>
+  async function getCurrentLocationName(latitude, longitude) {
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
+      const data = await response.json();
+      const city = data.address.city || data.address.town || data.address.village || data.address.county || '';
+      const suburb = data.address.suburb || '';
+      return `${suburb}, ${city}`;
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
+  }
+
+  async function getLatitudeLongitudeFromCookies() {
+    try {
+      const response = await fetch("/d_cookies");
+      const {
+        latitude,
+        longitude
+      } = await response.json();
+      return {
+        latitude,
+        longitude
+      };
+    } catch (error) {
+      console.error(error);
+      throw new Error("Unable to fetch latitude and longitude from cookies");
+    }
+  }
+
+  async function getLocationFromCookie() {
+    try {
+      const {
+        latitude,
+        longitude
+      } = await getLatitudeLongitudeFromCookies();
+      return getCurrentLocationName(latitude, longitude);
+    } catch (error) {
+      console.error(error);
+      // Handle error
+      // ...
+      return '';
+    }
+  }
+
+  // Show the place order popup
+  async function showPlaceOrderPopup() {
+    const placeOrderModal = new bootstrap.Modal(document.getElementById("placeOrderPopup"), {
+      backdrop: true
+    });
+    placeOrderModal.show();
+
+    console.log("showing place order popup", placeOrderModal);
+
+    try {
+      const currentLocationName = await getLocationFromCookie();
+      document.getElementById("currentLocationName").value = currentLocationName;
+    } catch (error) {
+      console.error(error);
+      // Handle error
+      // ...
+    }
+  }
+
+  // Handle submission of the delivery form
+  function handleDeliveryFormSubmit(event) {
+    event.preventDefault();
+    const address = document.getElementById("currentLocationName").value;
+
+    // Send the delivery address via POST request to "/deliveryAddress"
+    const data = {
+      address: address
+    };
+
+    fetch("/deliveryAddress", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = "/placeOrder";
+        } else {
+          // Handle error response
+          // ...
+        }
+      })
+      .catch(error => {
+        // Handle error
+        // ...
+      });
+  }
+
+  // Add event listeners after the page has loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("placeOrderBtn"))
+      document.getElementById("placeOrderBtn").addEventListener("click", showPlaceOrderPopup);
+    if (document.getElementById("deliveryForm"))
+      document.getElementById("deliveryForm").addEventListener("submit", handleDeliveryFormSubmit);
+  });
+
+  // Close the place order popup when clicking outside of it
+  window.addEventListener("click", (event) => {
+    const placeOrderModal = document.getElementById("placeOrderPopup");
+    if (event.target === placeOrderModal) {
+      const backdrop = placeOrderModal.querySelector(".modal-backdrop");
+      const modal = placeOrderModal.querySelector(".modal-dialog");
+      if (backdrop && modal) {
+        backdrop.classList.remove("show");
+        modal.classList.remove("show");
+      }
+    }
+  });
+</script>
+
+
+
+<script>
+  // JavaScript functions
+  function updateCart(productId, price, currRate, currency_code) {
+    const quantityInput = document.getElementById(`quantity_${productId}`);
+    const quantity = parseInt(quantityInput.innerText);
+    const totalPriceElement = document.getElementById(`totalPrice_${productId}`);
+    const totalPrice = quantity * price;
+    totalPriceElement.textContent = `${(quantity * price * currRate).toFixed(2)} ${currency_code}`
+    // totalPriceElement.innerText = totalPrice;
+
+    // Send updated data to server
+    const data = {
+      productId: productId,
+      quantity: quantity,
+      price: totalPrice
+    };
+    fetch('/update_cart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log("Value Changed by One")
+        } else {
+          // Handle error response
+          // ...
+        }
+      })
+      .catch(error => {
+        // Handle error
+        // ...
+      });
+  }
+
+  function increaseQuantity(productId, price, currRate, currency_code) {
+    const quantityInput = document.getElementById(`quantity_${productId}`);
+    let quantity = parseInt(quantityInput.innerText);
+    if (quantity < 100) {
+      quantity++;
+      quantityInput.innerText = quantity;
+      updateCart(productId, price, currRate, currency_code);
+    }
+  }
+
+  function decreaseQuantity(productId, price, currRate, currency_code) {
+    const quantityInput = document.getElementById(`quantity_${productId}`);
+    let quantity = parseInt(quantityInput.innerText);
+    if (quantity > 1) {
+      quantity--;
+      quantityInput.innerText = quantity;
+      updateCart(productId, price, currRate, currency_code);
+    }
+  }
+</script>
+
+<script>
+  const yearSpan = document.querySelector('.current-year');
+  const date = new Date();
+  const year = date.getFullYear();
+  yearSpan.innerHTML = year.toString();
+  setInterval(() => {
+    const date = new Date();
+    const year = date.getFullYear();
+    yearSpan.innerHTML = year.toString();
+  }, 60000)
+</script>
+
+
+
+</html>

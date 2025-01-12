@@ -1,0 +1,140 @@
+<style>
+  .notification-div {
+    width: 250px;
+  }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<header class="d-flex justify-content-between align-items-center px-3 px-lg-5 border-bottom py-3">
+  <button class="btn btn-outline-secondary me-3 fs-4 d-lg-none dashboard-opener" style="height: fit-content;">
+    <i class="bi bi-list"></i>
+  </button>
+  <div class="d-flex align-items-center" style="justify-content: space-between; flex-grow: 1;">
+    <h4 class="fw-bold fs-4"><%- name %></h4>
+    <div class="d-flex align-items-center column-gap-2">
+
+      <div class="nav-item" style="position: relative;">
+        <a href="/" class="nav-link d-flex gap-2 position-relative">
+          <i class="bi bi-house" style="font-size: 22px; color: #1A63A6;"></i>
+        </a>
+      </div>
+
+      <div class="nav-item" style="position: relative;">
+
+        <a class="nav-link d-flex gap-2 position-relative notification-btn" href="#">
+          <i class="bi bi-bell" style="font-size: 22px; color: #1A63A6;"></i>
+          <%
+                    var notCnt = 0
+										if (notification != undefined) {
+											notification.forEach(function(not) {
+													if (not.is_read == 0) {
+													notCnt++
+													}
+											})
+										}
+                    %>
+          <% if (notCnt > 0) { %>
+          <span class="position-absolute rounded-circle text-white fs-6 text-center"
+            style="background-color: #1A63A6;min-height: 1.3rem;min-width: 1.3rem;left: 30%;top: -40%;"><%= notification == undefined ? "0" : notCnt  %></span>
+          <p class="m-0 fs-6" style="color: #1A63A6;"></p>
+          <% } %>
+        </a>
+
+        <div class="notification-div-hide rounded-2 shadow" id="notification-container">
+          <% for (var i = 0; i < notification.length; i++) { %>
+          <div id="notification_<%= notification[i].notification_id %>" data-id="<%= notification[i].notification_id %>"
+            class="d-flex flex-column <%= notification[i].is_read == 1 ? "" : "notification_unread_color" %> gap-2 border-bottom p-3 notification">
+
+            <!-- Notification Text -->
+            <a href="<%= notification[i].url %>"
+              class="<%= notification[i].is_read == 0 ? "text-light" : "text-dark" %>">
+              <label class="form-label color8 <%= (notification[i].is_read == 0) ? 'required-label' : '' %>">
+                <%= notification[i].notification %>
+              </label>
+              <br>
+              <!-- Time Ago Display under the notification text -->
+              <small class="time-ago <%= notification[i].is_read == 1 ? 'text-dark' : 'text-light' %>"
+                data-created-at="<%= notification[i].created_at %>"></small>
+            </a>
+          </div>
+          <% } %>
+        </div>
+
+
+
+
+      </div>
+      <div class="nav-item" style="position: relative;">
+        <a href="" id="reloadBtn" class="nav-link d-flex gap-2 position-relative notification-btn">
+          <i class="bi bi-arrow-clockwise" style="font-size: 22px; color: #1A63A6;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+<script>
+  function addActiveClass(id) {
+    document.querySelector("#" + id).classList.add("link-active");
+  }
+  addActiveClass("<%- menuId %>");
+</script>
+
+<script>
+  document.getElementById('reloadBtn').addEventListener('click', function (event) {
+    event.preventDefault();
+    location.reload();
+  });
+</script>
+
+<script>
+  function timeAgo(date) {
+    const now = new Date();
+    const createdAt = new Date(date);
+    const diffInSeconds = Math.floor((now - createdAt) / 1000);
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds} seconds ago`;
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 2592000) {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 31536000) {
+      const months = Math.floor(diffInSeconds / 2592000);
+      return `${months} month${months > 1 ? 's' : ''} ago`;
+    } else {
+      const years = Math.floor(diffInSeconds / 31536000);
+      return `${years} year${years > 1 ? 's' : ''} ago`;
+    }
+  }
+
+  // Find all elements with the class 'time-ago' and update them
+  document.querySelectorAll('.time-ago').forEach(function (element) {
+    const createdAt = element.getAttribute('data-created-at');
+    const timeAgoText = timeAgo(createdAt);
+    element.textContent = timeAgoText;
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#notification-container').on('click', '.notification', function () {
+      var notificationId = $(this).data('id');
+      $.ajax({
+        type: 'POST',
+        url: '/__sNot',
+        data: {
+          notification_id: notificationId
+        },
+        success: function (response) {
+          console.log('Success:', response);
+        },
+        error: function (error) {
+          console.error('Error:', error);
+        }
+      });
+    });
+  });
+</script>

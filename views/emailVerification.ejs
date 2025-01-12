@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification OTP</title>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet" />
+
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h1 class="card-title text-center fs-4"
+                style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Email Verification OTP
+              </h1>
+
+              <!-- Error Message -->
+              <% if (verificationStatus != null) { %>
+              <h5 id="verificationStatus" class="text-center text-danger">
+                <b><%= verificationStatus %></b>
+              </h5>
+              <% } %>
+
+              <form method="post" action="/emailVerificationPostByUserId">
+                <div class="mb-3">
+                  <label for="otp" class="form-label fw-semibold">Enter OTP:</label>
+                  <input type="text" class="form-control" id="otp" name="otp" value="" required>
+                  <input type="text" class="form-control" value="<%= encUserId %>" id="encUserId" name="encUserId"
+                    hidden readonly>
+
+                  <input type="text" class="form-control" value="<%= userId %>" id="userId" name="userId" hidden
+                    readonly>
+                </div>
+                <!-- <input type="hidden" name="generatedOTP" value=""> -->
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Verify</button>
+
+                </div>
+
+              </form>
+              <p>Didn't receive an OTP? </p>
+              <p class="btn btn-primary" id="resendOTPButton">Resend OTP</p>
+              <p id="otpMessage" style="display: none;">An OTP is sent to your email</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(() => {
+    $('#verificationStatus').fadeIn('fast', () => {
+      setTimeout(() => {
+        $('#verificationStatus').fadeOut('fast');
+      }, 5000);
+    });
+
+
+    // $('#resendOTPButton').click(function () {
+    //   var encUserId = $('#encUserId').val();
+
+    //   // Perform Ajax request to resend the OTP
+    //   $.ajax({
+    //     type: 'GET',
+    //     url: '/resendOTP/' + encUserId, // Replace with the actual endpoint for OTP resend
+    //     success: function (response, status, xhr) {
+    //       // Handle success case
+    //       console.log('Response:', response);
+    //       console.log('Status:', status);
+    //       console.log('XHR:', xhr);
+
+    //       if (response.status === "success") {
+
+    //         const verificationStatus = document.getElementById('verificationStatus');
+    //         verificationStatus.innerHTML = "OTP resend successfully. Please check your email.";
+    //         // OTP resend successful
+    //       } else {
+    //         // Handle other error cases
+    //         const verificationStatus = document.getElementById('verificationStatus');
+    //         verificationStatus.innerHTML = "OTP resend failed. Please try again.";
+    //       }
+    //     },
+    //     error: function (xhr, status, error) {
+    //       // Log additional information for debugging
+    //       console.log('Error:', error);
+    //       console.log('Status:', status);
+    //       console.log('XHR:', xhr);
+
+    //       // Handle Ajax request error
+    //       var errorMessage = 'An error occurred while resending the OTP.';
+    //       if (xhr.status === 302) {
+    //         errorMessage = 'Redirected to: ' + xhr.getResponseHeader('Location');
+    //       }
+    //       const verificationStatus = document.getElementById('verificationStatus');
+    //       verificationStatus.innerHTML = "OTP resend failed. Please try again.";
+    //     }
+    //   });
+    // });
+
+  });
+</script>
+
+<script>
+  document.getElementById('resendOTPButton').addEventListener('click', function () {
+    var encUserId = document.getElementById('encUserId').value;
+    var userId = document.getElementById('userId').value;
+    console.log(encUserId);
+
+    // Perform fetch request to resend the OTP
+    fetch(`/resendOtpByUserId/${userId}`, {
+      method: 'GET',
+      redirect: 'follow' // Follow redirects automatically
+    })
+      .then(response => {
+        if (response.status === 302) {
+          console.log(res);
+          // Handle the redirection case
+          return fetch(response.headers.get('Location'))
+            .then(res => res.json())
+            .then(data => ({ data, status: response.status }));
+        } else {
+          return response.json().then(data => ({ data, status: response.status }));
+        }
+      })
+      .then(({ data, status }) => {
+        // Handle success case
+        console.log('Response:', data);
+        console.log('Status:', status);
+
+        const verificationStatus = document.getElementById('verificationStatus');
+        if (data.status === "success") {
+          verificationStatus.innerHTML = "OTP resend successfully. Please check your email.";
+        } else {
+          verificationStatus.innerHTML = "OTP resend failed. Please try again.";
+        }
+      })
+      .catch((error) => {
+        // Handle fetch request error
+        console.log('Error:', error);
+
+        const verificationStatus = document.getElementById('verificationStatus');
+        verificationStatus.innerHTML = "OTP resend failed. Please try again.";
+      });
+  });
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#resendOTPButton').click(function () {
+      $('#otpMessage').fadeIn(); // Show the message
+      setTimeout(function () {
+        $('#otpMessage').fadeOut(); // Hide the message after a certain time (optional)
+      }, 3000); // Hide after 3 seconds (3000 milliseconds)
+    });
+  });
+</script>

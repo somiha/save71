@@ -1,0 +1,59 @@
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Include Quill CSS -->
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>
+<!-- Your editor container -->
+<div id="editor-container" style="height: 200px; width: 100%;" name="product_des"><%= des == null ? "" : des %></div>
+<input id="product-des-input" type="hidden" name="product_des" required>
+
+
+<!-- Include Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- Include Quill JS -->
+
+<script>
+  const savedContent = "<%- des %>";
+
+  var quill = new Quill('#editor-container', {
+    theme: 'snow', // Use the 'snow' theme for a clean and simple interface
+    modules: {
+      toolbar: [
+        [{
+          'header': [1, 2, 3, 4, 5, 6, false]
+        }], // Header selector
+        ['bold', 'italic', 'underline', 'strike'], // Basic formatting options
+        [{
+          'align': []
+        }], // Text alignment options
+        [{
+          'list': 'bullet'
+        }], // Number list option
+        [{
+          'list': 'ordered'
+        }], // Number list option
+        [{
+            'script': 'sub',
+            'icon': 'bi bi-type-subscript'
+          }, // Subscript option
+          {
+            'script': 'super',
+            'icon': 'bi bi-type-superscript'
+          } // Superscript option
+        ],
+      ],
+    }
+  });
+  quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+    delta.ops = delta.ops.map(op => {
+      return {
+        insert: op.insert
+      }
+    })
+    return delta
+  })
+
+  quill.on('text-change', function() {
+    var html = quill.root.innerHTML;
+    document.getElementById('product-des-input').value = html;
+  });
+</script>

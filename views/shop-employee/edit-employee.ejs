@@ -1,0 +1,240 @@
+<%- include('../header-one'),{menuId:menuId}; -%>
+<link rel="stylesheet" type="text/css" href="./css/daterangepicker.css" />
+
+<div class="w-100 bg-light">
+    <%- include('../dashboard-topbar'),{menuId:menuId}; -%>
+    <style>
+        .highlighted {
+            background-color: yellow;
+            /* Change the background color to highlight */
+            border-radius: 5px;
+            /* Add rounded corners to the border */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            /* Add a subtle shadow for a material effect */
+            transition: 1s ease-in-out;
+            /* Longer transition duration for a smoother effect */
+        }
+    </style>
+
+    <!-- tab section -->
+    <div class=" my-5 px-2 mt-5">
+        <nav class="mb-4 w-100 px-lg-5 py-5 py-lg-0 overflow-x-auto">
+
+            <div class="row">
+                <div class="col-sm-3 text-start">
+                </div>
+                <div class="col-sm-6 text-start">
+                    <!-- Empty space -->
+                </div>
+
+            </div>
+
+
+
+        </nav>
+        <div class="tab-content w-100 px-5">
+
+
+            <section class="my-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-wrap" style="overflow-x: auto;">
+                            <form action="/update-employee" method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="<%= employee[0].name %>"" required>
+                                </div>
+
+                                <div class=" mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        value="<%= employee[0].email %>" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="designation" class="form-label">Designation</label>
+                                    <input type="text" class="form-control" id="designation" name="designation"
+                                        value="<%= employee[0].designation %>" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="mobile_number" class="form-label">Mobile Number</label>
+                                    <input type="text" class="form-control" id="mobile_number" name="mobile_number"
+                                        value="<%= employee[0].mobile_number %>" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        value="<%= employee[0].address %>" required>
+                                </div>
+
+                                <% if (employee[0].image) { %>
+                                <img src="<%= employee[0].image %>" style="width: 100px;">
+                                <% } %>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                </div>
+
+                                <input type="hidden" name="id" value="<%= employee[0].id %>">
+
+                                <div class="mb-3">
+                                    <h5>Permissions</h5>
+
+                                    <% const groupedPermissions = {}; %>
+                                    <!-- <% let userPermissions = employee[0].permissions %> -->
+
+                                    <!-- <p>sdf <%= userPermissions %> </p> -->
+                                    <% allPermissions.forEach(permission => { 
+                                            const group = permission.permission_group;
+                                            if (!groupedPermissions[group]) {
+                                                groupedPermissions[group] = [];
+                                            }
+                                            groupedPermissions[group].push(permission);
+                                        }); %>
+
+                                    <% for (const group in groupedPermissions) { %>
+                                    <fieldset>
+                                        <legend><%= group %></legend>
+
+                                        <!-- Loop through permissions in each group -->
+                                        <% groupedPermissions[group].forEach(permission => { %>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input"
+                                                id="permission_<%= permission.permission_id %>" name="permissions[]"
+                                                value="<%= permission.permission_id %>"
+                                                <%= employee[0].permissions.includes(permission.permission_id) ? 'checked' : '' %>>
+                                            <label class="form-check-label"
+                                                for="permission_<%= permission.permission_id %>">
+                                                <%= permission.permission_name %>
+                                            </label>
+                                        </div>
+                                        <% }); %>
+                                    </fieldset>
+                                    <% } %>
+                                </div>
+
+
+
+
+
+                                <button type="submit" class="btn btn-primary">Edit Employee</button>
+                            </form>
+
+                            <form action="/update-employee-password" method="POST" class="mt-5">
+                                <div class="mb-3">
+                                    <label for="new_password" class="form-label">New Password</label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control" id="new_password"
+                                            name="new_password" required>
+                                        <p class="password-show-btn"
+                                            style="position:absolute; right:2%; top:50%; transform: translateY(-50%); cursor:pointer; z-index: 1;">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control" id="confirm_password"
+                                            name="confirm_password" required>
+                                        <p class="password-show-btn"
+                                            style="position:absolute; right:2%; top:50%; transform: translateY(-50%); cursor:pointer; z-index: 1;">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="id" value="<%= employee[0].id %>">
+
+                                <button type="submit" class="btn btn-primary">Update Password</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+
+            // If no range is selected, show all orders
+            if (!start || !end) {
+                $('#rejected-order, #confirmed-order, #accepted-order, #new-order').show();
+                return;
+            }
+
+            // Iterate through each parent div and check if the order date is within the selected range
+            $('#rejected-order, #confirmed-order, #accepted-order, #new-order').each(function () {
+                $(this).find('.order').each(function () {
+                    var orderDate = moment($(this).find('#order_date').text().replace('Placed Date:', ''), 'YYYY-MM-DD');
+                    if (orderDate.isBetween(start, end, null, '[]')) {
+                        // Order date is within the selected range, show the parent div
+                        $(this).show();
+                    } else {
+                        // Order date is outside the selected range, hide the parent div
+                        $(this).hide();
+                    }
+                })
+            });
+        }
+
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+
+        cb(); // Call initially to show all orders
+
+    });
+</script>
+
+<script>
+    const passShowBtn = document.querySelectorAll('.password-show-btn');
+    passShowBtn.forEach(psb => {
+        psb.addEventListener('click', e => {
+            const passField = psb.parentElement.children[0];
+            if (passField.type == 'password') passField.type = 'text';
+            else passField.type = 'password'
+        })
+    })
+</script>
+
+<!-- Filter Script -->
+<%- include('../footer-one'); -%>

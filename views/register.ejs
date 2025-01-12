@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <link rel="icon" sizes="325x325" href="https://save71.com/images/save71_icon.webp">
+    <meta property="og:title" content="Save71 Connects You and the World through Business.">
+    <meta property="og:site_name" content="Save-71">
+    <meta property="og:url" content="https://save71.com/registration">
+    <meta property="og:description" content="Unlock Global Connectivity with Save71 for Business.">
+    <meta property="og:type" content="business.business">
+    <meta property="og:image" content="https://save71.com/images/logo-og.webp">
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+    <!-- Telephone -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css"> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Save 71</title>
+  </head>
+
+  <style>
+    #loading-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #loading-gif {
+      width: 100px;
+      height: 100px;
+    }
+
+    .required-label::after {
+      content: " *";
+      color: red;
+      /* You can adjust the color as needed */
+    }
+  </style>
+
+
+  <script src="/js/index.js"></script>
+
+  <script src="/js/location.js"></script>
+
+  <body>
+    <div id="loading-container" style="display: none">
+      <img id="loading-gif" src="https://save71.com/images/loading.gif" alt="Loading..." />
+    </div>
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+      <div class="d-flex flex-column row-gap-5 pt-5 input__field-group">
+        <a href="/" style="display: contents; ">
+          <img src="https://save71.com/images/logo.webp" class="mb-lg-5 mb-0 w-25"
+            style="justify-self: center; align-self: center" />
+        </a>
+
+        <div class="d-flex flex-column">
+          <form class="d-flex flex-column row-gap-4 px-5">
+            <div class="mb-3">
+              <h5 class="text-center" style="color: red">
+                <b><i>
+                    <% if (loginMessage) { %>
+                    <%= loginMessage %>
+                    <% } %>
+                    <% if (message) { %>
+                    <%= message %>
+                    <% } %>
+                  </i></b>
+              </h5>
+            </div>
+            <div class="d-flex w-100 flex-column flex-lg-row row-gap-3 column-gap-5 input__field">
+              <div class="">
+                <label for="firstName" class="form-label">First Name:</label>
+                <input type="text" class="form-control py-3" id="firstName" name="firstName"
+                  placeholder="Enter your name.." required />
+              </div>
+              <div class="">
+                <label for="lastName" class="form-label">Last Name:</label>
+                <input type="text" class="form-control py-3" id="lastName" name="lastName"
+                  placeholder="Enter your name.." required />
+              </div>
+            </div>
+            <div class="d-flex w-100 column-gap-5 flex-column row-gap-3 flex-lg-row input__field">
+              <!-- <div class="">
+                <label for="inputEmail1" class="form-label">Email Id:</label>
+                <input type="email" class="form-control py-3" id="inputEmail1" name="email" aria-describedby="emailHelp"
+                  placeholder="info@xyz.com" required />
+              </div>
+              <div class="d-flex flex-column">
+                <label for="phone" class="form-label">Mobile No:</label>
+                <input type="text" class="form-control py-3" id="phone" name="phone" placeholder="YOUR NUMBER"
+                  aria-describedby="numberHelp" required />
+                <div id="error-msg" style="color: red; margin-top: 5px;"></div>
+                <div id="valid-msg" style="color: green; margin-top: 5px;"></div>
+              </div> -->
+
+              <div class="">
+                <label for="inputEmail1" class="form-label">Email Id:</label>
+                <input type="email" class="form-control py-3" id="inputEmail1" name="email" aria-describedby="emailHelp"
+                  placeholder="info@xyz.com" required />
+                <div id="error-msg-email" style="color: red; margin-top: 5px;"></div> <!-- Email error message -->
+                <div id="valid-msg-email" style="color: green; margin-top: 5px;"></div>
+              </div>
+
+              <div class="d-flex flex-column">
+                <label for="phone" class="form-label">Mobile No:</label>
+                <input type="tel" class="form-control py-3" id="phone" name="phone" placeholder="YOUR NUMBER"
+                  aria-describedby="numberHelp" required />
+                <div id="error-msg" style="color: red; margin-top: 5px;"></div>
+                <div id="valid-msg" style="color: green; margin-top: 5px;"></div>
+              </div>
+
+              <!-- <div class="">
+                <label for="inputEmail1" class="form-label">Email Id:</label>
+                <input type="email" class="form-control py-3" id="inputEmail1" name="email" aria-describedby="emailHelp"
+                  placeholder="info@xyz.com" required />
+                <div id="email-error-msg" style="color: red; margin-top: 5px;"></div>
+              </div>
+
+              <div class="d-flex flex-column">
+                <label for="phone" class="form-label">Mobile No:</label>
+                <input type="text" class="form-control py-3" id="phone" name="phone" placeholder="YOUR NUMBER"
+                  aria-describedby="numberHelp" required />
+                <div id="phone-error-msg" style="color: red; margin-top: 5px;"></div> 
+                <div id="valid-msg" style="color: green; margin-top: 5px;"></div>
+              </div> -->
+            </div>
+            <div class="d-flex w-100 column-gap-5  flex-column row-gap-3 flex-lg-row input__field">
+              <div class=" position-relative" style="height: fit-content;">
+                <label for="inputPassword" class="form-label">Password</label>
+                <input type="password" class="form-control py-3" id="inputPassword" name="password"
+                  placeholder="Password" required />
+                <span class="position-absolute" style="bottom: 15%; right: 5%" id="showPass"><i
+                    class="bi bi-eye-fill fs-5 text-secondary"></i></span>
+              </div>
+
+              <div class="">
+                <label for="shop_type" class="form-label">Shop Type</label>
+                <select class="form-select py-3 me-2" id="shop_type" name="shop_type" required>
+                  <option value="1">Manufacturer & Wholesalers</option>
+                  <option value="2" selected>Shopping & Retail</option>
+                </select>
+              </div>
+            </div>
+            <div class="d-flex w-100 column-gap-5 flex-column row-gap-3 flex-lg-row input__field">
+              <div class="">
+                <label for="refId" class="form-label">Reference Number</label>
+                <input type="tel" class="form-control py-3" name="refIdText" id="refId" placeholder="Ref Number"
+                  aria-describedby="numberHelp" required />
+                <div id="error-msg-ref" style="color: red; margin-top: 5px;"></div> <!-- Reference ID error message -->
+                <div id="valid-msg-ref" style="color: green; margin-top: 5px;"></div>
+              </div>
+              <!-- <div class="">
+                <label for="refId" class="form-label">Reference Number</label>
+                <input type="text" class="form-control  py-3" name="refIdText" id="refId" placeholder="Ref Number"
+                  required />
+                <div id="error-msg-ref" style="color: red; margin-top: 5px;"></div>
+                <div id="valid-msg-ref" style="color: green; margin-top: 5px;"></div>
+              </div> -->
+
+              <!-- DOB section -->
+              <div class="">
+                <label for="date-of-birth" class="form-label">Date of Birth</label>
+                <div class="d-flex">
+                  <div class="d-flex">
+                    <!-- Dropdown for Month -->
+                    <select class="form-select py-3 me-2" id="month" name="month" required>
+                      <option value="" disabled selected>Month</option>
+                      <!-- Generate month options with short names -->
+                      <% const shortMonths=["Jan", "Feb" , "Mar" , "Apr" , "May" , "Jun" , "Jul" , "Aug" , "Sep" , "Oct"
+                      , "Nov" , "Dec" ]; %>
+                      <% for (let i=0; i < shortMonths.length; i++) { %>
+                      <option value="<%= i + 1 %>">
+                        <%= shortMonths[i] %>
+                      </option>
+                      <% } %>
+                    </select>
+
+
+                    <!-- Dropdown for Day -->
+                    <!-- <select class="form-select py-3 me-2" id="day" name="day" required>
+                      <option value="" disabled selected>Day</option>
+                    </select> -->
+
+                    <select class="form-select py-3 me-2" id="day" name="day" required>
+                      <option value="" disabled selected>Day</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                      <option value="13">13</option>
+                      <option value="14">14</option>
+                      <option value="15">15</option>
+                      <option value="16">16</option>
+                      <option value="17">17</option>
+                      <option value="18">18</option>
+                      <option value="19">19</option>
+                      <option value="20">20</option>
+                      <option value="21">21</option>
+                      <option value="22">22</option>
+                      <option value="23">23</option>
+                      <option value="24">24</option>
+                      <option value="25">25</option>
+                      <option value="26">26</option>
+                      <option value="27">27</option>
+                      <option value="28">28</option>
+                      <option value="29">29</option>
+                      <option value="30">30</option>
+                      <option value="31">31</option>
+                    </select>
+
+
+
+                    <!-- Dropdown for Year -->
+                    <select class="form-select py-3" id="year" name="year" required>
+                      <option value="" disabled selected>Year</option>
+                      <!-- Generate year options for the last 80 years -->
+                      <% const currentYear=new Date().getFullYear(); %>
+                      <% for (let i=currentYear; i>= currentYear - 80; i--) { %>
+                      <option value="<%= i %>">
+                        <%= i %>
+                      </option>
+                      <% } %>
+                    </select>
+                  </div>
+
+                </div>
+                <input type="hidden" id="combined-date" name="DOB" />
+              </div>
+              <!-- DOB section End -->
+
+
+            </div>
+            <div class=" pt-2" style="height: fit-content;">
+              <div class="">
+                <label class="form-label fw-semibold">Gender</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="male" value="male" required />
+                    <label class="form-check-label" for="male">Male</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="female" value="female" />
+                    <label class="form-check-label" for="female">Female</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="other" value="other" />
+                    <label class="form-check-label" for="other">Other</label>
+                  </div>
+                </div>
+
+                <button id="signUpButton" type="button" class="btn btn-dark py-2 w-100 mt-5"
+                  style="background-color: #1a63a6" onclick="submitForm()">
+                  Sign Up
+                </button>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between " style="height: fit-content;">
+              <div class="col-6 ">
+                <input type="text" id="latitude" name="latitude" placeholder="latitude" required readonly hidden />
+              </div>
+              <div class="col-6 ">
+                <input type="text" id="longitude" name="longitude" placeholder="longitude" required readonly hidden />
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Check if 'error' parameter exists and if it's the specific error
+        if (urlParams.has('error') && urlParams.get('error') === 'wrongRefId') {
+          const refIdInput = document.getElementById('refId');
+
+          // Check if the refId input is empty before showing the alert
+          if (refIdInput.value.trim() === "") {
+            alert("Your reference ID is not correct!");
+          }
+        }
+      };
+    </script>
+    <!-- <script>
+      window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Check if 'error' parameter exists and handle different error types
+        if (urlParams.has('error')) {
+          const errorType = urlParams.get('error');
+
+          // Mobile number duplication check
+          if (errorType === 'phoneExists') {
+            const phoneInput = document.getElementById('phone');
+            const phoneErrorMsg = document.getElementById('phone-error-msg');
+
+            // Show alert and error message if the mobile number already exists
+            if (phoneInput && phoneInput.value.trim() !== "") {
+              phoneErrorMsg.textContent = "This mobile number already exists!";
+              phoneInput.focus(); // Optionally set focus on the input
+            }
+          }
+
+          // Email duplication check
+          if (errorType === 'emailExists') {
+            const emailInput = document.getElementById('inputEmail1');
+            const emailErrorMsg = document.getElementById('email-error-msg');
+
+            // Show alert and error message if the email already exists
+            if (emailInput && emailInput.value.trim() !== "") {
+              emailErrorMsg.textContent = "This email already exists!";
+              emailInput.focus(); // Optionally set focus on the input
+            }
+          }
+        }
+      };
+    </script> -->
+  </body>
+  <script src="/js/index.js"></script>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script> -->
+
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script> -->
+
+  <script>
+    async function initializeTelInput() {
+      try {
+        // Fetch country code from the server or external service
+        const apiUrl = `/__gCCo`; // Replace with your API endpoint
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const countryCode = data.countryCode || "auto"; // Fallback to "auto" if no country code is returned
+
+        const phoneInputField = document.querySelector("#phone");
+
+        // Initialize the intlTelInput with country code
+        const telInput = intlTelInput(phoneInputField, {
+          initialCountry: countryCode,
+          autoInsertDialCode: true,
+          separateDialCode: true, // Displays the country code separately
+          utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+
+        const errorDisplay = document.querySelector("#error-msg");
+        const validDisplay = document.querySelector("#valid-msg");
+        const submitButton = document.querySelector("#signUpButton");
+
+        // Validate the phone number
+        function checkValidNumber() {
+          if (phoneInputField.value.trim()) {
+            if (telInput.isValidNumber()) {
+              validDisplay.textContent = "Valid phone number";
+              errorDisplay.textContent = "";
+              submitButton.disabled = false;
+            } else {
+              validDisplay.textContent = "";
+              errorDisplay.textContent = "Invalid phone number";
+              submitButton.disabled = true;
+            }
+          }
+        }
+
+        phoneInputField.addEventListener("keyup", checkValidNumber); // Check validity on keyup event
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    initializeTelInput();
+  </script>
+
+  <!-- For Reference ID Validation -->
+  <script>
+    async function initializeRefIdInput() {
+      try {
+        const apiUrl = `/__gCCo`; // Replace with your API endpoint
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const countryCode = data.countryCode || "auto"; // Fallback to "auto" if no country code is returned
+
+        const refInputField = document.querySelector("#refId");
+
+        // Initialize intlTelInput for refId field with country code support
+        const refInput = intlTelInput(refInputField, {
+          initialCountry: countryCode,
+          autoInsertDialCode: true,
+          separateDialCode: true, // Separate the country code and input
+          utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+
+        const refIdErrorDisplay = document.querySelector("#error-msg-ref");
+        const refIdValidDisplay = document.querySelector("#valid-msg-ref");
+        const submitButton = document.querySelector("#signUpButton");
+
+        // Validate the reference ID field
+        function validateRefId() {
+          const refId = refInputField.value.trim();
+
+          if (refId.length < 6) {
+            refIdErrorDisplay.textContent = "Invalid reference ID";
+            refIdValidDisplay.textContent = "";
+            submitButton.disabled = true;
+          } else {
+            refIdErrorDisplay.textContent = "";
+            refIdValidDisplay.textContent = "Valid reference ID";
+            submitButton.disabled = false;
+          }
+        }
+
+        // Only handle validation on input
+        refInputField.addEventListener("keyup", validateRefId);
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    initializeRefIdInput();
+  </script>
+
+  <script>
+    async function submitForm() {
+      // Clear previous error messages and highlights
+      const phoneInputField = document.getElementById('phone');
+      const refIdInputField = document.getElementById('refId');
+      const emailInput = document.getElementById('inputEmail1');
+
+      const errorMsgPhone = document.getElementById('error-msg');
+      const errorMsgEmail = document.getElementById('error-msg-email');
+      const errorMsgRef = document.getElementById('error-msg-ref');
+
+      phoneInputField.classList.remove('is-invalid');
+      refIdInputField.classList.remove('is-invalid');
+      emailInput.classList.remove('is-invalid');
+
+      errorMsgPhone.textContent = '';
+      errorMsgEmail.textContent = '';
+      errorMsgRef.textContent = '';
+
+      // Get the intlTelInput instance for the phone input and refId input
+      const phoneInput = intlTelInputGlobals.getInstance(phoneInputField);
+      const refIdInput = intlTelInputGlobals.getInstance(refIdInputField);
+
+      const fullPhoneNumber = phoneInput.getNumber(); // Full phone number with country code
+      const fullRefId = refIdInput.getNumber(); // Full refId with country code (if required)
+
+      // Get form data
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = emailInput.value;
+      const password = document.getElementById('inputPassword').value;
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const month = document.getElementById('month').value;
+      const day = document.getElementById('day').value;
+      const year = document.getElementById('year').value;
+      const DOB = `${year}-${month}-${day}`; // Combine the date of birth parts into a valid format (YYYY-MM-DD)
+      const latitude = document.getElementById('latitude').value;
+      const longitude = document.getElementById('longitude').value;
+      const shop_type = document.getElementById('shop_type').value;
+
+      // Create the data object to send
+      const formData = {
+        firstName,
+        lastName,
+        email,
+        password,
+        gender,
+        refIdText: fullRefId,  // Full refId with country code
+        DOB,
+        latitude,
+        longitude,
+        phone: fullPhoneNumber, // Full phone number with country code
+        shop_type,
+      };
+
+      try {
+        // Send the form data to the API using fetch
+        const response = await fetch('/registration-api', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        // Handle the response from the server
+        console.log("response", response);
+
+        if (response.ok) {
+          // Registration success
+          // window.location.href = `/emailVerificationRequestByUserId/${result.userId}/${result.redirectMessage}`;
+          window.location.href = `${window.location.origin}/emailVerificationRequestByUserId/${result.userId}/${result.redirectMessage}`;
+
+        } else {
+          // Handle specific error for phone number already existing
+          if (result.message === "This mobile number already exists!") {
+            phoneInputField.classList.add('is-invalid'); // Add red border to the input field
+            errorMsgPhone.textContent = result.message; // Show the error message
+            phoneInputField.focus(); // Focus on the mobile number field
+          }
+
+          // Handle specific error for email already existing
+          if (result.message === "This email already exists!") {
+            emailInput.classList.add('is-invalid'); // Add red border to the input field
+            errorMsgEmail.textContent = result.message; // Show the error message
+            emailInput.focus(); // Focus on the email field
+          }
+
+          // Handle specific error for invalid reference ID
+          if (result.message === "Invalid reference ID") {
+            refIdInputField.classList.add('is-invalid'); // Add red border to the input field
+            errorMsgRef.textContent = result.message; // Show the error message
+            refIdInputField.focus(); // Focus on the reference ID field
+          } else {
+            alert(result.message || 'Registration failed!');
+          }
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('An error occurred during registration.');
+      }
+    }
+  </script>
+
+
+
+
+  <!-- <script>
+    async function submitForm() {
+      // Clear previous error messages and highlights
+      const phoneInput = document.getElementById('phone');
+      const emailInput = document.getElementById('inputEmail1');
+      const refIdInput = document.getElementById('refId');
+
+      const errorMsgPhone = document.getElementById('error-msg');
+      const errorMsgEmail = document.getElementById('error-msg-email');
+      const errorMsgRef = document.getElementById('error-msg-ref');
+
+      phoneInput.classList.remove('is-invalid');
+      emailInput.classList.remove('is-invalid');
+      refIdInput.classList.remove('is-invalid');
+
+      errorMsgPhone.textContent = '';
+      errorMsgEmail.textContent = '';
+      errorMsgRef.textContent = '';
+
+      // Get form data
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = emailInput.value;
+      const phone = phoneInput.value;
+      const password = document.getElementById('inputPassword').value;
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const refId = refIdInput.value;
+      const month = document.getElementById('month').value;
+      const day = document.getElementById('day').value;
+      const year = document.getElementById('year').value;
+      const DOB = `${year}-${month}-${day}`; // Combine the date of birth parts into a valid format (YYYY-MM-DD)
+      const latitude = document.getElementById('latitude').value;
+      const longitude = document.getElementById('longitude').value;
+      const shop_type = document.getElementById('shop_type').value;
+
+      // Create the data object to send
+      const formData = {
+        firstName,
+        lastName,
+        email,
+        password,
+        gender,
+        refIdText: refId,
+        DOB,
+        latitude,
+        longitude,
+        phone,
+        shop_type,
+      };
+
+      try {
+        // Send the form data to the API using fetch
+        const response = await fetch('/registration-api', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        // Handle the response from the server
+        if (response.ok) {
+          // Registration success
+          window.location.href = `/emailVerificationRequestByUserId/${result.userId}/${result.redirectMessage}`;
+        } else {
+          // Handle specific error for phone number already existing
+          if (result.message === "This mobile number already exists!") {
+            phoneInput.classList.add('is-invalid'); // Add red border to the input field
+            errorMsgPhone.textContent = result.message; // Show the error message
+            phoneInput.focus(); // Focus on the mobile number field
+          }
+
+          // Handle specific error for email already existing
+          if (result.message === "This email already exists!") {
+            emailInput.classList.add('is-invalid'); // Add red border to the input field
+            errorMsgEmail.textContent = result.message; // Show the error message
+            emailInput.focus(); // Focus on the email field
+          }
+
+          // Handle specific error for invalid reference ID
+          if (result.message === "Invalid reference ID") {
+            refIdInput.classList.add('is-invalid'); // Add red border to the input field
+            errorMsgRef.textContent = result.message; // Show the error message
+            refIdInput.focus(); // Focus on the reference ID field
+          } else {
+            alert(result.message || 'Registration failed!');
+          }
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('An error occurred during registration.');
+      }
+    }
+  </script> -->
+
+  <style>
+    /* Add styles for invalid input fields */
+    .is-invalid {
+      border-color: red;
+    }
+  </style>
+
+
+  <!-- <script>
+    async function submitForm() {
+      // Get form data
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('inputEmail1').value;
+      const phone = document.getElementById('phone').value;
+      const password = document.getElementById('inputPassword').value;
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const refId = document.getElementById('refId').value;
+      const month = document.getElementById('month').value;
+      const day = document.getElementById('day').value;
+      const year = document.getElementById('year').value;
+      const DOB = `${year}-${month}-${day}`; // Combine the date of birth parts into a valid format (YYYY-MM-DD)
+      const latitude = document.getElementById('latitude').value;
+      const longitude = document.getElementById('longitude').value;
+      const shop_type = document.getElementById('shop_type').value;
+
+      // Create the data object to send
+      const formData = {
+        firstName,
+        lastName,
+        email,
+        password,
+        gender,
+        refIdText: refId,
+        DOB,
+        latitude,
+        longitude,
+        phone,
+        shop_type,
+      };
+
+      console.log({ formData });
+
+
+      try {
+        // Send the form data to the API using fetch
+        const response = await fetch('/registration-api', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        // Handle the response from the server
+        if (response.ok) {
+          // Registration success
+          // alert('Registration successful!');
+
+          // Redirect to the login page
+          window.location.href = `/emailVerificationRequestByUserId/${result.userId}/${result.redirectMessage}`;
+        } else {
+          // Handle errors
+          alert(result.message || 'Registration failed!');
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('An error occurred during registration.');
+      }
+    }
+
+    // Enable the submit button once all required fields are filled in
+    // const signUpButton = document.getElementById('signUpButton');
+    // const requiredFields = document.querySelectorAll('input[required], select[required]');
+
+    // requiredFields.forEach((field) => {
+    //   field.addEventListener('input', () => {
+    //     const allFilled = [...requiredFields].every(input => input.value);
+    //     signUpButton.disabled = !allFilled;
+    //   });
+    // });
+  </script> -->
+
+  <!-- <script>
+    window.intlTelInputGlobals.loadUtils("/js/utils.js"); // for isValidNumber function
+
+    function getDecCCo(url) {
+      return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          return {
+            countryCode: data.countryCode
+          };
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          throw error;
+        });
+    }
+
+    async function initializeTelInput() {
+      try {
+        const apiUrl = `/__gCCo`;
+        const {
+          countryCode
+        } = await getDecCCo(apiUrl);
+        const input = document.querySelector("#phone");
+
+
+        const telInput = intlTelInput(input, {
+          initialCountry: countryCode || "auto",
+          autoInsertDialCode: true,
+          separateDialCode: false,
+        });
+
+
+        const errorDisplay = document.querySelector("#error-msg");
+        const validDisplay = document.querySelector("#valid-msg");
+        const submitButt = document.querySelector("#signUpButton");
+
+        // Function to update the placeholder based on the selected country
+        function updatePlaceholder() {
+          const selectedCountryData = telInput.getSelectedCountryData();
+          const newInputValue = "+" + selectedCountryData.dialCode;
+          input.value = newInputValue;
+        }
+
+        // Function to check if the entered phone number is valid
+        function checkValidNumber() {
+          if (input.value.trim()) {
+            if (telInput.isValidNumber()) {
+              validDisplay.textContent = "Valid phone number";
+              errorDisplay.textContent = "";
+              submitButt.disabled = false;
+            } else {
+              validDisplay.textContent = "";
+              errorDisplay.textContent = "Invalid phone number";
+              submitButt.disabled = true;
+            }
+          }
+        }
+
+        updatePlaceholder();
+        input.addEventListener("countrychange", updatePlaceholder);
+        input.addEventListener("keyup", checkValidNumber); // Check validity on keyup event
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    initializeTelInput();
+  </script> -->
+
+  <script>
+    document.getElementById('signUpButton').addEventListener('submit', async function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const formData = new FormData(document.getElementById('signUpButton'));
+
+      const response = await fetch('/registration', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      // If there are validation errors, display them
+      if (data.error) {
+        alert(data.message);
+      } else {
+        // No errors, proceed with redirection or success action
+        window.location.href = '/success';
+      }
+    });
+  </script>
+
+
+
+
+  <!-- For Ref  ID -->
+  <!-- <script>
+    function getDecCCo(url) {
+      return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          return {
+            countryCode: data.countryCode
+          };
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          throw error;
+        });
+    }
+
+    async function initializeTelInput() {
+      try {
+        const apiUrl = `/__gCCo`;
+        const {
+          countryCode
+        } = await getDecCCo(apiUrl);
+        const input1 = document.querySelector("#refId");
+
+
+        const telInput1 = intlTelInput(input1, {
+          initialCountry: countryCode || "auto",
+          autoInsertDialCode: true,
+          separateDialCode: false,
+        });
+
+
+        const errorDisplayRef = document.querySelector("#error-msg-ref");
+        const validDisplayRef = document.querySelector("#valid-msg-ref");
+        const submitButt = document.querySelector("#signUpButton");
+
+        // Function to update the placeholder based on the selected country
+        function updatePlaceholder() {
+          const selectedCountryData = telInput1.getSelectedCountryData();
+          const newInputValue = "+" + selectedCountryData.dialCode;
+          input1.value = newInputValue;
+        }
+
+        // Function to check if the entered phone number is valid
+        function checkValidNumber() {
+          if (input1.value.trim()) {
+            if (telInput1.isValidNumber()) {
+              validDisplayRef.textContent = "Valid phone number";
+              errorDisplayRef.textContent = "";
+              submitButt.disabled = false;
+            } else {
+              validDisplayRef.textContent = "";
+              errorDisplayRef.textContent = "Invalid phone number";
+              submitButt.disabled = true;
+            }
+          }
+        }
+
+        updatePlaceholder();
+        input1.addEventListener("countrychange", updatePlaceholder);
+        input1.addEventListener("keyup", checkValidNumber); // Check validity on keyup event
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    initializeTelInput();
+  </script> -->
+
+  <!-- Date function -->
+
+  <script>
+    // Function to update the hidden input with the combined date
+    function updateCombinedDate() {
+      const day = document.getElementById('day').value;
+      const month = document.getElementById('month').value;
+      const year = document.getElementById('year').value;
+
+      if (!day || !month || !year) return; // Skip if any field is not selected
+
+      const dateObject = new Date(year, month - 1, day);
+      const formattedDate = dateObject.toISOString().split('T')[0];
+      document.getElementById('combined-date').value = formattedDate;
+    }
+
+    // Function to validate day against month and year
+    function validateDay() {
+      const day = parseInt(document.getElementById('day').value);
+      const month = parseInt(document.getElementById('month').value);
+      const year = parseInt(document.getElementById('year').value);
+
+      if (month && year) {
+        const daysInMonth = new Date(year, month, 0).getDate(); // Get days in selected month
+        if (day > daysInMonth) {
+          alert(`The selected day (${day}) does not exist in the month of ${month}.`);
+          document.getElementById('day').value = daysInMonth; // Reset to the last valid day
+        }
+      }
+    }
+
+    // Event listeners for changes
+    document.getElementById('day').addEventListener('change', function () {
+      updateCombinedDate();
+      validateDay();
+    });
+
+    document.getElementById('month').addEventListener('change', function () {
+      validateDay();
+      updateCombinedDate();
+    });
+
+    document.getElementById('year').addEventListener('change', function () {
+      validateDay();
+      updateCombinedDate();
+    });
+  </script>
+  <!-- <script>
+    // Function to update the hidden input with the combined date
+    function updateCombinedDate() {
+      const day = document.getElementById('day').value;
+      const month = document.getElementById('month').value;
+      const year = document.getElementById('year').value;
+
+      // Create a Date object with the selected date components
+      const dateObject = new Date(`${year}-${month}-${day}`);
+
+      // Format the date as yyyy-mm-dd using toISOString
+      const formattedDate = dateObject.toISOString().split('T')[0];
+
+      document.getElementById('combined-date').value = formattedDate;
+    }
+
+    // Add event listeners to update the combined date when any of the inputs change
+    document.getElementById('day').addEventListener('input', updateCombinedDate);
+    document.getElementById('month').addEventListener('input', updateCombinedDate);
+    document.getElementById('year').addEventListener('input', updateCombinedDate);
+  </script>
+
+
+  <script>
+    $(document).ready(function () {
+      // Initialize day dropdown based on the current month
+      const currentMonth = new Date().getMonth() + 1; // Adding 1 to get 1-based month index
+      $('#month').val(currentMonth);
+      $('#month').trigger('change'); // Trigger the change event
+
+      // Dynamically update the day dropdown based on the selected month
+      $('#month').change(function () {
+        const dayDropdown = $('#day');
+        const selectedMonth = parseInt($(this).val());
+        const daysInMonth = new Date($('#year').val(), selectedMonth, 0).getDate();
+
+        // Clear existing options
+        dayDropdown.empty();
+        dayDropdown.append('<option value="" disabled selected>Day</option>');
+
+        // Generate day options based on the selected month
+        for (let i = 1; i <= daysInMonth; i++) {
+          dayDropdown.append($('<option>', {
+            value: i,
+            text: i
+          }));
+        }
+      });
+    });
+  </script> -->
+
+  <script>
+    function togglePassword() {
+      const passwordInput = $('#inputPassword');
+      const showPassIcon = $('#showPass');
+
+      if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        showPassIcon.html('<i class="bi bi-eye-slash-fill fs-5 text-secondary"></i>');
+      } else {
+        passwordInput.attr('type', 'password');
+        showPassIcon.html('<i class="bi bi-eye-fill fs-5 text-secondary"></i>');
+      }
+    }
+
+    $('#showPass').click(togglePassword);
+  </script>
+
+
+
+</html>

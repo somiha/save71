@@ -1,0 +1,296 @@
+<%- include('header'); -%>
+
+
+
+<!-- Upload Product Section -->
+<div class="bg-body-secondary flex-grow-1 py-4">
+  <div class="container d-flex justify-content-center align-items-center mt-3">
+    <div class="card bg-white p-3 mb-5" style="width: 40rem">
+      <div class="card-body">
+        <div class="cardHeader d-flex justify-content-between flex-column flex-lg-row">
+          <h5 class="card-title">
+            <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+              <ol class="breadcrumb" style="background: transparent;">
+                <!-- <li class="breadcrumb-item"><a href="/products">Upload</a></li> -->
+                <li class="breadcrumb-item active" aria-current="page">
+                  <a href="/products">Upload your own product</a>
+                </li>
+              </ol>
+            </nav>
+          </h5>
+          <a href="/products" class="btn text-danger p-lg-2">Cancel</a>
+        </div>
+
+        <!-- Form Starts -->
+        <form id="productForm" action="/upload-own-product" method="POST" enctype="multipart/form-data"
+          class="d-flex flex-column" onsubmit="disableSubmitButton()">
+          <div class="mb-3">
+            <label for="productName" class="form-label fw-medium">Product Name</label>
+            <textarea type="text" class="form-control bg-body-secondary border-0 py-3" id="productName"
+              placeholder="Enter Product Name" name="product_name" required maxlength="100"></textarea>
+            <small class="text-danger" id="charCount">100</small><small class="text-danger">/100</small>
+          </div>
+
+
+          <label for="" class="my-0 form-label fw-medium">Product Category</label>
+          <div class="my-2">
+            <select id="productCategory" name="category"
+              onchange="showPriceWarning(this, '<%= currRate %>', '<%= currencyCode %>')"
+              class="py-3 selectpicker w-100" data-live-search="true">
+              <option value="" data-deduct-amount="" data-category="" required selected disabled>Select Category
+              </option>
+              <% for (var i = 0; i < extra_cat.length; i++) { %>
+              <option value="<%= extra_cat[i].extra_cat_id %>"
+                data-deduct-amount="<%= shop_type == 1 ? extra_cat[i].manufacturer_deduct_percentage : extra_cat[i].retailer_deduct_percentage %>"
+                data-category="<%= extra_cat[i].extra_cat_name %>" required>
+                <%= extraCat[i].extra_cat_name %>
+              </option>
+              <% } %>
+            </select>
+            <div id="priceWarning" style="color: red;"></div>
+          </div>
+
+
+          <div class="mb-3">
+            <label for="regular_price" class="form-label fw-medium">Regular Price (<%= currencyCode  %>)</label>
+            <input type="number" class="form-control bg-body-secondary border-0 py-3" id="regular_price"
+              name="regular_price" placeholder="100" min="0" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="product_price" class="form-label fw-medium">Selling Price (<%= currencyCode  %>)</label>
+            <input type="number" class="form-control bg-body-secondary border-0 py-3" id="product_price"
+              name="product_price" placeholder="100" min="0" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="productDescription" class="form-label fw-medium">Product Short Description</label>
+            <textarea maxlength="150" class="form-control bg-body-secondary border-0 py-3" style="height: 100px"
+              id="productShortDescription" name="product_short_des" placeholder="Product Description"
+              required></textarea>
+            <small id="descCharCount" class="text-danger">150</small><small class="text-danger">/150</small>
+          </div>
+
+          <div class="mb-3">
+            <label for="productDescription" class="form-label fw-medium">Product Long Description</label>
+            <!-- <textarea class="form-control bg-body-secondary border-0 py-3" style="height: 100px" id="productDescription" name="product_des" placeholder="Product Description" required></textarea> -->
+            <%- include('richText', {des : null}); %>
+          </div>
+
+          <div class="">
+            <!-- Image section -->
+            <div id="imagePreviewContainer"></div>
+            <label for="product_images" class="btn btn-main-outline"
+              onclick="document.getElementById('productImages').click()"><i class="bi bi-upload me-2"></i>Upload Image
+              [1:1]</label>
+            <input class="form-control" style="display:none;" type="file" name="productImages" id="productImages"
+              accept="image/*" multiple required>
+          </div>
+
+
+
+          <!-- Video Upload section -->
+          <div class="">
+            <!-- <label class="form-label fw-medium">Upload Video</label> -->
+            <div id="videoPreviewContainer"></div>
+            <div class="mb-4">
+              <label for="productVideo" class="btn btn-main-outline mt-2" class="form-label fw-medium"><i
+                  class="bi bi-upload me-2"></i>Upload Video [1:1]&nbsp;&nbsp;</label>
+              <input type="file" id="productVideo" style="display:none;" name="product_video" class="form-control"
+                accept="video/*">
+            </div>
+          </div>
+
+
+
+          <button type="submit" id="submitBtn" class="btn text-white fw-bold py-3"
+            style="background-color: #2874a6">Upload</button>
+        </form>
+
+        <!-- Form Ends -->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  function disableSubmitButton() {
+    var submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Uploading...';
+  }
+</script>
+
+<script>
+  function showPriceWarning(selectElement, currRate, currencyCode) {
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    var deductAmount = parseFloat(selectedOption.getAttribute('data-deduct-amount'));
+
+    var priceWarningElement = document.getElementById('priceWarning');
+
+    if (!isNaN(deductAmount) && deductAmount > 0) {
+      priceWarningElement.textContent = deductAmount.toFixed(2) + '% will be deducted from the price !';
+    } else {
+      priceWarningElement.textContent = 'No price Will be deducted from the price !';
+    }
+  }
+</script>
+
+<!-- Image preview -->
+<script>
+  var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+  var fileInput = document.getElementById('productImages');
+  var row = document.createElement('div');
+  row.className = 'row';
+  fileInput.addEventListener('change', function (e) {
+    imagePreviewContainer.innerHTML = '';
+    for (var i = 0; i < e.target.files.length; i++) {
+      var file = e.target.files[i];
+      var reader = new FileReader();
+      reader.onload = (function (i) {
+        return function (event) {
+          var img = new Image();
+          img.src = event.target.result;
+          img.onload = function () {
+            var column = document.createElement('div');
+            column.className = 'col-md-3 mb-3';
+            var container = document.createElement('div');
+            container.className = 'mb-3 d-flex flex-column align-items-center';
+            var imagePreview = document.createElement('img');
+            imagePreview.src = img.src;
+            imagePreview.className = 'img-thumbnail';
+            imagePreview.style.width = '100px';
+            imagePreview.style.height = '100px';
+            var buttonGroup = document.createElement('div');
+            buttonGroup.className = 'btn-group';
+            var featuredRadioBtn = document.createElement('input');
+            featuredRadioBtn.type = 'radio';
+            featuredRadioBtn.name = 'featured_index';
+            featuredRadioBtn.value = i;
+            // featuredRadioBtn.select = 'btn-check';
+
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn text-danger p-1 m-2';
+            removeButton.innerHTML = '<i class="bi bi-trash-fill"></i>';
+            removeButton.addEventListener('click', function () {
+              column.remove();
+            });
+            buttonGroup.appendChild(featuredRadioBtn);
+            buttonGroup.appendChild(removeButton);
+            container.appendChild(imagePreview);
+            container.appendChild(buttonGroup);
+            column.appendChild(container);
+            row.appendChild(column);
+          };
+        };
+      })(i);
+      reader.readAsDataURL(file);
+    }
+    imagePreviewContainer.appendChild(row);
+  });
+  /*
+    document.getElementById('productVideo').addEventListener('change', function(e) {
+      var videoPreviewContainer = document.getElementById('videoPreviewContainer');
+      videoPreviewContainer.innerHTML = '';
+  
+      var file = e.target.files[0];
+  
+      if (file) {
+        var videoPreview = document.createElement('video');
+        videoPreview.src = URL.createObjectURL(file);
+        videoPreview.controls = true;
+        videoPreview.style.width = '75%';
+  
+        videoPreviewContainer.appendChild(videoPreview);
+      }
+    });
+  */
+
+  document.getElementById('productVideo').addEventListener('change', function (e) {
+    var videoPreviewContainer = document.getElementById('videoPreviewContainer');
+    videoPreviewContainer.innerHTML = '';
+
+    var file = e.target.files[0];
+
+    if (file) {
+      const fileSizeInBytes = file.size;
+      const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
+
+      const limit = 50;     // 50 MB limit
+
+      if (fileSizeInMegabytes > limit) {
+        const warningElem = document.createElement('p');
+        warningElem.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Video file size is larger than ${limit} MB. Please upload a smaller video file.`;
+        warningElem.style.color = 'red';   // Set the color of the warning message to red
+        videoPreviewContainer.appendChild(warningElem);
+
+        // Clear the selected file from the input field
+        e.target.value = '';
+        return;
+      }
+
+      var videoPreview = document.createElement('video');
+      videoPreview.src = URL.createObjectURL(file);
+      videoPreview.controls = true;
+      videoPreview.style.width = '75%';
+
+      // Create a div for the video and the delete button
+      var videoDiv = document.createElement('div');
+      videoDiv.className = 'd-flex align-items-center';
+
+      // Create a delete button using Bootstrap's trash icon
+      var deleteButton = document.createElement('button');
+      deleteButton.className = 'btn btn-danger ml-3';
+      deleteButton.innerHTML = '<i class="bi bi-trash"></i> ';
+      deleteButton.addEventListener('click', function () {
+
+
+        videoDiv.removeChild(videoPreview);
+        videoDiv.removeChild(deleteButton);
+      });
+
+      videoDiv.appendChild(videoPreview);
+      videoDiv.appendChild(deleteButton);
+
+      videoPreviewContainer.appendChild(videoDiv);
+    }
+  });
+</script>
+
+
+
+<%- include('footer'); -%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Search select -->
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    console.log('dropdown clicked')
+    $('#productCategory').selectpicker();
+  })
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#productName').on('input', function () {
+      var remaining = 100 - $(this).val().length;
+      $('#charCount').text(remaining);
+    });
+  });
+
+  $(document).ready(function () {
+    $('#productShortDescription').on('input', function () {
+      var remaining = 150 - $(this).val().length;
+      $('#descCharCount').text(remaining);
+    });
+  });
+</script>

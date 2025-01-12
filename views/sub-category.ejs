@@ -1,0 +1,48 @@
+<%- include('header'); -%>
+
+<!-- Breadcrumb -->
+<div class="mb-4 fs-5 rounded p-2 border-bottom py-4">
+	<div class="container">
+		<nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+			<ol class="breadcrumb m-0">
+				<li class="breadcrumb-item"><a href="/">Home</a></li>
+				<li class="breadcrumb-item">
+					<a href="/all-category">All Categories</a>
+				</li>
+				<% var cat_name %> <% for (var i=0; i < subCat.length; i++) {%> <% if
+				(subCat[i].sub_cat_id==subId) { %>
+				<li class="breadcrumb-item active" aria-current="page">
+					<%= subCat[i].sub_cat_name %>
+				</li>
+				<% cat_name=subCat[i].sub_cat_name %> <% } %> <% } %>
+			</ol>
+		</nav>
+	</div>
+</div>
+
+<!-- Categories Section -->
+<div class="container mb-5">
+	<h1 class="fs-4 fw-medium mb-5" style="color: #1a63a6"><%= cat_name %></h1>
+	<div class="row row-cols-2 row-cols-md-3 row-cols-md-6">
+		<% for (var i=0; i < extraCat.length; i++) {%> <% if
+		(extraCat[i].extra_cat_ref==subId) { %>
+		<a href="/product/<%= extraCat[i].extra_cat_id  %>?name=<%= extraCat[i].extra_cat_name %>">
+			<div class="col mb-5">
+				<div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+					<div style="height: 20rem">
+						<img src="<%= extraCat[i].extra_cat_image_url %>" class="card-img h-100 rounded-2"
+							style="object-fit: cover" />
+					</div>
+					<div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+						<h5 class="card-title text-white text-center">
+							<%= extraCat[i].extra_cat_name %>
+						</h5>
+					</div>
+				</div>
+			</div>
+		</a>
+		<% } %> <% } %>
+	</div>
+</div>
+
+<%- include('footer'); -%>

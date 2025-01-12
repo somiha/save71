@@ -1,0 +1,52 @@
+<%- include('header'); -%>
+<meta property="og:title"
+  content="Empower Your Business Journey with Save71 - Affordable Excellence for Everyone, from Beginners to Wholesalers">
+<meta property="og:site_name" content="Save-71">
+<meta property="og:url" content="https://save71.com/all-category">
+<meta property="og:description"
+  content="At Save71, we're your go-to destination for hassle-free and budget-friendly business solutions. Whether you're just starting out or managing a wholesale operation, we've got the perfect services for you. Our platform is designed to be super beginner-friendly, ensuring a seamless experience for all. Explore, succeed, and save with Save71 – where affordable excellence is accessible to every entrepreneur, from beginners to seasoned wholesalers.">
+<meta property="og:type" content="business.business">
+<meta property="og:image" content="https://save71.com/images/logo-og.webp">
+<!-- Breadcrumb -->
+<div class="mb-4 fs-5 rounded p-2 border-bottom py-4">
+  <div class="container">
+    <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+      <ol class="breadcrumb m-0">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          All Categories
+        </li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- Categories Section -->
+<% for (var i=0; i < mainCat.length; i++) {%>
+<div class="container mb-5">
+  <h1 id="<%= mainCat[i].main_cat_name %>" class="fs-4 fw-medium mb-5" style="color: #1a63a6">
+    <%= mainCat[i].main_cat_name %>
+  </h1>
+  <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5">
+    <% for (var j=0; j < subCat.length; j++) {%> <% if
+		(subCat[j].sub_cat_ref==mainCat[i].main_cat_id) {%>
+    <a href="/sub-category/<%= subCat[j].sub_cat_id %>?name=<%= subCat[j].sub_cat_name  %>">
+      <div class="col mb-5">
+        <div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+          <div style="height: 20rem">
+            <img src="<%= subCat[j].sub_cat_image_url %>" class="card-img h-100 rounded-2" alt="img"
+              style="object-fit: cover" />
+          </div>
+
+          <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+            <h5 class="card-title text-white text-center">
+              <%= subCat[j].sub_cat_name %>
+            </h5>
+          </div>
+        </div>
+      </div>
+    </a>
+    <% } %> <% } %>
+  </div>
+</div>
+<% } %> <%- include('footer'); -%>

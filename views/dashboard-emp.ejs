@@ -1,0 +1,29 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<header class="d-flex justify-content-between align-items-center px-3 px-lg-5 border-bottom py-3">
+    <button class="btn btn-outline-secondary me-3 fs-4 d-lg-none dashboard-opener" style="height: fit-content;">
+        <i class="bi bi-list"></i>
+    </button>
+    <div class="d-flex align-items-center" style="justify-content: space-between; flex-grow: 1;">
+        <h4 class="fw-bold fs-4"><%- name %></h4>
+        <div class="d-flex align-items-center column-gap-2">
+            <div class="nav-item" style="position: relative;">
+                <a href="" id="reloadBtn" class="nav-link d-flex gap-2 position-relative notification-btn">
+                    <i class="bi bi-arrow-clockwise" style="font-size: 22px; color: #1A63A6;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+<script>
+    function addActiveClass(id) {
+        document.querySelector("#" + id).classList.add("link-active");
+    }
+    addActiveClass("<%- menuId %>");
+</script>
+
+<script>
+    document.getElementById('reloadBtn').addEventListener('click', function (event) {
+        event.preventDefault();
+        location.reload();
+    });
+</script>

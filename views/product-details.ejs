@@ -1,0 +1,948 @@
+<%- include('header'); -%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Rich Text Editor Section -->
+<link rel="stylesheet" href=" /richtexteditor/rte_theme_default.css" />
+<link href="
+https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css
+" rel="stylesheet">
+<script src="
+https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js
+"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/jquery.imagezoom.min.css">
+<script type="text/javascript" src="js/jquery.imagezoom.min.js"></script>
+<script type="text /javascript" src="/richtexteditor/rte.js"></script>
+<script type="text /javascript" src='/richtexteditor/plugins/all_plugins.js'></script>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/2.2.3ß/jquery.elevatezoom.min.js"></script>
+
+<style>
+  .rating-stars {
+    display: inline-block;
+    color: orange;
+  }
+</style>
+<style>
+  .custom-slide {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .profile-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 768px) {
+    .image {
+      width: 75%;
+    }
+  }
+
+  .splide__slide img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .splide__slide {
+    opacity: 0.6;
+  }
+
+
+  .splide__slide .is-active {
+    opacity: 1;
+  }
+
+  .splide__arrow--prev {
+    left: -2.3em;
+  }
+
+  .splide__arrow--next {
+    right: -2.3em;
+  }
+
+  #carousel-wrapper {
+    border: 1px solid #ccc;
+    /* Gray border */
+    border-radius: 5px;
+    /* Rounded corners */
+    padding: 10px;
+    /* Optional: Add padding inside the border */
+  }
+
+  /* .thumbnail-slider .splide__slide img {
+    transform-origin: 65% 75%;
+    transition: transform 1s, filter .5s ease-out;
+  }
+
+  .thumbnail-slider .splide__slide:hover img {
+    transform: scale(5);
+  
+  } */
+  .thumbnail-slider .splide__slide .is-active .is-visible img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0 0;
+  }
+
+  .img-zoom-container {
+    position: relative;
+    overflow: hidden;
+    /* Ensure the zoom effect doesn't overflow the container */
+    width: 100%;
+    height: 100%;
+  }
+
+  .zoom-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+    /* Smooth zoom effect */
+  }
+
+  .img-zoom-container:hover .zoom-image {
+    transform: scale(2);
+    /* Adjust the scale as needed for zoom effect */
+  }
+</style>
+
+<script>
+  function toggleMute(btn) {
+    var video = btn.parentElement.querySelector('video');
+    if (video.muted) {
+      video.muted = false;
+      btn.textContent = '';
+    } else {
+      video.muted = true;
+      btn.textContent = '';
+    }
+  }
+
+  var carousel = document.getElementById('headerCarousel');
+  carousel.addEventListener('slid.bs.carousel', function () {
+    var activeItem = carousel.querySelector('.carousel-item.active');
+    var videos = activeItem.querySelectorAll('video');
+    for (var i = 0; i < videos.length; i++) {
+      videos[i].pause();
+    }
+  });
+</script>
+
+<script>
+  // review section
+  $(document).ready(function () {
+    $('#submit').click(function () {
+      var rating = $('.star.selected').length;
+      var description = $('.modal-body textarea').val();
+      var productId = '<%= product[0].product_id %>';
+
+      $.ajax({
+        url: '/ratings',
+        method: 'POST',
+        data: {
+          rating: rating,
+          description: description,
+          productId: productId
+        },
+        success: function (response) {
+          console.log('Rating saved:', response);
+          $('.star').removeClass('selected');
+          $('.modal-body textarea').val('');
+          $('#addReview').modal('hide');
+          location.reload();
+        },
+        error: function (error) {
+          console.error('Error saving rating:', error);
+        }
+      });
+    });
+
+    $('.star').click(function () {
+      $('.star').removeClass('selected');
+      var index = $(this).index();
+      for (var i = 0; i <= index; i++) {
+        $('.star').eq(i).addClass('selected');
+      }
+    });
+
+    $('#clear-star').click(function () {
+      $('.star').removeClass('selected');
+    });
+  });
+
+  // render stars
+  function renderStars(rating) {
+    const fullStars = Math.round(rating);
+    let starsHTML = '';
+    // Render full stars
+    for (let i = 0; i < fullStars; i++) {
+      starsHTML += '<i class="bi bi-star-fill"></i>';
+    }
+    return starsHTML;
+  }
+
+  // JavaScript functions
+  function updateCart(productId, price) {
+    const quantityInput = document.getElementById(`quantity_${productId}`);
+    const quantity = parseInt(quantityInput.innerText);
+    const totalPriceElement = document.getElementById(`totalPrice_${productId}`);
+    const totalPrice = quantity * price;
+    totalPriceElement.innerText = totalPrice;
+
+    // Send updated data to server
+    const data = {
+      productId: productId,
+      quantity: quantity,
+      price: totalPrice
+    };
+    fetch('/update_cart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log("Value Changed by One")
+        } else {
+          // Handle error response
+          // ...
+        }
+      })
+      .catch(error => {
+        // Handle error
+        // ...
+      });
+  }
+
+  function increaseQuantity(productId, price) {
+    const quantityInput = document.getElementById(`quantity_${productId}`);
+    let quantity = parseInt(quantityInput.innerText);
+    if (quantity < 100) {
+      quantity++;
+      quantityInput.innerText = quantity;
+      updateCart(productId, price);
+    }
+  }
+
+  function decreaseQuantity(productId, price) {
+    const quantityInput = document.getElementById(`quantity_${productId}`);
+    let quantity = parseInt(quantityInput.innerText);
+    if (quantity > 1) {
+      quantity--;
+      quantityInput.innerText = quantity;
+      updateCart(productId, price);
+    }
+  }
+</script>
+
+
+<!-- Products Description Section -->
+<div class="container relative mt-5 d-flex flex-column flex-md-row w-100 product-details-carousel row-gap-5">
+  <!-- Carousel Section -->
+  <!-- <div class="d-flex w-50 justify-content-center align-items-center me-5 position-relative rounded-3">
+    <div class="d-flex align-items-center">
+      <div id="headerCarousel" class="carousel slide w-100">
+        <div class="carousel-indicators">
+          <% for (var i=0; i < (video.length + product.length); i++) { %>
+          <button type="button"
+            style="width: 1rem; height: 1rem; border-radius: 50%; background: transparent; border: 1px solid white;"
+            data-bs-target="#headerCarousel" data-bs-slide-to="<%= i %>" <% if (i===0) { %>class="active"
+            aria-current="true" <% } %> aria-label="Slide <%= (i + 1) %>"></button>
+          <% } %>
+        </div>
+        <div class="carousel-inner position-relative" style="height: 50vh;">
+          <% for (var i=0; i < video.length; i++) { %>
+          <div class="carousel-item <%= (i === 0) ? 'active' : '' %> h-100">
+            <div class="position-relative w-100 h-100">
+              <video src="<%= video[i].product_video_url %>" class="d-block w-100 h-100" style="object-fit:contain;"
+                autoplay muted controls="minimal">
+                <button class="btn btn-primary btn-sm position-absolute top-0 start-0 m-3"
+                  onclick="toggleMute(this)"></button>
+              </video>
+            </div>
+          </div>
+          <% } %>
+          <% for (var i=0; i < product.length; i++) { %>
+          <div class="carousel-item <%= (i === 0 && video.length === 0) ? 'active' : '' %> h-100">
+            <div class="position-relative w-100 h-100">
+              <img src="<%= product[i].product_image_url %>" class="d-block image" style="object-fit:contain;">
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% if ((video.length + product.length) > 1) { %>
+    <button class="product-chevron-prev text-black position-absolute" type="button" data-bs-target="#headerCarousel"
+      data-bs-slide="prev">
+      <i class="bi bi-chevron-left fs-3"></i>
+    </button>
+    <button class="product-chevron-next text-black position-absolute" type="button" data-bs-target="#headerCarousel"
+      data-bs-slide="next">
+      <i class="bi bi-chevron-right fs-3"></i>
+    </button>
+    <% } %>
+  </div> -->
+  <div id="carousel-wrapper" class="justify-content-center align-items-center me-5 position-relative rounded-3"
+    style="width: 40%; height: 40%">
+    <section id="main-carousel" class="splide" aria-label="The carousel with videos and images"
+      style="margin-bottom: 30px;">
+      <div class="thumbnail-slider splide__track">
+        <ul class="splide__list imgBox">
+          <% for (var i=0; i < video.length; i++) { %>
+          <li class="splide__slide">
+            <div class="<%= (i === 0) ? 'active' : '' %> h-100">
+              <div class="position-relative w-100 h-100">
+                <video src="<%= video[i].product_video_url %>" class="d-block w-100 h-100" style="object-fit: contain;"
+                  autoplay muted controls="minimal">
+                  <button class="btn btn-primary btn-sm position-absolute top-0 start-0 m-3"
+                    onclick="toggleMute(this)"></button>
+                </video>
+              </div>
+            </div>
+          </li>
+          <% } %>
+          <% for (var i=0; i < product.length; i++) { %>
+          <li class="splide__slide">
+            <div class="<%= (i === 0 && video.length === 0) ? 'active' : '' %> h-100">
+              <div class="img-zoom-container position-relative w-100 h-100">
+                <img src="<%= product[i].product_image_url %>" class="zoom-image d-block w-100 h-100"
+                  id="productImage<%= i %>" style="object-fit: contain;">
+              </div>
+            </div>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </section>
+
+    <section id="thumbnail-carousel" class="splide" aria-label="Thumbnail carousel for navigation"
+      style="display: flex; margin-bottom: 5px; margin-left: 30px; margin-right: 30px;">
+      <div class="splide__track">
+        <ul class="splide__list">
+          <% for (var i=0; i < video.length + product.length; i++) { %>
+          <li class="splide__slide custom-slide">
+            <div class="position-relative w-100 h-100">
+              <% if (i < video.length) { %>
+              <video src="<%= video[i].product_video_url %>" class="d-block w-100 h-100" style="object-fit: contain;">
+              </video>
+              <% } else { %>
+              <img src="<%= product[i - video.length].product_image_url %>" class="d-block w-100 h-100 image"
+                id="thumbnailImage<%= i %>" style="object-fit: contain;">
+              <% } %>
+            </div>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+
+
+
+  <!-- Details Section -->
+  <div class="d-flex w-50">
+    <div class="d-flex w-75 flex-column">
+
+      <h1 class="fw-medium fs-5" style="color: #2874a6;">
+        <%= product[0].product_name %>
+      </h1>
+
+
+      <div class="d-flex mt-3 gap-3 align-items-center mb-2">
+        <% if (product[0].regular_price) { %>
+        <% var regularPrice = product[0].regular_price * currRate; %>
+        <% var sellingPrice = product[0].product_price * currRate; %>
+        <% var discount = ((regularPrice - sellingPrice) / regularPrice) * 100; %>
+        <h3 class="fw-normal fs-6">
+          <div style="font-size: larger; margin-bottom: 10px;">
+
+            <%= currencyCode %>: <%= sellingPrice.toFixed(2) %>
+          </div>
+          <div class="d-flex align-items-center">
+            <div style="text-decoration: line-through; margin-right: 10px;">
+              <%= currencyCode %>: <%= regularPrice.toFixed(2) %>
+            </div>
+            <span style="color: red;"><%= discount.toFixed(0) %>% Save</span>
+          </div>
+
+        </h3>
+        <% } else { %>
+        <% var sellingPrice = product[0].product_price * currRate; %>
+        <h3 class="fw-normal fs-6">
+          <%= currencyCode %>: <%= sellingPrice.toFixed(2) %>
+        </h3>
+        <% } %>
+      </div>
+
+
+      <p class="text-dark" id="productId">Product Id : <%= product[0].product_id %>
+        <button title="Copy Product ID" id="copyButton" class="btn text-white fw-bold">
+          <i title="Copy Product ID" id="copy_icon" class="bi bi-clipboard fw-bold" style="color: #2874a6"></i>
+        </button>
+      </p>
+
+      <div class=" gap-3">
+        <p class="fw-medium">
+          Category:
+          <%= product[0].extra_cat_name %>
+        </p>
+      </div>
+
+      <p>
+
+        <% for (var p=0; p < sortedShops.length; p++) { %>
+        <% if (sortedShops[p].id==product[0].seller_id) { %>
+        <% if (sortedShops[p].distanceKm>= 1) { %>
+        <span><i class="bi bi-geo-alt-fill color-main me-1"></i>
+          <%= sortedShops[p].distanceKm %> KM
+        </span>
+        <% } else { %>
+        <span><i class="bi bi-geo-alt-fill color-main me-1"></i>
+          <%= sortedShops[p].distanceMeters %> M
+        </span>
+        <% } %>
+        <% } %>
+        <% } %>
+      </p>
+
+
+      <div>
+        <p>
+          <%- product[0].product_short_des %>
+        </p>
+      </div>
+      <div class="rating d-flex gap-4 mb-2">
+        <a class="text-black" href="#Customer_Reviews">
+          <p>
+            <%= ratings.length %> reviews
+          </p>
+          <div>
+            <% for (let j = 0; j < 5; j++) { %>
+            <% if (j < Math.floor(averageRating)) { %>
+            <i class="rating-stars bi bi-star-fill"></i>
+            <% } else if (j < Math.ceil(averageRating) && averageRating % 1 !== 0) { %>
+            <i class="rating-stars bi bi-star-half"></i>
+            <% } else { %>
+            <i class="rating-stars bi bi-star"></i>
+            <% } %>
+            <% } %>
+          </div>
+        </a>
+      </div>
+
+
+      <div class="d-none d-md-flex flex-row column-gap-2 row-gap-4 w-100">
+        <button class="btn text-white fw-normal fs-6 " style="background-color: #2874a6">
+          <a href="/cart/<%= product[0].seller_id %>/<%= encodeURIComponent(product[0].product_id) %>"
+            class="text-white product-details-addToCart-btn" style="background-color: #2874a6">
+            <i class="bi bi-cart-plus me-2"></i>
+            Add to Cart
+          </a>
+        </button>
+        <button type="button" class="btn  text-white fw-normal fs-6" style="background-color: #2874a6"
+          data-bs-toggle="modal" data-bs-target="#addToShop">
+          <i class="bi bi-plus-circle me-2"></i>
+          Add to Store
+        </button>
+        <button id="shareButton" class="btn  text-white fw-bold">
+          <i id="share_icon" class="bi bi-share-fill" style="color: #2874a6"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Add to store Modal -->
+<form class="d-flex flex-column" action="/addProductFromStore" method="POST" onsubmit="disableSubmitButton()">
+
+  <div class="modal fade" id="addToShop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content ">
+        <div class="modal-header" style="border-bottom: 0px">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Add This Product To Your Store
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+
+        <div class="modal-body">
+          <div class=" h-100 w-100 mb-3">
+            <img src="<%= product[0].product_image_url %>" class="d-block h-100 w-100" alt="Product Image"
+              style="object-fit: contain" />
+          </div>
+
+
+          <!-- Price and other details section -->
+          <div class="d-flex flex-column">
+            <div class="mb-3">
+              <!-- <label for="name_<%= i %>" class="form-label">Product ID</label> -->
+              <input type="text" class="form-control" name="product_id" value="<%= product[0].product_id %>" required
+                readonly hidden />
+            </div>
+            <div class="mb-3">
+              <label for="name_<%= i %>" class="form-label">Product Name</label>
+              <input maxlength="100" type="text" class="form-control product_name" name="product_name"
+                value="<%= product[0].product_name %>" required />
+              <small id="charCount" class="form-text text-danger">100</small><small
+                class="form-text text-danger">/100</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Regular Price (<%= currencyCode %>)</label>
+              <input type="number" class="form-control" name="regular_price"
+                value="<%= (product[0].regular_price * currRate).toFixed(2) %>" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Selling Price (<%= currencyCode %>)</label>
+              <input type="number" class="form-control" name="product_price"
+                value="<%= (product[0].product_price * currRate).toFixed(2) %>" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Product Short
+                Description</label>
+              <p type="text" class="form-control" readonly>
+                <%= product[0].product_short_des %>
+              </p>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Product Long
+                Description</label>
+              <div class="form-control">
+                <%- product[0].product_details_des %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="border-top: 0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Product details & qa section -->
+<div class="container my-5 px-2 mt-2" style="margin-top: 80px !important">
+  <nav class="mb-4 w-100">
+    <div class="d-flex gap-lg-3 gap-3 fs-6 products-tab justify-content-center justify-content-lg-start px-3 px-lg-0"
+      id="nav-tab" role="tablist">
+      <a class="nav-link active btn p-2 px-3" id="nav-description-tab" data-bs-toggle="tab"
+        data-bs-target="#nav-description" type="button">
+        Description
+      </a>
+      <a class="nav-link btn p-2 px-3" id="nav-reviews-tab" data-bs-toggle="tab" data-bs-target="#nav-reviews"
+        type="button">
+        Reviews
+      </a>
+      <a class="nav-link btn p-2 px-3" id="nav-questions-tab" data-bs-toggle="tab" data-bs-target="#nav-questions"
+        type="button">
+        FAQ
+      </a>
+    </div>
+  </nav>
+
+  <div class="tab-content w-100 " id="nav-tabContent">
+    <div class="tab-pane fade show active border rounded-3 p-4" id="nav-description" role="tabpanel" tabindex="0">
+      <div>
+        <p class="mb-5">
+          <%- product[0].product_details_des %>
+        </p>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav-reviews" role="tabpanel" tabindex="0">
+      <div class="border rounded-3 p-4">
+        <h1 id="Customer_Reviews" class="fs-5" style="color: #003F62;">Customer Reviews</h1>
+        <div class="d-flex flex-column gap-3">
+          <% for (let i = 0; i < ratings.length; i++) { %>
+          <% if (ratings[i].user_id == user[0].user_id) { %>
+          <div class="d-flex flex-column gap-0 p-3 border rounded-3">
+            <ul class="d-flex p-0 gap-2 align-items-center">
+              <% for (let j = 0; j < 5; j++) { %>
+              <% if (j < ratings[i].review_star) { %>
+              <i class="rating-stars bi bi-star-fill"></i>
+              <% } else { %>
+              <i class="rating-stars bi bi-star"></i>
+              <% } %>
+              <% } %>
+            </ul>
+            <p class="m-0 text-secondary mb-2">
+              <%= ratings[i].review_des %>
+            </p>
+            <p class="m-0">
+              <%= ratings[i].user_name %>
+            </p>
+          </div>
+          <% } %>
+          <% } %>
+        </div>
+
+        <!-- Button trigger modal -->
+        <% if (login_status) { %>
+        <button type="button" class="btn mt-3" style="text-decoration: underline; background: #003F62; color: white;"
+          id="reviewButton">
+          Write A review
+        </button>
+        <!-- Hidden message element -->
+        <div id="alreadyReviewedMessage" style="display: none; color: red;">
+          You have already reviewed this product.
+        </div>
+        <% } else { %>
+        <a href="/login" type="button" class="btn"
+          style="text-decoration: underline; background: #003F62; color: white;">
+          Login
+        </a>
+        <% } %>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addReview" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="d-flex gap-3 w-100 mb-3">
+                  <% if (typeof user !== 'undefined' && user[0].pic_url != 'null' && user[0].pic_url != null) { %>
+                  <img src="<%= user[0].pic_url %>" class="profile-image rounded-circle" alt="Profile Image">
+                  <% } else { %>
+                  <img src="https://save71.com/images/user_header.webp" class="profile-image rounded-circle"
+                    alt="Profile Image">
+                  <% } %>
+                  <div class="d-flex flex-column">
+                    <p class="m-0 fw-bold">
+                      <%= user[0].user_name %>
+                    </p>
+                    <p class="m-0 text-secondary">Rate this Product</p>
+                  </div>
+                </div>
+                <div class="rating d-flex gap-4 mb-2">
+                  <ul class="d-flex p-0 gap-2 align-items-center" data-mdb-toggle="rating" data-mdb-dynamic="true"
+                    data-mdb-color="orange">
+                    <i class="bi bi-star star"></i>
+                    <i class="bi bi-star star"></i>
+                    <i class="bi bi-star star"></i>
+                    <i class="bi bi-star star"></i>
+                    <i class="bi bi-star star"></i>
+                    <button class="btn border ms-3 p-1" id="clear-star">Clear</button>
+                  </ul>
+                </div>
+                <textarea class="w-100 border rounded-3 p-3" style="height: 10rem;" required></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn" id="submit" style="background: #003F62; color: white;">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal End -->
+
+        <!-- Hidden input field to store review status -->
+        <input type="hidden" id="userHasReviewed"
+          value="<%= JSON.stringify(ratings.some(rating => rating.user_id == user[0].user_id)) %>">
+      </div>
+
+      <div class="d-flex flex-column gap-3">
+        <% for (let i = 0; i < ratings.length; i++) { %>
+        <% if (ratings[i].user_id != user[0].user_id) { %>
+        <div class="d-flex flex-column gap-0 p-3 border rounded-3">
+          <ul class="d-flex p-0 gap-2 align-items-center">
+            <% for (let j = 0; j < 5; j++) { %>
+            <% if (j < ratings[i].review_star) { %>
+            <i class="rating-stars bi bi-star-fill"></i>
+            <% } else { %>
+            <i class="rating-stars bi bi-star"></i>
+            <% } %>
+            <% } %>
+          </ul>
+          <p class="m-0 text-secondary mb-2">
+            <%= ratings[i].review_des %>
+          </p>
+          <p class="m-0">
+            <%= ratings[i].user_name %>
+          </p>
+        </div>
+        <% } %>
+        <% } %>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Retrieve the userHasReviewed value from the hidden input field
+        const userHasReviewed = JSON.parse(document.getElementById('userHasReviewed').value);
+
+        const reviewButton = document.getElementById('reviewButton');
+        const alreadyReviewedMessage = document.getElementById('alreadyReviewedMessage');
+
+        reviewButton.addEventListener('click', () => {
+          if (userHasReviewed) {
+            // Display a message that the user has already reviewed
+            alreadyReviewedMessage.style.display = 'block';
+          } else {
+            // Trigger the modal
+            var myModal = new bootstrap.Modal(document.getElementById('addReview'));
+            myModal.show();
+          }
+        });
+      });
+    </script>
+
+
+    <!-- FAQ starts -->
+    <div class="tab-pane fade" id="nav-questions" role="tabpanel" tabindex="0">
+      <h1 class="fw-bold fs-3">Frequently Asked Questions</h1>
+      <div class="accordion accordion-flush border-top border-3 border-bottom" id="productDetailsFaq">
+        <!-- qus -->
+        <% for (var i=0; i < faq.length; i++) {%>
+        <div class="accordion-item border-3">
+          <h2 class="accordion-header border-0">
+            <button class="accordion-button collapsed ps-0 py-4 " type="button" data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseOne-<%= faq[i].faq_id %>" aria-expanded="false"
+              aria-controls="flush-collapseOne" style="background: transparent;">
+              <p class="m-0 fw-bold">
+                <%= faq[i].question %>
+              </p>
+            </button>
+          </h2>
+          <div id="flush-collapseOne-<%= faq[i].faq_id %>" class="accordion-collapse collapse border-0"
+            data-bs-parent="#productDetailsFaq">
+            <div class="py-3 pb-5">
+              <%= faq[i].answer %>
+            </div>
+          </div>
+        </div>
+        <% } %>
+        <!-- Qus ends -->
+      </div>
+    </div>
+    <!-- FAQ Ends -->
+  </div>
+</div>
+
+
+
+<!-- You might also like section -->
+<div class="container d-md-block justify-content-center d-none my-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="fs-3 fw-bolder">You might also like</h1>
+  </div>
+  <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3">
+    <% relatedProducts.slice(0, 5).forEach(function(productDetails) { %>
+    <% if (productDetails.quantity === 0) { %>
+    <div class="col">
+      <%- include('./components/product_card.ejs', { product_details: productDetails }) %>
+    </div>
+    <% } %>
+    <% }) %>
+  </div>
+</div>
+
+
+
+</div>
+
+<!-- Popular Products show at mobile devices only -->
+<div class="container w-100  d-md-none my-5">
+
+  <div class="d-flex flex-wrap w-100 gy-4">
+    <!-- Mobile per product -->
+    <% relatedProducts.forEach(function(productDetails) { %>
+    <div class="w-50 p-2">
+      <%- include('./components/product_card.ejs', { product_details: productDetails }) %>
+    </div>
+    <% }) %>
+    <!-- per product End -->
+  </div>
+</div>
+<!-- Sticky add to cart button for mobile devices -->
+<div class="d-flex d-md-none flex-row column-gap-2 row-gap-4 w-100 p-2 py-3 border"
+  style="position: fixed; bottom: -2%; left: 0; z-index: 1000; background-color: #fff;">
+  <button class="btn text-white fw-normal fs-6 " style="background-color: #2874a6">
+    <a href="/cart/<%= product[0].seller_id %>/<%= encodeURIComponent(product[0].product_id) %>"
+      class="text-white product-details-addToCart-btn" style="background-color: #2874a6">
+      <i class="bi bi-cart-plus me-2"></i>
+      Add to Cart
+    </a>
+  </button>
+  <button type="button" class="btn  text-white fw-normal fs-6" style="background-color: #2874a6" data-bs-toggle="modal"
+    data-bs-target="#addToShop">
+    <i class="bi bi-plus-circle me-2"></i>
+    Add to Store
+  </button>
+  <button id="shareButton" class="btn  text-white fw-bold">
+    <i id="share_icon" class="bi bi-share-fill" style="color: #2874a6"></i>
+  </button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+
+<script>
+  $('.imgBox').imgZoom({
+    boxWidth: 400,
+    boxHeight: 400,
+    marginLeft: 5,
+    origin: 'data-origin'
+  });
+</script>
+
+<script>
+  function disableSubmitButton() {
+    var submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Uploading...';
+  }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const shareButton = document.getElementById("shareButton");
+    const shareIcon = document.getElementById("share_icon");
+
+    // Initialize Clipboard.js
+    new ClipboardJS('#shareButton', {
+      text: function () {
+        return window.location.href;
+      }
+    });
+    document.getElementById("shareButton").addEventListener("click", function () {
+      shareButton.style.backgroundColor = '#2874a6';
+      // shareIcon.className = "bi bi-check2-all";
+      shareIcon.className = "bi bi-clipboard-check-fill";
+      shareIcon.style.color = 'white';
+
+      setTimeout(function () {
+        shareButton.style.backgroundColor = 'white';
+        shareIcon.style.color = '#2874a6';
+        shareIcon.className = "bi bi-share-fill";
+      }, 1000);
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const productId = document.getElementById("productId");
+    const copyButton = document.getElementById("copyButton");
+    const copyIcon = document.getElementById("copy_icon");
+
+    const copyToClipboard = () => {
+      const el = document.createElement('textarea');
+      el.value = productId.innerText.trim().split(":")[1].trim();
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      // Update the icon and text
+      copyButton.style.backgroundColor = '#2874a6';
+      copyButton.title = "Copied!";
+      copyIcon.title = "Copied!";
+      copyIcon.className = "bi bi-clipboard-check-fill";
+      copyIcon.style.color = 'white';
+
+      // Restore the icon and text after 1 second
+      setTimeout(() => {
+        copyButton.style.backgroundColor = 'white';
+        copyButton.title = "Copy Product ID";
+        copyIcon.title = "Copy Product ID";
+        copyIcon.className = "bi bi-clipboard";
+        copyIcon.style.color = '#2874a6';
+      }, 1000);
+    }
+
+    copyButton.addEventListener("click", copyToClipboard);
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('#charCount').text(100 - $('.product_name').val().length);
+    $('.product_name').on('input', function () {
+      var remaining = 100 - $(this).val().length;
+      $('#charCount').text(remaining);
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var main = new Splide('#main-carousel', {
+      type: 'fade',
+      rewind: true,
+      pagination: false,
+      arrows: false,
+    });
+
+    var thumbnails = new Splide('#thumbnail-carousel', {
+      fixedWidth: 100,
+      fixedHeight: 60,
+      gap: 10,
+      rewind: true,
+      pagination: false,
+      isNavigation: true,
+      breakpoints: {
+        600: {
+          fixedWidth: 60,
+          fixedHeight: 44,
+        },
+      },
+    });
+
+    main.sync(thumbnails);
+    main.mount();
+    thumbnails.mount();
+  });
+
+
+</script>
+
+<script>
+  $("#zoom").imagezoom();
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const zoomContainers = document.querySelectorAll(".img-zoom-container");
+
+    zoomContainers.forEach(container => {
+      const img = container.querySelector(".zoom-image");
+
+      container.addEventListener("mousemove", function (e) {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+
+        const xPercent = (x / container.offsetWidth) * 100;
+        const yPercent = (y / container.offsetHeight) * 100;
+
+
+        img.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+      });
+    });
+  });
+</script>
+
+
+
+<%- include('footer'); -%>

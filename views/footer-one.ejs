@@ -1,0 +1,144 @@
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Filter</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <h5>Transaction type</h5>
+          <div class="d-flex justify-content-between">
+            <button id="orderBtnModal" class="btn border" style="padding: 10px 45px;">Order</button>
+            <button id="referralBtnModal" class="btn border" style="padding: 10px 45px;">Referral</button>
+            <button id="withdrawBtnModal" class="btn border" style="padding: 10px 45px;">Withdraw</button>
+          </div>
+        </div>
+        <div class="mb-3">
+          <h5>Transaction date</h5>
+          <input class="w-100 py-2" type="date" id="transactionDate" name="transactionDate">
+        </div>
+        <div>
+          <button id="applyFilterBtn" class="w-100 border-0 py-3 rounded btn btn-primary text-white" disabled>Apply
+            Filter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    var selectedOption = null;
+    var applyFilterBtn = $("#applyFilterBtn");
+
+    $("#orderBtnModal, #referralBtnModal, #withdrawBtnModal").click(function () {
+      var buttonId = $(this).attr("id");
+      selectedOption = buttonId === "orderBtnModal" ? 1 : (buttonId === "referralBtnModal" ? 2 : 3);
+      toggleButtonSelection("#orderBtnModal, #referralBtnModal, #withdrawBtnModal", buttonId);
+      checkApplyFilterButtonStatus();
+    });
+
+    $("#transactionDate").change(function () {
+      checkApplyFilterButtonStatus();
+    });
+
+    applyFilterBtn.click(function () {
+      var selectedDate = $("#transactionDate").val();
+
+      var requestData = {
+        option: selectedOption,
+        date: selectedDate
+      };
+
+      $.ajax({
+        url: "/applyCustomFilter",
+        type: "POST",
+        data: requestData,
+        success: function (response) {
+          var options = ['Orders', 'Referrals', 'Withdraws'];
+          var modalTitle = options[selectedOption - 1] + " | " + selectedDate;
+          $(".modal-title").text(modalTitle);
+
+          var resultHTML = `<p>Found: ${response.length}</p>
+            <table class="table table-striped">
+              <colgroup>
+                <col />
+                <col />
+                ${selectedOption === 2 ? '<col />' : ''}
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Serial Number</th>
+                  <th>Amount</th>
+                  ${selectedOption === 2 ? '<th>From</th>' : ''}
+                </tr>
+              </thead>
+              <tbody>
+          `;
+          response.forEach(function (item, index) {
+            resultHTML += `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${item.amount * item.currRate}</td>
+                ${selectedOption === 2 ? '<td>' + item.user_name + '( ' + item.phone + ' )</td>' : ''}
+              </tr>
+            `;
+          });
+          resultHTML += `
+              </tbody>
+            </table>
+          `;
+          $(".modal-body").html(resultHTML);
+          $("#transactionDate").val("");
+          applyFilterBtn.prop("disabled", true);
+        },
+
+        error: function () {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Filter Error !'
+          });
+        }
+      });
+    });
+
+    function toggleButtonSelection(selector, selectedButtonId) {
+      $(selector).each(function () {
+        var buttonId = $(this).attr("id");
+        var isSelected = buttonId === selectedButtonId;
+        $(this).toggleClass("btn-primary border-primary", isSelected);
+      });
+    }
+
+    function checkApplyFilterButtonStatus() {
+      var selectedDate = $("#transactionDate").val();
+      var isSelectionComplete = selectedOption !== null && selectedDate !== "";
+      applyFilterBtn.prop("disabled", !isSelectionComplete);
+    }
+
+    $('#exampleModal').on('hidden.bs.modal', function (e) {
+      selectedOption = null;
+      $("#transactionDate").val("");
+      toggleButtonSelection("#orderBtnModal, #referralBtnModal, #withdrawBtnModal", null);
+      applyFilterBtn.prop("disabled", true);
+    });
+
+
+  });
+</script>
+
+</body>
+
+</html>
+<script src=" /js/index.js"></script>

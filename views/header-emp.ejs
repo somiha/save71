@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" sizes="325x325" href="https://save71.com/images/save71_icon.webp">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet" />
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
+
+
+
+        <!-- Custom Stylesheet -->
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/responsive.css" />
+        <link rel="stylesheet" href="/css/modal.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+        <!-- Sweet Alert -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+        <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
+        <title>Save 71</title>
+    </head>
+
+    <body class="position-relative min-vh-100 d-flex">
+        <!-- Sidebar Section -->
+        <div class="position-sticky border-end border-secondary-subtle py-4 pe-5 dashboard-sidebar"
+            style="width: 18%; height: 100vh; top: 0; box-sizing: border-box">
+            <div class="d-flex align-items-start justify-content-between">
+                <a href="/" class=" d-flex align-items-center dashboard-company-logo" style="height: fit-content;">
+                    <img src="/images/logo.webp" class="mb-5 ms-4 w-50 " />
+                </a>
+                <button class="d-lg-none btn btn-outline-secondary fs-4 dashboard-closer">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <div class="p-0 d-flex text-center text-lg-start flex-grow-1 flex-column gap-2 position-relative dashboard-sidebar-links-grp"
+                style="height: 85vh;">
+                <a href="/employee-dashboard" id="shop-employee-dashboard"
+                    class="py-2 rounded rounded-start-0 px-2 cursor-pointer sidebar-link">
+                    <p class="text-black m-0 fs-5 fw-medium ms-4">Dashboard</p>
+                </a>
+                <% if (myPermissions.includes('/products-emp') ) { %>
+                <a href="/products-emp" id="emp-products"
+                    class="py-2 rounded rounded-start-0 px-2 cursor-pointer sidebar-link">
+                    <p class="text-black m-0 fs-5 fw-medium ms-4">Products</p>
+                </a>
+                <% } %>
+
+                <a href="/orders-emp" id="emp-orders"
+                    class="py-2 rounded rounded-start-0 px-2 cursor-pointer sidebar-link">
+                    <p class="text-black m-0 fs-5 fw-medium ms-4">Selling</p>
+                </a>
+
+
+                <!-- <a href="/purchase-emp" id="emp-purchase"
+                    class="py-2 rounded rounded-start-0 px-2 cursor-pointer sidebar-link">
+                    <p class="text-black m-0 fs-5 fw-medium ms-4">Purchase</p>
+                </a> -->
+
+
+                <a href="/logout" class="py-2 rounded rounded-start-0 mt-5 px-2 cursor-pointer  sidebar-link-logout">
+
+                    <p class="fs-5 d-flex gap-3 fw-medium align-items-center ms-4"> <i
+                            class="bi bi-box-arrow-right"></i>Log Out
+                    </p>
+                </a>
+            </div>
+        </div>
+        <div class="dashboard-body" style="width: 82%;">
+            <script>
+                function addActiveClass(id) {
+                    document.querySelector("#" + id).classList.add("link-active");
+                }
+                addActiveClass("<%- menuId %>");
+            </script>

@@ -1,0 +1,150 @@
+<%- include('header'); -%>
+
+
+<script>
+  const categoryLinks = document.querySelectorAll('a[href^="#"]');
+  categoryLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const categoryElement = document.querySelector(event.target.hash);
+      categoryElement?.scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+
+
+<!-- Shops Nearby Section -->
+<div class="container mb-5">
+
+
+  <!-- Category Section -->
+
+
+  <div class="d-flex flex-column mb-5">
+    <div class="d-flex flex-lg-row flex-column gap-2 mt-5">
+
+      <!-- Sidebar -->
+      <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
+        <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1">
+          Categories
+          <i class="bi bi-chevron-right d-lg-none"></i>
+        </h1>
+        <div class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container">
+          <a id="all" href="#allProducts" class="fs-6 w-100 d-flex align-items-center justify-content-between mb-2"
+            type="button" onclick="updateDisplay(this.id)">
+            All Products
+          </a>
+          <% extraCat.forEach(exCat=>{ %>
+          <a id="<%= exCat.extra_cat_id %>" href="#all"
+            class="fs-6 w-100 d-flex align-items-center justify-content-between mb-2" type="button"
+            onclick="updateDisplay(this.id)">
+            <%= exCat.extra_cat_name %>
+          </a>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- All products start -->
+      <div class="products flex-grow-1">
+        <div class="container d-md-block justify-content-center d-none my-5">
+          <div class="products flex-grow-1">
+            <div id="allProducts" class="row row-cols-lg-4 g-4 row-cols-2 row-cols-md-3">
+              <!-- Per product start -->
+              <% shops.forEach(shop => { %>
+              <!-- New Product Card -->
+              <div class="col">
+                <%- include('./components/product_card.ejs', {
+                  product_details: shop,
+                })  -%>
+              </div>
+              <% }) %>
+              <!-- Per product end -->
+            </div>
+          </div>
+          <!-- All products End -->
+
+
+
+
+          <!-- Products Section -->
+          <div id="notAll" class="products flex-grow-1" style="display: none;">
+            <% extraCat.forEach(exCat => { %>
+            <div id="display_<%= exCat.extra_cat_id %>" class="w-100 mb-5 extraCatProduct" style="display: none">
+              <div class="flex-grow-1">
+                <div class="w-100 d-flex align-items-center justify-content-between mb-0">
+                  <h3 class="fs-4" id="<%= exCat.extra_cat_id %>">
+                    <%= exCat.extra_cat_name %>
+                  </h3>
+                  <!-- Load more button -->
+                  <a href="/product/<%= exCat.extra_cat_id %>?name=<%= exCat.extra_cat_name %>"
+                    class="btn fw-medium text-primary fs-5">
+                    See All</a>
+                </div>
+                <!-- Product start -->
+                <div class="w-100 row row-cols-2 row-cols-lg-4 gap-2 row-gap-3">
+                  <% shops.forEach(shop =>{%>
+                  <% if (shop.product_cat_id==exCat.extra_cat_id) { %>
+                  <!-- New Product Card -->
+                  <%- include('./components/product_card.ejs', {
+                  product_details: shop,
+                }) %>
+                  <% } %>
+                  <% }) %>
+                </div>
+                <!-- Product End -->
+              </div>
+            </div>
+
+            <% }) %>
+
+          </div>
+        </div>
+
+        <!-- Nearest Products show at mobile devices only -->
+        <div class="container w-100  d-md-none my-5">
+
+          <div class="d-flex flex-wrap w-100 gy-4">
+            <!-- Mobile per product -->
+            <!-- Per product start -->
+            <% shops.forEach(shop => { %>
+            <!-- New Product Card -->
+            <div class="w-50 p-2">
+              <%- include('./components/product_card.ejs', {
+                product_details: shop,
+                })  -%>
+            </div>
+            <% }) %>
+            <!-- Per product end -->
+            <!-- Mobile per product -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function updateDisplay(id) {
+    const allProductElement = document.getElementById('allProducts')
+    const otherProductsElement = document.getElementById('notAll')
+
+    if (id == 'all') {
+      otherProductsElement.style.display = 'none'
+      allProductElement.style.display = 'flex'
+    } else {
+      const catProductsClass = document.querySelectorAll('.extraCatProduct')
+      const catProductElement = document.getElementById('display_' + id)
+      allProductElement.style.display = 'none'
+      otherProductsElement.style.display = 'flex'
+      catProductsClass.forEach(elements => {
+        elements.style.display = 'none'
+      })
+      catProductElement.style.display = 'flex'
+    }
+  }
+</script>
+<%- include('footer'); -%>

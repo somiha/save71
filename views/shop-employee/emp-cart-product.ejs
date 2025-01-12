@@ -1,0 +1,244 @@
+<%- include('../header-emp'),{menuId:menuId}; -%>
+
+<div class="w-100 bg-light">
+    <%- include('../dashboard-emp'),{menuId:menuId}; -%>
+
+    <div class="my-5 px-5">
+        <div class="d-flex">
+
+        </div>
+        <!-- Header -->
+        <!-- search -->
+        <!-- <div class="w-lg-50 mb-3">
+				<input type="text" class="form-control p-2" id="search_text" placeholder="Search by product ID" />
+			</div> -->
+        <!-- search -->
+
+        <div class="d-flex flex-column row-gap-3 flex-lg-row justify-content-between align-items-center mb-4">
+            <div class="text-left">
+                <p class="mb-0 fw-middle fs-4">Total Products: <%= products.length %>
+                </p>
+            </div>
+
+            <div class="d-flex column-gap-2">
+                <div class="dropdown">
+                    <button class="btn btn-main-outline d-flex gap-3" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Sort <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="filterProducts('all')">All Products</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="filterProducts('unpublished')">Published
+                                Products</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="filterProducts('published')">Unpublished
+                                Products</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="published" class="products">
+            <!-- Published Products -->
+            <p class="mb-0 fs-5 fw-medium">Published Products</p>
+            <% for (var i=0; i < products.length; i++) { %>
+            <% if (products[i].quantity !=-1) { %>
+            <div class="d-flex align-items-center mt-0 mb-0 py-0 border-bottom published_product individual_product">
+                <div class="w-100">
+                    <div class="d-flex align-items-center justify-content-between py-0">
+                        <div class="d-flex align-items-center w-50">
+                            <% for (var k = 0; k < images.length; k++) { %>
+                            <% if (images[k].product_id == products[i].product_id) { %>
+                            <img class="w-25 pe-4" src="<%= images[k].product_image_url %>" alt=".." />
+                            <% } %>
+                            <% } %>
+                            <div class="fw-medium d-flex flex-column gap-1">
+                                <p class="m-0 fs-6 fw-medium">
+                                    <% if (products[i].is_branded == 1) {%>
+                                    <i class="bi bi-patch-check-fill branded_badge"></i>
+                                    <% } %>
+                                    <%= products[i].product_name %>
+                                    <% var statName = ['','','Pending', 'Rejected'] %>
+                                    <span
+                                        class="badge rounded-pill fs-6 text-bg-danger"><%= statName[products[i].status-1] %></span>
+                                    <% if (!products[i].admin_published) { %>
+                                    <span class="badge rounded-pill text-bg-secondary fs-6"
+                                        title="Admin will review">Unpublished</span>
+                                    <% } %>
+                                    <% if (products[i].status != 1) { %>
+                                    <span class="badge rounded-pill text-bg-secondary fs-6" title="Admin will review">In
+                                        Review</span>
+                                    <% } %>
+                                    <% if (products[i].is_branded == 1) {%>
+                                    <!-- <span class="badge rounded-pill text-bg-warning fs-6" title="It's a branded product">Branded</span> -->
+                                    <% } %>
+                                </p>
+                                <p class="m-0 d-flex text-secondary product_id" id="<%= i %>_published_pID">Product Id :
+                                    <%= products[i].product_id %></p>
+                                </p>
+                                <p class="m-0 d-flex">Price : <%= (products[i].product_price * currRate).toFixed(2) %>
+                                    <%= currencyCode  %>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-black d-flex flex-lg-row">
+                            <a href="/emp-addToCartBySeller/<%=order_id%>/<%=userId%>/<%=products[i].product_id%>/<%=products[i].seller_id%>"
+                                title="Unpublish this product"><i
+                                    class="bi bi-plus text-white btn rounded-0 border fs-5"
+                                    style="background-color: #1A63A6;"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <% } %>
+        </div>
+
+        <div id="unpublished" class="products">
+            <!-- Unpublished Products -->
+            <!-- <p class="mb-0 fs-5 fw-medium mt-5">Unpublished Products</p> -->
+            <% for (var i=0; i < products.length; i++) { %>
+            <% if (products[i].quantity==-1) { %>
+            <div class="d-flex align-items-center mt-0 mb-0 py-0 border-bottom unpublished_product individual_product">
+                <!-- <div class="pe-1">
+          <input type="checkbox" id="<%= products[i].product_id %>" name="product_check" value="product" class="form-check-input cursor-pointer" />
+        </div> -->
+                <div class="w-100 ">
+                    <div class="d-flex align-items-center justify-content-between py-1">
+                        <div class="d-flex align-items-center w-50">
+                            <!-- <img class="w-25 pe-4" src="<%= // products[i].product_image_url %>" alt="" /> -->
+                            <% for (var k=0; k < images.length; k++) { %>
+                            <% if (images[k].product_id==products[i].product_id) { %>
+                            <img class="w-25 pe-4" src="<%= images[k].product_image_url %>" alt=".." />
+                            <% } %>
+                            <% } %>
+                            <div class="fw-medium d-flex flex-column gap-1" style="width: max-content">
+                                <p class="m-0 fs-5 fw-medium">
+                                    <%= products[i].product_name %>
+                                    <% var statName = ['','','Pending', 'Rejected'] %>
+                                    <span
+                                        class="badge rounded-pill fs-6 text-bg-danger"><%= statName[products[i].status-1] %></span>
+                                    <% if (!products[i].admin_published) { %>
+                                    <span class="badge rounded-pill text-bg-secondary fs-6"
+                                        title="Admin will review">Unpublished</span>
+                                    <% } %>
+                                    <% if (products[i].status != 1) { %>
+                                    <span class="badge rounded-pill text-bg-secondary fs-6" title="Admin will review">In
+                                        Review</span>
+                                    <% } %>
+                                </p>
+                                <p class="m-0 d-flex text-secondary product_id" id="<%= i %>_unpublished_pID">Product Id
+                                    : <%= products[i].product_id %></p>
+                                <p class="m-0 d-flex fs-6">Price: <%=
+																			(products[i].product_price *
+																			currRate).toFixed(2) %>
+                                    <%= currencyCode %>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <a href="#" title="Delete this product"
+                                onclick="showDeleteConfirmation('<%= products[i].product_id %>')">
+                                <i class="bi bi-trash btn rounded-0 border fs-5"></i>
+                            </a>
+                            <a href="/edit_product-emp/<%= encodeURIComponent(products[i].product_id) %>"
+                                title="Edit this product"><i class="bi bi-pencil btn rounded-0 border fs-5"></i></a>
+                            <a href="/publish_product-emp/<%= encodeURIComponent(products[i].product_id) %>"
+                                title="Publish this product"><i
+                                    class="bi bi-eye btn-danger btn rounded-0 border fs-5"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <% } %>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function showDeleteConfirmation(productId) {
+        Swal.fire({
+            title: 'Delete Product',
+            text: 'Are you sure you want to delete this product?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#dc3545',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/del_product-emp/${productId}`;
+            }
+        });
+    }
+</script>
+
+<script>
+    function filterProducts(category) {
+        console.log(category)
+        if (category === 'all') {
+            $('.products').css('display', 'block');
+        } else {
+            // Hide all product lists and then show the selected category
+            $('.products').css('display', 'block');
+            $('#' + category).css('display', 'none');
+        }
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Get the query parameter from the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var queryParam = urlParams.get('pID');
+
+        // If query parameter is present, set the search box value and filter products
+        if (queryParam) {
+            queryParam = decodeURIComponent(queryParam);
+            $('#search_text').val(queryParam);
+            filterProducts(queryParam);
+        }
+
+        $('#search_text').on('input', function () {
+            var searchVal = $(this).val().toLowerCase().trim();
+
+            // If search is empty, show all products
+            if (searchVal === '') {
+                $(".individual_product").show();
+                return;
+            }
+
+            // Filter and show the individual products that match the search value
+            filterProducts(searchVal);
+        });
+
+        // Function to filter products based on search value
+        function filterProducts(searchVal) {
+            // Hide all individual products using display: none with !important
+            $(".individual_product").attr('style', 'display: none !important');
+
+            // Filter and show the individual products that match the search value
+            $(".individual_product").filter(function () {
+                var productId = $(this).find(".product_id").text().toLowerCase();
+                return productId.includes(searchVal);
+            }).attr('style', 'display: block !important');
+        }
+    });
+</script>
+
+
+
+
+
+<%- include('../footer-one'); -%>

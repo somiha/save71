@@ -1,0 +1,57 @@
+<%- include('header'); -%>
+
+
+  <!-- Upload Product Section -->
+  <div class="bg-body-secondary flex-grow-1">
+    <div class="container d-flex justify-content-center align-items-center mt-3">
+      <div class="bg-white p-3 px-4 my-5 rounded-3" style="width: 40rem">
+        <div class="d-flex flex-column row-gap-4">
+          <div class="">
+
+
+            <!-- FAQ start -->
+            <label for="product_price" class="form-label fw-medium">Frequently Asked Questions</label>
+            <% for (var i=0; i < (faqs==undefined ? 0 : faqs.length); i++) { %>
+              <div class="faq-item">
+                <form action="/updateFaq/<%= faqs[i].faq_id %>" method="POST">
+                  <div class="input-group d-flex flex-column flex-grow-1 row-gap-2 me-2 my-2">
+                    <input type="text" class="form-control w-100 rounded-2" id="qus" placeholder="Enter a Question"
+                      name="qus" value="<%= faqs[i].question %>" required>
+                    <textarea type="text" class="form-control w-100 rounded-2" id="ans" placeholder="Enter an Answer"
+                      name="ans" value="<%= faqs[i].answer %>" required><%= faqs[i].answer %></textarea>
+                    <div class="d-flex w-100 column-gap-3">
+                      <button type="submit" class="btn w-50 btn-outline-success update-btn p-1"><i
+                          class="bi bi-check fs-4"></i></button>
+                      <a href="/delFaq/<%= faqs[i].faq_id %>" class="btn w-50 btn-outline-danger delete-btn p-1">
+                        <i class="bi bi-x fs-4"></i>
+                      </a>
+
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <% } %>
+
+          </div>
+          <div class="">
+            <label for="product_price" class="form-label fw-medium">Add a New Question</label>
+            <form action="/addFaq/<%= encodeURIComponent(product_id) %>" method="POST" class="d-flex">
+              <div class="input-group d-flex flex-column flex-grow-1 row-gap-2 me-2 my-2">
+                <input type="text" class="w-100 form-control rounded-2" id="question" name="question"
+                  placeholder="Enter a Question" required>
+                <textarea type="text" class="form-control w-100 rounded-2" id="answer" name="answer"
+                  placeholder="Enter an Answer" required></textarea>
+                <button type="submit" class="btn rounded-2 text-white" style="background: #1a63a6;">Add</button>
+              </div>
+            </form>
+          </div>
+          <a href="/edit_product/<%= encodeURIComponent(product_id) %>" type="button" class="w-100 btn text-white" style="background: #1a63a6;">Preview Product</a>
+          <a href="/products" type="button" class="w-100 btn text-white" style="background: #1a63a6;">Finish</a>
+          <!-- FAQ ends -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('footer'); -%>

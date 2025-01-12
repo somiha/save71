@@ -1,0 +1,622 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta property="og:title" content="<%= ogTitle %>">
+  <meta property="og:site_name" content="Save-71">
+  <meta property="og:url" content="<%= ogUrl %>">
+  <meta property="og:description" content="Unlock Global Connectivity with Save71 for Business">
+  <meta property="og:type" content="business.business">
+
+  <meta property="og:image" content="<%= ogImage %>">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+  <link rel="icon" sizes="325x325" href="https://save71.com/images/save71_icon.webp">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <title>Save 71</title>
+</head>
+
+
+
+<script>
+  $(document).ready(function () {
+    const searchDropDown = $('.searchDropDown');
+    function updateSearchResults(query, containerId) {
+      if (query.length >= 0 && query !== "") {
+        $.ajax({
+          type: 'POST',
+          url: '/search/suggestions',
+          data: {
+            query: query
+          },
+          success: function (data) {
+            var html = '';
+            if (data.length > 0) {
+              searchDropDown.removeClass('d-none');
+              html += '<div class="search-results-container text-dark  " style="z-index: 1000;  width: 100%;  backgound:#fff">';
+              html += '<div class="search-results">';
+              data.forEach(function (result) {
+                if (result.type == 'product') {
+                  html += '<a href="/product-details/' + encodeURIComponent(result.name) + '/' + encodeURIComponent(result.id) + '" class="text-decoration-none text-dark">';
+                  html += '<div class="card mb-3 py-1 result-card">';
+                  html += '<div class=" d-flex column-gap-3">';
+                  html += '<div class="search-result-img-container" >';
+                  html += '<img src="' + result.product_image_url + '" class=" rounded" alt="Product Image">';
+                  html += '</div>';
+                  html += '<div class="search-result-text-container" >';
+                  html += '<h5 class="card-title fs-5 search-result-text" >' + result.name + '</h5>';
+                  html += '<p class="card-text fw-bold"> ' + (result.price * result.currRate).toFixed(2) + ' ' + result.currencyCode + '</p>';
+                  if (result.distance !== undefined) {
+                    html += '<p class="card-text text-muted"><i class="bi bi-geo-alt-fill me-1"></i> ' + result.distance.toFixed(2) + ' KM</p>';
+                  }
+                  html += '</div>';
+                  html += '</div>';
+                  html += '</div>';
+                  html += '</div>';
+                  html += '</a>';
+                } else if (result.type == 'shop') {
+                  html += '<a href="/shop/' + result.shop_custom_url + '" class="text-decoration-none text-dark">';
+                  html += '<div class="card mb-3 result-card">';
+                  html += '<div class="card-body">';
+                  html += '<h5 class="card-title fs-5 search-result-text">' + result.name + '</h5>';
+                  if (result.distance !== undefined) {
+                    html += '<p class="card-text text-muted"><i class="bi bi-geo-alt-fill me-1"></i> ' + result.distance.toFixed(2) + ' KM</p>';
+                  }
+                  html += '</div>';
+                  html += '</div>';
+                  html += '</a>';
+                }
+              });
+              html += '</div>';
+              html += '</div>';
+            } else {
+              html += '<div class="search-results-container text-dark " style="z-index: 1000;  width: 100%;  backgound:#fff">No results found.</div>';
+            }
+
+            $(`#${containerId}`).html(html).show();
+          },
+          error: function (err) {
+            console.log(err);
+          }
+        });
+      } else {
+        searchDropDown.addClass('d-none');
+        $(`#${containerId}`).empty().hide();
+      }
+    }
+
+    $('#search-large').on('input', function () {
+      updateSearchResults($(this).val(), 'search-results-large');
+    });
+
+    $('#search-small').on('input', function () {
+      updateSearchResults($(this).val(), 'search-results-small');
+    });
+    $(document).on('click', function (e) {
+      if (!$(e.target).closest('.searchDropDown').length && !$(e.target).is('#search-large')) {
+        searchDropDown.addClass('d-none');
+      }
+    });
+  });
+</script>
+
+
+<style>
+  .profile-image {
+    width: 50px;
+    height: 50px;
+  }
+</style>
+
+<body class="position-relative min-vh-100">
+  <nav class="navbar d-flex align-items-center row-gap-3 bg-white border-bottom py-4">
+    <div class="w-100 container d-flex align-items-center">
+      <div class="d-flex column-gap-1 align-items-center">
+        <button class="btn border d-flex d-lg-none" id="sidebar-btn">
+          <i class="bi bi-list fs-4"></i>
+        </button>
+        <a href="/"><img src="/images/logo.webp" width="100" /></a>
+      </div>
+
+      <!-- Search and All Category (visible on large devices) -->
+      <div class="d-none d-lg-flex align-items-center flex-grow-1 header-search-container position-relative"
+        style="max-width: 50%;">
+        <form class="d-flex w-100 position-relative" role="search" id="search-form" action="/search" method="GET">
+          <div class="search d-flex w-100">
+            <input class="form-control bg-transparent rounded-2 nav-search py-2"
+              style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Search" aria-label="Search"
+              id="search-large" name="q" autocomplete="off" />
+          </div>
+          <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
+            style="right: 0%;" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+        <div class="w-100 position-absolute d-none border searchDropDown p-2" id="search-results-large"
+          style="top: 80%; z-index: 1000; background-color: #fff;"></div>
+      </div>
+
+      <!-- All Category Button (hidden on large devices) -->
+      <div class="d-none d-lg-flex align-items-center ms-3 d-lg-none">
+        <a href="/all-category" class="text-center btn d-flex align-items-center gap-2 all-category"
+          style="border: 1px solid #02436a; color: #02436a;">
+          All Category
+          <i class="bi bi-arrow-right" style="line-height: 0"></i>
+        </a>
+      </div>
+
+      <!-- Other navigation links -->
+      <ul
+        class="column-gap-3 px-0 align-self-center mb-0 d-flex align-items-center justify-content-lg-around fs-3 header-links"
+        style="max-width: 50%;">
+        <li class="nav-item">
+          <a class="nav-link active d-none d-lg-flex align-items-center gap-2" aria-current="page"
+            href="<%= login_status? "/dashboard" : "/login"  %>">
+            <% // console.log("UImg: ", userImage) %>
+            <% if (typeof userImage !== 'undefined' && userImage != 'null' && userImage != null) { %>
+            <img src="<%= userImage %>" class="profile-image rounded-circle" alt="Profile Image">
+            <% } else { %>
+            <img src="https://save71.com/images/user_header.webp" alt="Profile Image" height="40px" width="40px">
+            <% } %>
+            <p class="m-0 fs-6 hidden-sm" style="color: #1A63A6;"><%= login_status? userName : "Sign In"  %></p>
+          </a>
+          <a class="nav-link active d-lg-none d-flex align-items-center gap-2" style="color: #1A63A6;"
+            aria-current="page" href="<%= login_status? "/dashboard" : "/login"  %>">
+            <% if (typeof userImage !== 'undefined' && userImage != 'null' && userImage != null) { %>
+            <img src="<%= userImage %>" class="profile-image rounded-circle" alt="Profile Image">
+            <% } else { %>
+            <img src="https://save71.com/images/user_header.webp" alt="Profile Image" height="40px" width="40px">
+            <% } %>
+            <!-- <img src="./images/placeholder" class="profile-image rounded-circle" alt="Profile Image" style="width:100% ; height: fit-content;"> -->
+            <!-- <i class="bi bi-person-circle fs-2"></i> -->
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex gap-2 position-relative cart-btn" href="#">
+            <img src="/images/shopping-cart.webp" alt="" srcset="">
+            <!-- If no product in cart mute this -->
+            <% if (cart.length > 0) { %>
+            <span class="position-absolute rounded-circle text-white fs-6 text-center"
+              style="background-color: #1A63A6;height: 1.3rem;width: 1.3rem;left: 41%;top: -50%;"><%= cart == undefined ? "0" : cart.length  %></span>
+            <p class="m-0 fs-6" style="color: #1A63A6;"></p>
+            <% } %>
+          </a>
+        </li>
+
+        <!-- Notification -->
+        <li class="nav-item" style="position: relative;">
+          <a class="nav-link d-flex gap-2 position-relative notification-btn" href="#">
+            <i class="bi bi-bell" style="font-size: 22px; color: #1A63A6;"></i>
+            <%
+                  var notCnt = 0
+                  notification.forEach(function(not) {
+                    if (not.is_read == 0) {
+                      notCnt++
+                    }
+                  })
+                  %>
+            <% if (notCnt > 0) { %>
+            <span class="position-absolute rounded-circle text-white fs-6 text-center"
+              style="background-color: #1A63A6;height: 1.3rem;width: 1.3rem;left: 41%;top: -50%;"><%= notification == undefined ? "0" : notCnt  %></span>
+            <p class="m-0 fs-6" style="color: #1A63A6;"></p>
+            <% } %>
+          </a>
+
+          <div class="notification-div-hide rounded-2 shadow" id="notification-container">
+            <% for (var i = 0; i < notification.length; i++) { %>
+            <div id="notification_<%= notification[i].notification_id %>"
+              data-id="<%= notification[i].notification_id %>"
+              class="d-flex flex-column <%= notification[i].is_read == 1 ? "" : "notification_unread_color" %> gap-2 border-bottom p-3 notification">
+
+              <!-- Notification Text -->
+              <a href="<%= notification[i].url %>"
+                class="<%= notification[i].is_read == 0 ? "text-light" : "text-dark" %>">
+                <label class="form-label color8 <%= (notification[i].is_read == 0) ? 'required-label' : '' %>">
+                  <%= notification[i].notification %>
+                </label>
+                <br>
+                <!-- Time Ago Display under the notification text -->
+                <small class="time-ago <%= notification[i].is_read == 1 ? 'text-dark' : 'text-light' %>"
+                  data-created-at="<%= notification[i].created_at %>"></small>
+              </a>
+            </div>
+            <% } %>
+          </div>
+
+
+        </li>
+
+        <!-- location -->
+        <li class="nav-item">
+          <form id="updateShopLoc" style="margin: 0;" action="/updateStoreLocation" method="POST">
+            <a type="button" class="border-0 nav-link bg-transparent" onclick="upStoreLoc()">
+              <i class="bi bi-geo-alt-fill" style="color: #1A63A6; "></i>
+            </a>
+            <input type="text" id="latitude" name="latitude" placeholder="latitude" required readonly hidden />
+            <input type="text" id="longitude" name="longitude" placeholder="longitude" required readonly hidden />
+          </form>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Search and All Category for mobile view -->
+    <div class="position-relative d-flex container d-lg-none flex-grow-1 px-3 w-100">
+      <div class="d-flex w-100">
+        <form class="d-flex w-100 position-relative" role="search" id="search-form" action="/search" method="GET">
+          <div class="search d-flex w-100">
+            <input class="form-control bg-transparent rounded-2 nav-search py-2"
+              style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Search" aria-label="Search"
+              id="search-small" name="q" autocomplete="off" />
+          </div>
+          <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
+            style="right: 0%;" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- All Category Button (for mobile view) -->
+      <div class="d-flex align-items-center ms-2 d-lg-none">
+        <a href="/all-category" class="text-center btn d-flex align-items-center gap-2 all-category"
+          style="border: 1px solid #02436a; color: #02436a; height: 100%; padding: 0.5rem 1rem;">
+          All Category
+          <i class="bi bi-arrow-right" style="line-height: 0"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header Navbar -->
+
+
+
+  <!-- Link Navbar -->
+  <nav class="navbar navbar-expand-lg d-none d-lg-block bg-white py-0"
+    style="background: linear-gradient(180deg, #003F62 0%, #1A63A6 100%);">
+    <div class="container w-100">
+
+      <!-- No toggle  -->
+      <button class="navbar-toggler button-white" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon navbar-toggler-light text-white"></span>
+      </button>
+      <!-- No toggle  -->
+
+      <div class="collapse navbar-collapse h-100" id="navbarNavDropdown">
+        <ul class="navbar-nav  w-100 position-relative">
+          <li class="nav-item dropdown pe-5 py-1 all-category" style="background: #1A63A6;">
+            <a class="btn nav-link d-flex text-white gap-5 fw-normal" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="true">
+              All Categories
+              <i class="bi bi-chevron-down"> </i>
+            </a>
+
+            <ul class="dropdown-menu text-capitalize w-100 rounded-0" id="mainDropdown">
+              <div class="d-flex flex-column" style="max-height: 80vh; overflow-y: auto; ">
+
+
+                <% for (var i = 0; i < mainCat.length; i++) { %>
+                <li class="sub-dropdown">
+                  <a class="dropdown-item d-flex justify-content-between align-items-center"
+                    style="width: 100%; word-wrap: break-word; height: fit-content; white-space: normal;"
+                    href="/all-category/#<%= mainCat[i].main_cat_name %>"><%= mainCat[i].main_cat_name  %>
+                    <i class="bi bi-chevron-right"></i>
+                  </a>
+                  <ul class="sub-dropdown-list border border-secondary-subtle px-0 bg-white">
+                    <div class="d-flex flex-column" style="max-height: 80vh; overflow-y: auto;">
+                      <% for (var j = 0; j < subCat.length; j++) { %>
+                      <% if (mainCat[i].main_cat_id == subCat[j].sub_cat_ref) { %>
+                      <li class="sub-dropdown">
+                        <a href="/sub-category/<%= subCat[j].sub_cat_id %>?name=<%= subCat[j].sub_cat_name  %>"
+                          style="width: 100%; word-wrap: break-word; height: fit-content; white-space: normal;"
+                          class="dropdown-item d-flex justify-content-between align-items-center"><%= subCat[j].sub_cat_name  %>
+                          <i class="bi bi-chevron-right"></i>
+                        </a>
+                        <ul class="sub-dropdown-list border border-secondary-subtle px-0 bg-white">
+                          <div class="d-flex flex-column" style="max-height: 80vh; overflow-y: auto;">
+                            <% for (var k = 0; k < extraCat.length; k++) { %>
+                            <% if (extraCat[k].extra_cat_ref == subCat[j].sub_cat_id) { %>
+                            <li><a
+                                href="/product/<%= extraCat[k].extra_cat_id %>?name=<%= extraCat[k].extra_cat_name %>"
+                                style="width: 100%; word-wrap: break-word; height: fit-content; white-space: normal;"
+                                class="dropdown-item d-flex justify-content-between"><%= extraCat[k].extra_cat_name %></a>
+                            </li>
+                            <% } %>
+                            <% } %>
+                          </div>
+                        </ul>
+                      </li>
+                      <% } %>
+                      <% } %>
+                    </div>
+                  </ul>
+                </li>
+                <% } %>
+              </div>
+            </ul>
+          </li>
+
+          <li class="flex-grow-1">
+            <ul class="d-flex w-75 justify-content-center gap-5">
+              <% if (navId == undefined) var navId = "home" %>
+              <li class="nav-item py-1 <%= navId == "home" ? "page-active" : ""  %>">
+                <a class="nav-link text-white " aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item py-1 <%= navId == "area-shop" ? "page-active" : ""  %>">
+                <a class="nav-link text-white" href="/area-shop">Area Shop</a>
+              </li>
+              <li class="nav-item py-1 <%= navId == "manufacturerHome" ? "page-active" : ""  %>">
+                <a class="nav-link text-white" href="/manufacturerHome">Manufacturer</a>
+              </li>
+              <li class="nav-item py-1 <%= navId == "services" ? "page-active" : ""  %>">
+                <a class="nav-link text-white" href="/all-category/#Services">Services</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- sidebar for mobile devices -->
+  <div class="position-fixed bg-white border shadow-lg d-flex d-lg-none flex-column p-2 sidebar-hide"
+    id="sidebar-container"
+    style="height: 100vh; overflow-y: auto; width: 60%; z-index: 9999; top: 0; left: 0; transition: all 200ms;">
+    <button class="btn border align-self-end mb-4" id="sidebar-close"> <i class="bi bi-x fs-2"></i></button>
+    <nav class="d-flex flex-column bg-white py-0">
+      <div class="w-100 h-100">
+
+        <ul class="px-0 w-100 d-flex flex-column row-gap-3 position-relative">
+          <li class="py-1 border-bottom">
+            <a class="py-2 d-flex justify-content-between fw-normal sidebar-dropdown-btn">
+              All Categories
+              <i class="bi bi-chevron-right"> </i>
+            </a>
+
+            <ul class="ps-2 border-start row-gap-2 flex-column text-capitalize w-100 rounded-0 d-none py-2">
+              <% for (var i = 0; i < mainCat.length; i++) { %>
+              <li>
+                <a class="p-2 d-flex justify-content-between sidebar-dropdown-btn"
+                  href="/all-category"><%= mainCat[i].main_cat_name  %>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+                <ul class="border-start d-none row-gap-2 flex-column border-secondary-subtle ps-2 bg-white py-2">
+                  <% for (var j = 0; j < subCat.length; j++) { %>
+                  <% if (mainCat[i].main_cat_id == subCat[j].sub_cat_ref) { %>
+                  <li>
+                    <a href="/sub-category/<%= subCat[j].sub_cat_id %>?name=<%= subCat[j].sub_cat_name  %>"
+                      class="p-2 dropdown-item sidebar-dropdown-btn d-flex justify-content-between"><%= subCat[j].sub_cat_name  %>
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                    <ul
+                      class=" bg-secondary-subtle  d-none row-gap-2 flex-column border-secondary-subtle ps-2 bg-white py-2">
+                      <% for (var k = 0; k < extraCat.length; k++) { %>
+                      <% if (extraCat[k].extra_cat_ref == subCat[j].sub_cat_id) { %>
+                      <li><a href="/product/<%= extraCat[k].extra_cat_id %>?name=<%= extraCat[k].extra_cat_name %>"
+                          class="p-2 dropdown-item d-flex justify-content-between"><%= extraCat[k].extra_cat_name %></a>
+                      </li>
+                      <% } %>
+                      <% } %>
+                    </ul>
+                  </li>
+                  <% } %>
+                  <% } %>
+                </ul>
+              </li>
+              <% } %>
+            </ul>
+          </li>
+
+          <li class="">
+            <ul class="d-flex flex-column row-gap-3 justify-content-center px-0">
+              <li class=" py-1 border-bottom ">
+                <a class="text-black " aria-current="page" href="/">Home</a>
+              </li>
+              <li class=" py-1 border-bottom ">
+                <a class="text-black" href="/area-shop">Area Shop</a>
+              </li>
+              <li class=" py-1 border-bottom ">
+                <a class="text-black" href="/manufacturerHome">Manufacturer</a>
+              </li>
+              <li class=" py-1 border-bottom ">
+                <a class="text-black" href="/all-category/#Services">Services</a>
+              </li>
+
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+  </div>
+
+  <script>
+    function timeAgo(date) {
+      const now = new Date();
+      const createdAt = new Date(date);
+      const diffInSeconds = Math.floor((now - createdAt) / 1000);
+
+      if (diffInSeconds < 60) {
+        return `${diffInSeconds} seconds ago`;
+      } else if (diffInSeconds < 3600) {
+        const minutes = Math.floor(diffInSeconds / 60);
+        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+      } else if (diffInSeconds < 86400) {
+        const hours = Math.floor(diffInSeconds / 3600);
+        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+      } else if (diffInSeconds < 2592000) {
+        const days = Math.floor(diffInSeconds / 86400);
+        return `${days} day${days > 1 ? 's' : ''} ago`;
+      } else if (diffInSeconds < 31536000) {
+        const months = Math.floor(diffInSeconds / 2592000);
+        return `${months} month${months > 1 ? 's' : ''} ago`;
+      } else {
+        const years = Math.floor(diffInSeconds / 31536000);
+        return `${years} year${years > 1 ? 's' : ''} ago`;
+      }
+    }
+
+    // Find all elements with the class 'time-ago' and update them
+    document.querySelectorAll('.time-ago').forEach(function (element) {
+      const createdAt = element.getAttribute('data-created-at');
+      const timeAgoText = timeAgo(createdAt);
+      element.textContent = timeAgoText;
+    });
+  </script>
+
+
+  <script>
+    const sidebarContainer = document.querySelector('#sidebar-container');
+    const sidebarClose = document.querySelector('#sidebar-close');
+    const sidebarBtn = document.querySelector('#sidebar-btn');
+
+    sidebarBtn.addEventListener('click', e => {
+      sidebarContainer.classList.remove('sidebar-hide');
+    })
+    sidebarClose.addEventListener('click', e => {
+      sidebarContainer.classList.add('sidebar-hide');
+    })
+
+    const sidebarDropDownBtns = document.querySelectorAll('.sidebar-dropdown-btn');
+    sidebarDropDownBtns.forEach(sdb => {
+      sdb.addEventListener('click', e => {
+        e.preventDefault();
+        sdb.parentElement.children[1].classList.toggle('d-none');
+        sdb.parentElement.children[1].classList.toggle('d-flex');
+
+
+        if (sdb.children[0].classList.contains('bi-chevron-right'))
+          sdb.children[0].classList.replace('bi-chevron-right', 'bi-chevron-down');
+        else if (sdb.children[0].classList.contains('bi-chevron-down'))
+          sdb.children[0].classList.replace('bi-chevron-down', 'bi-chevron-right');
+        // console.log(sdb.children)
+      })
+    })
+  </script>
+
+
+  <!-- Function to auto cut due payment  -->
+  <script>
+      (function () {
+        function checkValidity() {
+          $.ajax({
+            url: '/checkValidity',
+            method: 'POST',
+            dataType: 'json',
+            data: {},
+            success: function (response) {
+              if (response === true) {
+                $('#duePaymentWarning').css('visibility', 'hidden');
+              } else {
+                $('#duePaymentWarning').css('visibility', 'visible');
+              }
+            },
+            error: function (error) {
+              // Handle errors using SweetAlert
+              Swal.fire({
+                icon: 'error',
+                title: 'Error checking validity',
+                text: 'An error occurred while checking the validity. Please try again later.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+              });
+              console.error('Error checking validity:', error);
+            }
+          });
+        }
+
+        $(document).ready(function () {
+          checkValidity();
+        });
+      })();
+  </script>
+
+  <!-- Location update script -->
+  <!-- Confirm Before Updating shop location -->
+  <script>
+    async function getDecLoc() {
+      try {
+        const response = await fetch('/d_cookies');
+        const data = await response.json();
+        const latitude = data.latitude;
+        const longitude = data.longitude;
+        return { latitude, longitude };
+      } catch (error) {
+        console.error('Error:', error);
+        throw error;
+      }
+    }
+
+
+    // Function to update the input fields with cookie values
+    async function updateInputFieldsWithCookies() {
+      const latitudeInput = document.getElementById('latitude');
+      const longitudeInput = document.getElementById('longitude');
+
+      const locationCookie = await getDecLoc();
+
+      // Update the input fields if the cookie exists and has latitude and longitude
+      if (locationCookie && locationCookie.latitude && locationCookie.longitude) {
+        latitudeInput.value = locationCookie.latitude;
+        longitudeInput.value = locationCookie.longitude;
+      }
+    }
+
+    // Call the function to update input fields on page load
+    window.addEventListener('load', updateInputFieldsWithCookies);
+
+    function upStoreLoc() {
+      Swal.fire({
+        title: 'Location Update',
+        text: 'Update shop location to the current location?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Update!',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc3545',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const form = document.getElementById('updateShopLoc');
+          form.submit();
+        }
+      });
+    }
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#notification-container').on('click', '.notification', function () {
+        var notificationId = $(this).data('id');
+        $.ajax({
+          type: 'POST',
+          url: '/__sNot',
+          data: { notification_id: notificationId },
+          success: function (response) {
+            console.log('Success:', response);
+          },
+          error: function (error) {
+            console.error('Error:', error);
+          }
+        });
+      });
+    });
+  </script>

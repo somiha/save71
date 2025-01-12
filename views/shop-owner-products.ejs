@@ -1,0 +1,286 @@
+<%- include('header'); -%>
+<style>
+
+</style>
+
+<!-- Hero Section -->
+<div class="w-100 position-relative" style="
+    height: 10rem;
+    background-image: url('/images/Rectangle\ 27');
+    background-size: cover;
+    ">
+  <div class="position-absolute w-100 h-100 top-0" style="background: rgba(26, 99, 166, 0.9)" style="z-index: 1"></div>
+
+  <div class="container h-100 d-flex justify-content-center position-relative" style="z-index: 2">
+    <% if (typeof pic_url !== 'undefined' && pic_url != 'null' && pic_url != null) { %>
+    <img src="<%= pic_url %>" class="profile-image rounded-circle" alt="Profile Image"
+      style="z-index: 3; margin-top: 30px;">
+    <% } else { %>
+    <img src="https://save71.com/images/user_header.webp" alt="Profile Image" height="80px" width="80px"
+      style="z-index: 3; margin-top: 30px; background-color: #fff;" class="rounded-circle">
+    <% } %>
+    <div
+      class="h-100 shop-owner-products-name-container w-50 text-white d-flex flex-column justify-content-center align-items-center">
+
+      <h1 class="fs-3 text-white" style="z-index: 3">
+        <%= shop==undefined ? "" : shop[0].shop_name %>
+      </h1>
+      <p class="fs-6 text-white" style="z-index: 3">
+        <i class="bi bi-geo-alt-fill text-dark"></i>
+        <% if (shop[0].distanceKm < 1) { %>
+        <%= shop[0].distanceMeters %> M
+        <% } else { %>
+        <%= shop[0].distanceKm %> KM
+        <% } %>
+      </p>
+      <div class=" shop-owner-products-search d-flex rounded-3"
+        style="z-index: 100; border: 1px solid white; color: white;">
+        <input type="text" class="form-control text-white bg-transparent border grocery-search border-0"
+          placeholder="Search Products..." id="searchInput" />
+        <a class="btn rounded-start-0" style="background: #fff; color: #1a63a6;">Search</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Products Section -->
+<div class="container d-flex flex-column mb-5">
+  <div class="d-flex flex-lg-row flex-column gap-2 mt-5">
+    <!-- Sidebar -->
+    <!-- <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
+      <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1">
+        Categories
+        <i id="sidebarToggle" class="bi bi-chevron-right d-lg-none"></i>
+      </h1>
+      <div id="sidebarContent"
+        class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container d-none">
+        <a id="all" href="#allProducts" class="fs-6 w-100 d-flex align-items-center justify-content-between mb-2"
+          type="button" onclick="updateDisplay(this.id)">
+          All Products
+        </a>
+        <% for (var i=0; i < filteredExtraCat.length; i++) { %>
+        <a id="<%= filteredExtraCat[i].extra_cat_id %>" href="#all"
+          class="fs-6 w-100 d-flex align-items-center justify-content-between mb-2" type="button"
+          onclick="updateDisplay(this.id)">
+          <%= filteredExtraCat[i].extra_cat_name %>
+        </a>
+        <% } %>
+      </div>
+    </div> -->
+
+    <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
+      <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1">
+        Categories
+        <i class="bi bi-chevron-right d-md-none"></i>
+      </h1>
+      <div class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container">
+        <!-- Search Box -->
+        <div class="position-relative d-lg-flex align-items-center flex-grow-1 header-search-container"
+          style="max-width: 100%;">
+          <div class="search d-flex w-100">
+            <input class="form-control bg-transparent rounded-2 nav-search py-2"
+              style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Search" aria-label="Search"
+              id="search-box" name="q" autocomplete="off" />
+            <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
+              style="right: 0%;" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Categories List -->
+        <% for (var i = 0; i < filteredExtraCat.length; i++) { %>
+        <a id="<%= filteredExtraCat[i].extra_cat_id %>" href="#all"
+          class="fs-6 w-100 d-flex align-items-center justify-content-between mb-2" type="button"
+          onclick="updateDisplay(this.id)">
+          <%= filteredExtraCat[i].extra_cat_name %>
+        </a>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Shops Nearby Section (similar to the previous example) -->
+
+    <!-- Products Section -->
+    <div class="products flex-grow-1">
+      <div class="container mb-5">
+        <div class="products flex-grow-1">
+          <div id="allProducts" class="products container d-md-block justify-content-center my-5">
+            <!-- <div class="header d-flex justify-content-between">
+        <p>
+          <%= products==undefined ? "0" : products.length %> products
+        </p>
+      </div> -->
+            <div class="row row-cols-lg-4 g-4 row-cols-sm-2 row-cols-md-3">
+              <% for (var i=0; i < (products===undefined ? 0 : products.length); i++ ) {%>
+              <div class="col extraCatProduct">
+                <%- include('./components/product_card.ejs', {
+                    product_details: products[i]
+                  }); -%>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="notAll" class="products flex-grow-1" style="display: none;">
+      <!-- This section will be populated dynamically based on categories -->
+      <% for (var i=0; i < filteredExtraCat.length; i++) { %>
+      <div id="display_<%= filteredExtraCat[i].extra_cat_id %>" class="container mb-5 extraCatProduct"
+        style="display: none">
+        <!--  only area products -->
+        <!-- Products Of a category Section -->
+        <div class="products flex-grow-1">
+          <!-- Product start -->
+          <div class="w-100 d-flex align-items-center justify-content-between mb-0">
+            <h3 class="fs-4" id="<%= extraCat[i].extra_cat_id %>">
+              <%= extraCat[i].extra_cat_name %>
+            </h3>
+          </div>
+          <div class="w-100 row row-cols-2 row-cols-lg-4 gap-2 row-gap-3">
+            <% for (var j=0; j < products.length; j++) { %>
+            <% if (products[j].product_cat_id==filteredExtraCat[i].extra_cat_id) { %>
+            <div class="col">
+              <div class="card card-product product-hover">
+                <div class="card-body">
+                  <div class="text-center position-relative">
+                    <% for (var f=0; f < images.length; f++) { %>
+                    <% if (images[f].product_id==products[j].product_id) { %>
+                    <img src="<%= images[f].product_image_url %>" class="card-img-top h-100"
+                      style="object-fit: contain;" />
+                    <% } %> <% } %>
+                  </div>
+                  <h2 class="fs-6">
+                    <a href="/product-details/<%= products[j].product_name %>/<%= encodeURIComponent(products[j].product_id) %>"
+                      class="text-inherit text-decoration-none" style="color: #1a63a6;">
+                      <%= products[j].product_name %>
+                    </a>
+                  </h2>
+
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-geo-alt-fill color-main me-1"></i>
+                    <% if (products[j].distanceKm>= 1) { %>
+                    <%= products[j].distanceKm %> KM
+                    <% } else { %>
+                    <%= (products[j].distanceMeters) %> M
+                    <% } %>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                      <small class="text-muted">
+                        <%= currencyCode %>
+                      </small>
+                      <span class="text-dark fs-5">
+                        <%= (products[j].product_price * currRate).toFixed(2) %>
+                      </span>
+                    </div>
+                    <div>
+                      <a href="/cart/<%= products[j].id %>/<%= encodeURIComponent(products[j].product_id)  %>"
+                        class="btn btn-sm primary-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="feather feather-plus">
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% } %>
+            <% } %>
+          </div>
+          <!-- Product End -->
+        </div>
+      </div>
+
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script>
+  const categoryLinks = document.querySelectorAll('a[href^="#"]');
+  categoryLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const categoryElement = document.querySelector(event.target.hash);
+      categoryElement?.scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  function updateDisplay(id) {
+    const allProductElement = document.getElementById('allProducts');
+    const otherProductsElement = document.getElementById('notAll');
+    console.log(window.location.hash);
+    console.log(id);
+    if (id == 'all') {
+      otherProductsElement.style.display = 'none';
+      allProductElement.style.display = 'flex';
+    } else {
+      const catProductsClass = document.querySelectorAll('.extraCatProduct');
+      const catProductElement = document.getElementById('display_' + id);
+      allProductElement.style.display = 'none';
+      otherProductsElement.style.display = 'flex';
+      catProductsClass.forEach(elements => {
+        elements.style.display = 'none';
+      });
+      catProductElement.style.display = 'flex';
+    }
+  }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#searchInput').on('input', function () {
+      var searchTerm = $(this).val().toLowerCase().trim();
+
+      // Loop through each section
+      $('.products').each(function () {
+        var section = $(this);
+
+        // Select product cards within the current section
+        var productCards = section.find('.product-card');
+
+        // If search term is empty, show all product cards in this section
+        if (searchTerm === '') {
+          productCards.show();
+        } else {
+          // Otherwise, filter product cards based on the search term
+          productCards.each(function () {
+            var productName = $(this).find('.card-title').text().toLowerCase();
+
+            // If the product name includes the search term, show the card, otherwise hide it
+            if (productName.includes(searchTerm)) {
+              $(this).show();
+            } else {
+              $(this).hide();
+            }
+          });
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebarContent = document.getElementById('sidebarContent');
+
+  sidebarToggle.addEventListener('click', () => {
+    sidebarContent.classList.toggle('d-none');
+  });
+</script>
+
+
+<%- include('footer'); -%>

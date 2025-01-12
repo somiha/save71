@@ -1,0 +1,568 @@
+<%- include('header-one'),{menuId:menuId}; -%>
+
+<div class="w-100 bg-light">
+  <!-- Header part -->
+  <%- include('dashboard-topbar'),{menuId:menuId}; -%>
+
+  <!-- Main Content -->
+  <style>
+    /* Style for the asterisk */
+    .required-label::after {
+      content: ' *';
+      color: red;
+      /* You can adjust the color as needed */
+    }
+
+    .modal {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-backdrop {
+      display: none;
+    }
+  </style>
+
+  <div class="my-5 px-3 px-lg-5">
+    <form action="/editPic" method="POST" enctype="multipart/form-data" class="mb-5">
+      <h5 style="color: red">
+        <b><i> <%= img_message %> </i></b>
+      </h5>
+      <!-- <h5 class="fw-bold mb-3"> Image Upload</h5> -->
+      <div class="d-flex align-items-center justify-content-center position-relative"
+        style="width: 10rem; height: 10rem">
+        <label for="file-input" class="mb-2 position-relative">
+          <% if (info !== undefined && info[0].pic_url !== null && info[0].pic_url !== 'null' && info[0].pic_url !== undefined) { %>
+          <img id="pp" src="<%= info[0].pic_url %>" class="rounded-circle" style="width: 10rem; height: 10rem"
+            alt="img" />
+          <% } else { %>
+          <img id="pp" src="https://save71.com/images/placeholder.webp" style="height: 100%; width: 100%" />
+          <% } %>
+          <!-- Edit Picture Icon -->
+          <span class="edit-icon position-absolute text-primary" style="bottom: 0; right: 0">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+              <path
+                d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"
+                fill="#086BAE" />
+            </svg>
+          </span>
+          <input id="file-input" type="file" name="user_img" style="display: none" onchange="previewImage(this);" />
+        </label>
+      </div>
+
+      <button class="border-0 rounded-pill text-white px-3 py-1 mt-2 d-flex gap-2 align-items-center"
+        style="background-color: #086bae">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy"
+          viewBox="0 0 16 16">
+          <path d="M11 2H9v3h2V2Z" />
+          <path
+            d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0ZM1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5Zm3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4v4.5ZM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5V15Z" />
+        </svg>
+        Save Picture
+      </button>
+    </form>
+
+    <div class="d-flex flex-lg-row justify-content-between settings-page-main-section gap-5 gap-lg-2"
+      style="flex-direction: column">
+      <div class="col-6 pe-lg-4">
+        <div>
+          <h5 class="fw-bold mb-3">Personal information</h5>
+          <h5 style="color: red">
+            <b><i> <%= email_message %> </i></b>
+          </h5>
+          <form action="/personalInfo" method="POST">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Name</label>
+              <input type="text" value="<%= info != undefined ? info[0].user_name : '' %>" name="name"
+                class="form-control" id="exampleFormControlInput1" placeholder="Enter Your Name" />
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Email address</label>
+              <input type="email" value="<%= info != undefined ? info[0].user_email : '' %>" name="email"
+                class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold required-label">Reference
+                ID</label>
+              <input type="text" value="<%= info != undefined ? info[0].own_ref_id : '' %>" name="ref"
+                class="form-control" id="exampleFormControlInput1" readonly />
+            </div>
+            <button class="border-0 rounded-4 text-white px-3 py-1" style="background-color: #086bae">
+              <i class="fa-solid fa-pen me-1" style="font-size: 10px"></i>
+              Update Personal Info
+            </button>
+          </form>
+        </div>
+
+        <div class="mt-5">
+          <h5 class="fw-bold mb-3">Password Change</h5>
+          <h5 style="color: red">
+            <b><i> <%= message %> </i></b>
+          </h5>
+          <form action="/changePass" method="POST">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Old Password</label>
+              <div style="position:relative;">
+                <input type="password" class="form-control" name="oldpass" id="exampleFormControlInput1"
+                  placeholder="Old Password" />
+                <p class="password-show-btn"
+                  style="position:absolute; right:2%; top:50%; transform: translateY(-50%); cursor:pointer"><i
+                    class="bi bi-eye-fill"></i></p>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">New Password</label>
+              <div style="position:relative;">
+                <input type="password" class="form-control" name="newpass" id="exampleFormControlInput1"
+                  placeholder="New Password" />
+                <p class="password-show-btn"
+                  style="position:absolute; right:2%; top:50%; transform: translateY(-50%); cursor:pointer"><i
+                    class="bi bi-eye-fill"></i></p>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Repeat New Password</label>
+              <div style="position:relative;">
+                <input type="password" class="form-control" name="reppass" id="exampleFormControlInput1"
+                  placeholder="Repeat New Password" />
+                <p class="password-show-btn"
+                  style="position:absolute; right:2%; top:50%; transform: translateY(-50%); cursor:pointer"><i
+                    class="bi bi-eye-fill"></i></p>
+              </div>
+            </div>
+            <button class="border-0 rounded-4 text-white px-3 py-1" style="background-color: #086bae">
+              <i class="fa-solid fa-pen me-1" style="font-size: 10px"></i>
+              Update Password
+            </button>
+          </form>
+        </div>
+
+        <!-- Bank info -->
+        <div class="mt-5">
+          <h5 class="fw-bold mb-3">Bank Info</h5>
+          <h5 style="color: red">
+            <b><i> <%= bank_message %> </i></b>
+          </h5>
+          <form action="/updateBankInfo" method="POST">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Bank Name</label>
+              <input type="text" class="form-control" name="bankName" id="exampleFormControlInput1"
+                value="<%= typeof banks == 'undefined' ? '' : banks.bank_name %>" placeholder="Enter Bank Name"
+                required />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Account Name</label>
+              <input type="text" class="form-control" name="accName" id="exampleFormControlInput1"
+                value="<%= typeof banks == 'undefined' ? '' : banks.account_name %>" placeholder="Enter Account Name"
+                required />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Branch Name</label>
+              <input type="text" class="form-control" name="branchName" id="exampleFormControlInput1"
+                value="<%= typeof banks == 'undefined' ? '' : banks.branch_name %>" placeholder="Enter Bank Branch Name"
+                required />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Account number</label>
+              <input type="number" class="form-control" name="accountNumber" id="exampleFormControlInput1"
+                value="<%= typeof banks == 'undefined' ? '' : banks.account_number %>" placeholder="37XXXXXXXXX"
+                required />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Routing number</label>
+              <input type="number" class="form-control" name="routingNumber" id="exampleFormControlInput1"
+                value="<%= typeof banks == 'undefined' ? '' : banks.routing_number %>" placeholder="09XXXXXXXXX"
+                required />
+            </div>
+            <button class="border-0 rounded-4 text-white px-3 py-1" style="background-color: #086bae">
+              <i class="fa-solid fa-pen me-1" style="font-size: 10px"></i>
+              Update Bank Info
+            </button>
+          </form>
+        </div>
+
+        <!-- BANK OTP enter modal -->
+        <form action="/updateBankInfoOTPApi" method="POST">
+          <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="otpModalLabel">
+                    Bank info change OTP
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="otpInput" class="form-label">OTP</label>
+                    <input type="text" class="form-control" name="bankOtp" id="otpInput" placeholder="Enter OTP" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                  </button>
+                  <p onclick="resendOtp('<%= info[0].user_id %>')" class="btn btn-primary" id="resendOTPButton1">Resend
+                  </p>
+                  <p id="otpMessage1" style="display: none;">An OTP is sent to your email</p>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Email OTP Modal -->
+        <form action="/personalInfoOTPApi" method="POST">
+          <div class="modal fade" id="emailOtpModal" tabindex="-1" aria-labelledby="emailOtpModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="emailOtpModalLabel">
+                    Personal info change OTP
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="otpInput" class="form-label">OTP</label>
+                    <input type="text" class="form-control" name="emailOtp" id="otpInput" placeholder="Enter OTP" />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                  </button>
+                  <p onclick="resendOtp('<%= info[0].user_id %>')" class="btn btn-primary" id="resendOTPButton">Resend
+                  </p>
+                  <p id="otpMessage" style="display: none;">An OTP is sent to your email</p>
+
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Shop Info system -->
+      <div class="col-6">
+        <div>
+          <h5 class="fw-bold mb-3">Shop Information</h5>
+          <h5 style="color: red">
+            <b><i> <%= store_message %> </i></b>
+          </h5>
+          <form action="/storeInfoEdit" method="POST">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold required-label">Shop Type
+              </label>
+              <% for ( var i=0; i < shop.length; i++) { %> <% if
+						((i+1)==info[0].shop_type) { %>
+              <input type="text" value="<%= shop[i].type_name %>" class="form-control" id="exampleFormControlInput1"
+                readonly />
+              <% } %> <% } %>
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Shop Name</label>
+              <input type="text" name="shop_name" class="form-control"
+                value="<%= info != undefined ? info[0].shop_name : '' %>" id="exampleFormControlInput1"
+                placeholder="Enter your shop name" />
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">Shop Custom URL</label>
+              <input type="text" name="shop_custom_url" class="form-control"
+                value="<%= info != undefined ? info[0].shop_custom_url : '' %>" id="exampleFormControlInput1"
+                pattern="[A-Za-z0-9]+"
+                oninvalid="setCustomValidity('Please enter only alphanumeric characters [A-Z, a-z, 0-9]')"
+                onchange="try{setCustomValidity('')}catch(e){}" placeholder="Enter your shop custom URL" required />
+            </div>
+            <button class="border-0 rounded-4 text-white px-3 py-1 mb-5" style="background-color: #086bae">
+              <i class="fa-solid fa-pen me-1" style="font-size: 10px"></i>
+              Update Shop Name
+            </button>
+
+
+            <!-- Location update and shop number -->
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold required-label">
+                Shop Phone Number
+              </label>
+              <input type="text" name="shop_number"
+                value="<%= info != undefined ? info[0].shop_number || info[0].phone : '' %>" class="form-control"
+                id="exampleFormControlInput1" placeholder="Shop Phone Number" readonly />
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label color8 fw-semibold">
+                Shop Location
+              </label>
+              <input type="text" value="<%= info[0].shop_location_lt %>, <%= info[0].shop_location_long %>"
+                class="form-control" id="shopLocation" placeholder="" readonly />
+            </div>
+          </form>
+        </div>
+
+        <!-- <a href="/logout">
+          <button class="border-0 rounded-4 text-white my-2 px-3 py-2" style="background-color: #d82929;">
+            Logout
+          </button>
+        </a> -->
+
+        <form id="updateShopLoc" action="/updateStoreLocation" method="POST">
+          <div class="d-flex justify-content-between" style="height: fit-content">
+            <div class="col-6">
+              <input type="text" id="latitude" name="latitude" placeholder="latitude" required readonly hidden />
+            </div>
+            <div class="col-6">
+              <input type="text" id="longitude" name="longitude" placeholder="longitude" required readonly hidden />
+            </div>
+          </div>
+          <button type="button" class="border-0 rounded-4 text-white my-2 px-3 py-2" onclick="upStoreLoc()"
+            style="background-color: #d82929">
+            Update Shop Location
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Confirm Before Updating shop location -->
+<script>
+  async function getDecLoc() {
+    try {
+      const response = await fetch('/d_cookies');
+      const data = await response.json();
+      const latitude = data.latitude;
+      const longitude = data.longitude;
+      return {
+        latitude,
+        longitude
+      };
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+  // Function to update the input fields with cookie values
+  async function updateInputFieldsWithCookies() {
+    const latitudeInput = document.getElementById('latitude');
+    const longitudeInput = document.getElementById('longitude');
+
+    const locationCookie = await getDecLoc();
+
+    // Update the input fields if the cookie exists and has latitude and longitude
+    if (locationCookie && locationCookie.latitude && locationCookie.longitude) {
+      latitudeInput.value = locationCookie.latitude;
+      longitudeInput.value = locationCookie.longitude;
+    }
+  }
+
+  // Call the function to update input fields on page load
+  window.addEventListener('load', updateInputFieldsWithCookies);
+
+  function upStoreLoc() {
+    Swal.fire({
+      title: 'Location Update',
+      text: 'Update shop location to the current location?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Update!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc3545',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const form = document.getElementById('updateShopLoc');
+        form.submit();
+      }
+    });
+  }
+</script>
+
+<!-- Shop location Name -->
+<script>
+  // Function to get a JSON cookie by name
+  /*
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      try {
+        return JSON.parse(parts.pop().split(';').shift());
+      } catch (error) {
+        console.error("Error parsing JSON cookie:", error);
+      }
+    }
+    return null;
+  }
+  */
+
+  // Function to set the value of an input field with the specified ID
+  function setInputValue(inputId, value) {
+    const inputElement = document.getElementById(inputId);
+    if (inputElement) {
+      inputElement.value = value;
+    } else {
+      console.error(`Input field with ID '${inputId}' not found.`);
+    }
+  }
+
+  // Function to fetch the location name based on latitude and longitude
+  async function getCurrentLocationName(latitude, longitude) {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+      );
+      const data = await response.json();
+      const city =
+        data.address.city ||
+        data.address.town ||
+        data.address.village ||
+        data.address.county ||
+        '';
+      const suburb = data.address.suburb || '';
+      return `${suburb}, ${city}`;
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
+  }
+
+  // get from user db
+  window.onload = function () {
+    // const shopLocationData = getCookie("location");
+    const shopLocationData = document.getElementById('shopLocation');
+    const shopLocationValue = shopLocationData.value.split(',');
+    console.log('shopLocation: ', shopLocationValue);
+
+    if (
+      shopLocationData &&
+      Number(shopLocationValue[0]) &&
+      Number(shopLocationValue[1])
+    ) {
+      getCurrentLocationName(
+        Number(shopLocationValue[0]),
+        Number(shopLocationValue[1])
+      )
+        .then((locationName) => {
+          setInputValue('shopLocation', locationName);
+        })
+        .catch((error) => {
+          console.error('Error fetching location name:', error);
+        });
+    } else {
+      console.error(
+        "Latitude and longitude not found in the 'shopLocation' cookie."
+      );
+    }
+  };
+</script>
+
+<!-- JavaScript code to handle file input and image preview -->
+<script>
+  function previewImage(input) {
+    var fileInput = input;
+    var imageContainer = $(input).closest('label');
+
+    if (fileInput.files && fileInput.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        imageContainer.find('#pp').attr('src', e.target.result);
+        imageContainer.find('#pp').addClass('rounded-circle');
+      };
+
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+  }
+</script>
+
+<script>
+  $(document).ready(function () {
+    if (window.location.hash === '#bankOtp') {
+      $('#otpModal').modal('show');
+    }
+  });
+
+  $(document).ready(function () {
+    if (window.location.hash === '#emailOtp') {
+      $('#emailOtpModal').modal('show');
+    }
+  });
+</script>
+
+<%- include('footer-one'); -%>
+
+
+<script>
+  const passShowBtn = document.querySelectorAll('.password-show-btn');
+  passShowBtn.forEach(psb => {
+    psb.addEventListener('click', e => {
+      const passField = psb.parentElement.children[0];
+      if (passField.type == 'password') passField.type = 'text';
+      else passField.type = 'password'
+    })
+  })
+</script>
+
+<script>
+  function resendOtp(userId) {
+    console.log(userId);
+    // Replace the URL with the actual endpoint for OTP resend
+    fetch('/resendOtpByUserId/' + userId)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Handle response data
+        console.log(data);
+        if (data.status === "success") {
+          // OTP resend successful
+          console.log('OTP resend successful');
+        } else {
+          // Handle other error cases
+          console.error('OTP resend failed');
+        }
+      })
+      .catch(error => {
+        // Handle fetch error
+        console.error('Fetch error:', error);
+      });
+  }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#resendOTPButton').click(function () {
+      $('#otpMessage').fadeIn(); // Show the message
+      setTimeout(function () {
+        $('#otpMessage').fadeOut(); // Hide the message after a certain time (optional)
+      }, 3000); // Hide after 3 seconds (3000 milliseconds)
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('#resendOTPButton1').click(function () {
+      $('#otpMessage1').fadeIn(); // Show the message
+      setTimeout(function () {
+        $('#otpMessage1').fadeOut(); // Hide the message after a certain time (optional)
+      }, 3000); // Hide after 3 seconds (3000 milliseconds)
+    });
+  });
+</script>

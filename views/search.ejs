@@ -1,0 +1,81 @@
+<%- include('header'); -%>
+<!-- Hero Section -->
+<div class="w-100 position-relative" style="
+		height: 10rem;
+		background-image: url('./images/Rectangle\ 27');
+		background-size: cover;
+	">
+  <div class="position-absolute w-100 h-100 top-0" style="background: rgba(26, 99, 166, 0.9); z-index: 1"></div>
+  <div class="container h-100 d-flex justify-content-center" style="z-index: 100">
+    <div class="h-100 w-25 text-white d-flex flex-column justify-content-center align-items-center">
+      <h1 class="fs-3 text-white" style="z-index: 100">
+        Search Results for : <%= query %>
+      </h1>
+      <!-- <input type="text" class="form-control bg-transparent text-white grocery-search"
+					placeholder="Search Products..." style="border: 1px solid white; color: white; z-index: 100" /> -->
+    </div>
+  </div>
+</div>
+
+<!-- Products Section -->
+<div class="products container py-3">
+  <div class="header w-100 d-flex justify-content-between">
+    <h4 class="mx-auto">
+      Total Results Found : <%= results==undefined ? "0" : results.length %>
+    </h4>
+  </div>
+
+  <!-- New Code  -->
+  <!-- Shop list -->
+  <div class="d-flex flex-column row-gap-2">
+    <p class="m-0 fs-3" style="color: #1a63a6">
+      <i class="bi bi-bag-fill"></i>
+      Shop
+    </p>
+    <div class="row row-cols-lg-5 row-cols-2 mb-5 px-3 px-lg-0 column-gap-3 row-gap-3 w-100">
+      <% for (var i=0; i < (results==undefined ? 0 : results.length); i++ ) {%>
+      <% if (results[i].type=='shop' ) { %>
+      <div class="col border p-3 px-4 rounded search-shop">
+        <a class="text-dark" href="/shop/<%= results[i].shop_custom_url %>">
+          <%= results[i].name %>
+        </a>
+        <!-- add the location icon with distance -->
+        <p class="m-0">
+          <i class="bi bi-geo-alt-fill color-main me-1"></i>
+          <%= (results[i].distance).toFixed(2) %> KM
+        </p>
+      </div>
+      <% } %>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Product List -->
+  <div class="d-flex flex-column row-gap-2">
+    <p class="m-0 fs-3" style="color: #1a63a6">
+      <i class="bi bi-box-seam-fill"></i>
+      Products
+    </p>
+    <div class="d-flex flex-wrap mb-5 column-gap-3 row-gap-3 w-100">
+      <!-- products start -->
+      <!-- TODO:
+      1) Cards are showing as big boxes, make them smaller
+      -->
+
+      <% for (var i=0; i < (results==undefined ? 0 : results.length); i++ ) {%>
+      <% if (results[i].type=='product' ) { %>
+      <%- include('./components/product_card.ejs', {
+							product_details: results[i],
+						}) %>
+      <% } %>
+      <% } %>
+
+
+
+      <!-- product end -->
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<%- include('footer'); -%>

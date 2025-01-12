@@ -1,0 +1,203 @@
+<%- include('header'), {navId:navId, ogImage, ogTitle, ogUrl}; -%>
+<meta property="og:title"
+  content="Empower Your Business Journey with Save71 - Affordable Excellence for Everyone, from Beginners to Wholesalers">
+<meta property="og:site_name" content="Save-71">
+<meta property="og:url" content="https://save71.com/area-shop">
+<meta property="og:description"
+  content="At Save71, we're your go-to destination for hassle-free and budget-friendly business solutions. Whether you're just starting out or managing a wholesale operation, we've got the perfect services for you. Our platform is designed to be super beginner-friendly, ensuring a seamless experience for all. Explore, succeed, and save with Save71 – where affordable excellence is accessible to every entrepreneur, from beginners to seasoned wholesalers.">
+<meta property="og:type" content="business.business">
+<meta property="og:image" content="https://save71.com/images/logo-og.webp">
+
+
+<style>
+  /* Adjust button position for mobile */
+  @media (max-width: 767px) {
+    .search {
+      position: relative;
+      /* Ensure relative positioning for the button */
+    }
+
+    .search-btn {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      /* Adjust as needed */
+      height: 100%;
+    }
+
+    .nav-search {
+      padding-right: 30px;
+      /* Adjust to make space for the button */
+    }
+  }
+</style>
+<!-- Shops Nearby Section -->
+<div class="container  mb-5">
+
+
+  <!-- Category Section -->
+
+
+  <div class="px-2 px-lg-0 d-flex flex-column mb-5">
+    <div class="d-flex flex-lg-row flex-column gap-5 mt-5">
+
+      <!-- Sidebar -->
+      <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
+        <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1">
+          Categories
+          <i class="bi bi-chevron-right d-md-none"></i>
+        </h1>
+        <div class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container">
+          <!-- Search Box -->
+          <div class="position-relative d-lg-flex align-items-center flex-grow-1 header-search-container"
+            style="max-width: 100%;">
+            <div class="search d-flex w-100">
+              <input class="form-control bg-transparent rounded-2 nav-search py-2"
+                style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Search"
+                aria-label="Search" id="search-box" name="q" autocomplete="off" />
+              <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
+                style="right: 0%;" type="submit">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Categories List -->
+          <% for (var i = 0; i < extraCat.length; i++) { %>
+          <a href="/product/<%= extraCat[i].extra_cat_id %>?name=<%= extraCat[i].extra_cat_name %>"
+            class="fs-6 w-100 py-1 d-flex align-items-center justify-content-between mb-2 category-item"
+            data-name="<%= extraCat[i].extra_cat_name %>" type="button" id="dropdown-btn">
+            <%= extraCat[i].extra_cat_name %>
+          </a>
+          <% } %>
+        </div>
+      </div>
+
+
+
+
+
+
+      <!-- Products Section For large screen -->
+      <div class="products flex-grow-1">
+        <!-- <div class="header w-100 d-flex flex-column"> -->
+        <% for (var i=0; i < extraCat.length; i++) { %>
+        <% // if (shops[i].shop_type==2) { %>
+        <div class=" mb-5">
+          <!--  only area shops -->
+          <!-- Products Of a category Section -->
+          <div class="products flex-grow-1">
+            <div class="w-100 d-flex align-items-center justify-content-between mb-2">
+              <h3 class="fs-4" id="<%= extraCat[i].extra_cat_id %>">
+                <%= extraCat[i].extra_cat_name %>
+              </h3>
+              <!-- Load more button -->
+              <a href="/product/<%= extraCat[i].extra_cat_id %>?name=<%= extraCat[i].extra_cat_name %>"
+                class="btn fw-medium text-primary fs-6">See
+                All</a>
+            </div>
+            <!-- Product start -->
+            <div class="row row-cols-lg-4 g-4 row-cols-2 row-cols-md-3 d-none d-md-flex">
+              <% var product_count = 0 %>
+              <% // for (var k=0; k < shops.length; k++) { %>
+              <% // if (product_count > 6) break;%>
+              <% for (var j=0; j < products.length; j++) { %>
+              <% if (product_count > 6) break;%>
+              <% if (products[j].product_cat_id==extraCat[i].extra_cat_id) { %>
+              <% product_count++ %>
+              <!-- New Product Card Design -->
+              <div class="col">
+                <%- include('./components/product_card.ejs', {
+                  product_details: {
+                    product_id: products[j].product_id,
+                    product_name: products[j].product_name,
+                    product_image_url: products[j].product_image_url,
+                    product_price: products[j].product_price,
+                    distanceKm: products[j].shop.distanceKm,
+                    distanceMeters: products[j].shop.distanceMeters,
+                    seller_id: products[j].seller_id
+                  }
+                }); %>
+              </div>
+              <% } %>
+              <% } %>
+              <%// } %>
+            </div>
+            <!-- Product End -->
+
+            <!-- Products Section for mobile screen -->
+            <div class="w-100 d-flex flex-wrap d-md-none ">
+              <% var product_count = 0 %>
+              <% // for (var k=0; k < shops.length; k++) { %>
+              <% // if (product_count > 6) break;%>
+              <% for (var j=0; j < products.length; j++) { %>
+              <% if (product_count > 6) break;%>
+              <% if (products[j].product_cat_id==extraCat[i].extra_cat_id) { %>
+              <% product_count++ %>
+              <!-- Mobile per product -->
+              <div class="w-50 p-2">
+                <!-- Product_card Design Fix Needed -->
+                <%- include('./components/product_card.ejs', {
+                  product_details: {
+                  product_id: products[j].product_id,
+                  product_name: products[j].product_name,
+                  product_image_url: products[j].product_image_url,
+                  product_price: products[j].product_price,
+                  distanceKm: products[j].shop.distanceKm,
+                  distanceMeters: products[j].shop.distanceMeters,
+                  seller_id: products[j].seller_id
+                  }
+                  }); %>
+              </div>
+              <% } %>
+              <% } %>
+              <%// } %>
+              <!-- Mobile per product -->
+            </div>
+          </div>
+        </div>
+
+        <% } %>
+        <% // } %>
+      </div>
+      <!-- Products Section For tablet and large screen End -->
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const categoryLinks = document.querySelectorAll('a[href^="#"]');
+  categoryLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const categoryElement = document.querySelector(event.target.hash);
+      categoryElement?.scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchBox = document.getElementById('search-box');
+    const categoryItems = document.querySelectorAll('.category-item');
+
+    searchBox.addEventListener('input', function () {
+      const searchText = searchBox.value.toLowerCase();
+      categoryItems.forEach(item => {
+        const categoryName = item.getAttribute('data-name').toLowerCase();
+        if (categoryName.includes(searchText)) {
+          item.classList.remove('d-none');
+          item.classList.add('d-flex');
+        } else {
+          item.classList.remove('d-flex');
+          item.classList.add('d-none');
+        }
+      });
+    });
+  });
+</script>
+<%- include('footer'); -%>

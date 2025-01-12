@@ -1,0 +1,535 @@
+<%- include('header-one1'); -%>
+<style>
+  /* Your existing styles */
+
+  .table-responsive {
+    display: none;
+  }
+
+
+  @media print {
+    .body {
+      font-size: 10px !important;
+    }
+
+
+    /* Hide non-essential elements */
+    #buttons_remove,
+    #control_remove,
+    .modal,
+    .d-flex.justify-content-between,
+    h5.fs-4 {
+      display: none !important;
+    }
+
+    /* Adjust the table for printing */
+    .table-responsive {
+      display: block !important;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1em;
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .table th,
+    .table td {
+      border: 1px solid #ddd;
+      padding: 5px;
+      text-align: left;
+      font-size: 10px;
+    }
+
+    .table th {
+      background-color: #f2f2f2;
+    }
+  }
+
+  .notes-container {
+    border: 1px solid #ccc;
+    /* Grey border */
+    border-radius: 5px;
+    max-height: 200px;
+    /* Fixed height */
+    overflow-y: scroll;
+    /* Scrollable content */
+    padding: 10px;
+  }
+
+  .note-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+
+  .note-date {
+    flex: 1;
+    font-size: 0.9em;
+    color: #555;
+    /* Light grey color */
+  }
+
+  .note-text {
+    flex: 2;
+    font-size: 0.85em;
+    /* Smaller font for note */
+    color: #777;
+    text-align: right;
+  }
+</style>
+
+<div class="d-flex flex-column min-vh-100">
+  <header class="d-flex justify-content-between px-5 border-bottom py-3">
+    <div>
+      <h4 class="fw-bold fs-2">Orders </h4>
+    </div>
+    <button class="btn btn-outline-secondary fs-4 d-lg-none dashboard-opener">
+      <i class="bi bi-list"></i>
+    </button>
+  </header>
+
+
+  <div id="printContent" class="d-flex justify-content-center align-items-center px-5 bg-light flex-grow-1">
+    <div id="demo-modal" class="modal">
+      <div class="modal__content">
+        <form action="/update-user-order" method="POST" style="width: 100%;">
+          <h3 style="font-weight: bold; font-size: 1.5em; margin-bottom: 1em;">Edit</h3>
+          <input
+            style="width: 100%; border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; outline: none; border-radius: 5px;"
+            type="text" id="order_id" name="order_id" value="<%= order_details[0]?.order_id %>" hidden />
+          <div style="padding-bottom: 1em;">
+            <p style="margin-bottom: 0.5em; color: #333;">Delivery Address</p>
+            <input
+              style="width: 100%; border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; outline: none; border-radius: 5px;"
+              type="text" id="edit_address" name="address" placeholder="Delivery Address" />
+          </div>
+          <button type="submit"
+            style="background-color: #007bff; color: #fff; padding: 0.5em 1em; border: none; cursor: pointer; margin-top: 2em; border-radius: 5px;">Submit</button>
+        </form>
+        <a href="#" class="modal__close">&times;</a>
+      </div>
+    </div>
+    <div class="body bg-white p-5 rounded-2" style="width:800px; height: fit-content;">
+      <div class=" d-flex justify-content-between ">
+        <!-- <% console.log(seller_details.shop_name) %> -->
+        <h5 class="fw-bold fs-4" style="color: #347cbf"><%= seller_details.shop_name %></h5>
+      </div>
+      <div class=" d-flex justify-content-between ">
+        <div>
+          <h5 class="fw-semibold fs-6 text-black">Order Id : <%= order_details[0]?.order_id %></h5>
+          <% if (order_details[0]?.placed_date) { %>
+          <p class="form-label mb-0">Order Date : <%= (order_details[0]?.placed_date).toISOString().substr(0,10) %></p>
+          <% } %>
+          <% if (matchingUser) { %>
+          <p for="dlocation" class="form-label mb-0">User Name: <%= matchingUser.user_name %>, </p>
+          <p for="dlocation" class="form-label mb-0">User Contact: <%= matchingUser.phone %></p>
+          <% } %>
+          <div class="d-flex align-items-center justify-content-between">
+            <label for="dlocation" class="form-label mb-0 fw-bold">Delivery Location: <%= order.address %></label>
+
+
+            <a href="#demo-modal" class="btn btn-outline-primary ms-3">
+              <i class="bi bi-pencil bi-2x"></i>
+            </a>
+
+          </div>
+
+          <p>OTP: <%= order.otp %></p>
+
+        </div>
+        <div id="buttons_remove">
+          <a href="/orders">
+            <button class="bg-black text-white rounded-circle">
+              <i class="bi bi-x fs-4"></i>
+            </button>
+          </a>
+          <div class="d-flex justify-content-end mt-3">
+            <button onclick="printDiv('printContent')" class="btn btn-outline-primary">
+              <i class="bi bi-printer bi-2x"></i>
+            </button>
+
+          </div>
+        </div>
+      </div>
+      <div class="mt-2">
+        <h5 class="fw-bold fs-4 text-black mb-2">Invoice</h5>
+
+        <div class="container d-print-none" style="width: 100%;">
+          <% for (var i=0; i < order_details.length; i++) {%>
+          <div class="row border-bottom">
+            <!-- Column 1: Product picture, name, and stock -->
+            <div class="col-12 col-md-6 p-2">
+              <div class="d-flex align-items-center gap-1 flex-row">
+                <% for (var k = 0; k < image.length; k++) { %>
+                <% if (image[k].product_id == order_details[i].product_id) { %>
+                <img class="mb-2" style="width: 2rem; object-fit: contain;" src="<%= image[k].product_image_url  %>"
+                  alt="">
+                <% } %>
+                <% } %>
+                <h6
+                  class="fw-6 text-black pt-1 <%= order_details[i].stock_out? " text-decoration-line-through" : "" %>">
+                  <%= order_details[i].product_name %>
+                </h6>
+                <% if (order_details[i].stock_out === 0 && order_details[0]?.seller_confirm === 0 && order_details[0]?.order_status=== 3 && order_details[0]?.is_paid === 0) { %>
+                <a class=" pe-2 ps-2"
+                  href="/stock_out/<%= order_details[i].order_id %>/<%= order_details[i].order_details_id %>/<%= order_details[i].product_id %>">
+                  <button id="stockOut_remove" class=" badge rounded-pill border-0 mt-1"
+                    style="background-color: rgb(249, 181, 181); color: rgb(170, 29, 29); font-weight:400;"
+                    onmouseover="this.style.backgroundColor='rgb(170, 29, 29)'; this.style.color='rgb(249, 181, 181)';"
+                    onmouseout="this.style.backgroundColor='rgb(249, 181, 181)'; this.style.color='rgb(170, 29, 29)';">Stock
+                    Out</button>
+                </a>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Column 2: Price x quantity and repeat button -->
+
+            <!-- <div class="col-12 col-md-4 p-2">
+              <div class="fw-6 text-black <%= order_details[i].stock_out? " text-decoration-line-through" : "" %>"
+                style="display: flex; align-items: center;">
+                <%= (order_details[i].product_price * currRate).toFixed(2) %>
+                <% if (order.seller_confirm == 0 || order_details[i].order_status === 4) { %>
+                <form method="POST"
+                  action="/updateOrder/<%= order_details[i].order_details_id %>/<%= order_details[i].product_cat_id %>/1"
+                  style="display: flex; align-items: center;">
+                  x &nbsp;
+                  
+
+
+                  <input type="number" min="0" class="color1" name="update_quantity"
+                    style="width: 35px; text-align: center; margin-right: 3px;"
+                    value="<%= order_details[i].product_quantity %>">
+                  <button title="update quantity" type="submit" class="btn btn-outline-primary"
+                    style="height: 30px; width: 30px; display: flex; justify-content: center; align-items: center;">
+                    <i class="bi bi-arrow-repeat"></i>
+                  </button>
+                </form>
+                <% } else { %>
+                x <%= order_details[i].product_quantity %>
+                <% } %>
+              </div>
+            </div> -->
+
+            <!-- Column 2: Price x quantity and repeat button -->
+            <div class="col-12 col-md-4 p-2">
+              <div class="fw-6 text-black <%= order_details[i].stock_out ? 'text-decoration-line-through' : '' %>"
+                style="display: flex; align-items: center;">
+                <%= (order_details[i].product_price * currRate).toFixed(2) %>
+                <% if (order.seller_confirm == 0 || order_details[i].order_status === 4) { %>
+                <form method="POST"
+                  action="/updateOrder/<%= order_details[i].order_details_id %>/<%= order_details[i].product_cat_id %>/1"
+                  style="display: flex; align-items: center;">
+                  x &nbsp;
+                  <input type="number" min="0"
+                    <%= order_details[i].order_status == 4 ? 'max="' + order_details[i].product_quantity + '"' : '' %>
+                    class="color1" name="update_quantity" style="width: 35px; text-align: center; margin-right: 3px;"
+                    value="<%= order_details[i].product_quantity %>">
+                  <button title="update quantity" type="submit" class="btn btn-outline-primary"
+                    style="height: 30px; width: 30px; display: flex; justify-content: center; align-items: center;">
+                    <i class="bi bi-arrow-repeat"></i>
+                  </button>
+                </form>
+
+                <!-- Add delete/remove button for order_status == 4 -->
+                <% if (order_details[i].order_status == 4) { %>
+                <% if (order_details.length > 1) { %>
+                <form method="POST" action="/deleteOrderItem/<%= order_details[i].order_details_id %>"
+                  style="display: flex; align-items: center; margin-left: 10px;">
+                  <button title="remove product" type="submit" class="btn btn-danger"
+                    style="height: 30px; width: 30px; display: flex; justify-content: center; align-items: center;">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+                <% } %>
+                <!-- <form method="POST" action="/deleteOrderItem/<%= order_details[i].order_details_id %>"
+                  style="display: flex; align-items: center; margin-left: 10px;">
+                  <button title="remove product" type="submit" class="btn btn-danger"
+                    style="height: 30px; width: 30px; display: flex; justify-content: center; align-items: center;">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form> -->
+                <% } %>
+                <% } else { %>
+                x <%= order_details[i].product_quantity %>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Column 3: Total price -->
+            <div class="col-12 col-md-2 p-2">
+              <p class="fw-6 text-black <%= order_details[i].stock_out? " text-decoration-line-through" : "" %>">
+                <%= (order_details[i].product_price * order_details[i].product_quantity * currRate).toFixed(2) %>
+              </p>
+            </div>
+          </div>
+          <% } %>
+
+        </div>
+
+        <div class="table-responsive" style="margin-top: 5px; margin-bottom: 5px;">
+          <table class="table table-bordered table-hover" style="font-size: 14px; line-height: 1;">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% var total_price = 0 %>
+              <% for (var i = 0; i < order_details.length; i++) { %>
+              <% if (order_details[i].stock_out == 0) { %>
+              <% total_price = ((parseFloat(total_price) + parseFloat(order_details[i].product_price) * parseFloat(order_details[i].product_quantity) * currRate)).toFixed(2) %>
+              <tr>
+                <td><% for (var k = 0; k < image.length; k++) { %>
+                  <% if (image[k].product_id == order_details[i].product_id) { %>
+                  <img class="mb-0" style="width: 20px; object-fit: contain;" src="<%= image[k].product_image_url  %>"
+                    alt="">
+                  <% } %>
+                  <% } %> <%= order_details[i].product_name %>
+                </td>
+                <td><%= order_details[i].product_quantity %></td>
+                <td><%= (order_details[i].product_price * order_details[i].product_quantity * currRate).toFixed(2) %>
+                </td>
+              </tr>
+              <% } %>
+              <% } %>
+              <tr>
+                <td colspan="2" style="padding: 10px; font-weight: bold; text-align: right;">Total Price:</td>
+                <td style="padding: 10px;"><%= total_price %></td>
+              </tr>
+              <tr>
+                <td colspan="2" style="padding: 10px; text-align: right;">Delivery Price:</td>
+                <td style="padding: 10px;"><%= (parseFloat(order.deliveryCharge)).toFixed(2) %></td>
+              </tr>
+              <tr>
+                <td colspan="2" style="padding: 10px; font-weight: bold; text-align: right;">Sum of Total Price:</td>
+                <td style="padding: 10px;">
+
+                  <%= (parseFloat(total_price) + parseFloat(order.deliveryCharge)).toFixed(2) %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-print-none">
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+              <p class="fs-6 text-black">Total Product Price</p>
+            </div>
+            <div class="">
+              <p class="fw-6">
+                <%= total_price %> <%= currencyCode  %>
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center border-bottom">
+            <div>
+              <p class="fs-6 text-black">Delivery Charge </p>
+            </div>
+            <form method="POST" action="/update-user-order-delivery-change" style="display: flex; align-items: center;">
+              &nbsp;
+              <input type="number" min="0" class="color1" name="charge"
+                style="width: 100px; text-align: center; margin-right: 3px;"
+                value="<%= order_details.length > 0 ? (parseFloat(order_details[0].deliveryCharge * currRate)).toFixed(2) : 0 %>">
+              <input type="hidden" name="order_id" value="<%= order.order_id %>">
+              <input type="hidden" name="currRate" value="<%= currRate %>">
+              <button title="update quantity" type="submit" class="btn btn-outline-primary"
+                style="height: 30px; width: 30px; display: flex; justify-content: center; align-items: center;">
+                <i class="bi bi-arrow-repeat"></i>
+              </button>
+            </form>
+
+            <div class="">
+              <p class="fw-6">
+                + <%= (parseFloat(order.deliveryCharge * currRate)).toFixed(2) %> <%= currencyCode  %>
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+              <p class="fw-semibold text-black">Total Order Price</p>
+            </div>
+            <div class="">
+              <p class="fw-semibold">
+                = <%= ((Number(total_price)) + Number(order.deliveryCharge)).toFixed(2) %>
+                <%= currencyCode  %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="control_remove" class="d-flex text-white justify-content-end">
+          <div id="notes" class="modal">
+            <div class="modal__content">
+              <% if (notes && notes.length > 0) { %>
+              <% if (notes && notes.length > 0) { %>
+              <div class="notes-container"
+                style="max-height: 200px; overflow-y: scroll; border: 1px solid grey; padding: 10px;">
+                <% for (var i = 0; i < notes.length; i++) { 
+            const createdAt = new Date(notes[i].created_at).toLocaleDateString('en-GB', {
+              day: '2-digit', 
+              month: '2-digit', 
+              year: 'numeric'
+            }) + ' ' + new Date(notes[i].created_at).toLocaleTimeString('en-GB', {
+              hour: '2-digit', 
+              minute: '2-digit'
+            });
+          %>
+                <div class="note-item d-flex justify-content-between"
+                  style="border-bottom: 1px solid lightgrey; padding: 5px 0;">
+                  <p class="note-text text-secondary" style="flex: 1; font-size: 14px; margin: 0; text-align: left;">
+                    <%= notes[i].note %>
+                  </p>
+                  <p class="note-date text-secondary" style="font-size: 12px; margin: 0; text-align: right;">
+                    <%= createdAt %></p>
+                </div>
+                <% } %>
+              </div>
+              <% } %>
+
+              <% } %>
+
+
+              <form method="post" action="/add-note" style="width: 100%;">
+                <input
+                  style="width: 100%; border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; outline: none; border-radius: 5px;"
+                  type="text" id="orderId" name="orderId" value="<%= order_details[0]?.order_id %>" hidden />
+                <div style="padding-bottom: 1em;">
+                  <p style="margin-bottom: 0.5em; color: #333;">Notes</p>
+                  <textarea type="text" class="form-control w-100 rounded-2" id="notes" placeholder="Notes" name="note"
+                    required></textarea>
+                </div>
+
+                <button type="submit"
+                  style="background-color: #007bff; color: #fff; padding: 0.5em 1em; border: none; cursor: pointer; margin-top: 2em; border-radius: 5px;">Submit</button>
+              </form>
+              <a href="#" class="modal__close">&times;</a>
+            </div>
+          </div>
+          <div>
+            <a href="#notes" class="btn btn-outline-primary" style="margin-left: 5px;"><i
+                class="bi bi-plus bi-2x"></i></a>
+          </div>
+          <div id="cancelNoteModal" class="modal">
+            <div class="modal__content">
+              <form method="POST" action="/add-cancel-note">
+                <input type="hidden" name="order_id" value="<%= order_details[0]?.order_id %>" />
+                <input type="hidden" name="user_id" value="<%= userId %>" />
+                <input type="hidden" name="seller_id" value="<%= seller_id %>" />
+                <input type="hidden" name="from_seller" value="1" />
+                <div style="padding-bottom: 1em;">
+                  <p style="margin-bottom: 0.5em; color: #333;">Cancel Note</p>
+                  <textarea type="text" class="form-control w-100 rounded-2" id="cancel_note"
+                    placeholder="Enter cancellation note" name="cancel_note" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-outline-danger">Submit Cancellation</button>
+              </form>
+              <a href="#" class="modal__close">&times;</a>
+            </div>
+          </div>
+          <% if (order_details[0]?.order_status == 4 || order_details[0]?.order_status == 3) { %>
+          <a href="#cancelNoteModal" class="btn btn-outline-danger mx-2" onclick="openCancelModal()">Cancel</a>
+          <% } %>
+          <!-- <% if ( order_details[0]?.order_status == 4) { %>
+          <a href="/order_details/<%= order_details[0]?.order_id %>/2">
+            <button class="btn btn-outline-danger mx-2">Cancel</button>
+          </a>
+          <% } %>
+
+          <% if (order_details[0]?.order_status == 3 ) { %>
+
+          <a href="/order_details/<%= order_details[0]?.order_id %>/5">
+            <button class="btn btn-outline-danger mx-2">Cancel</button>
+          </a>
+          <% } %> -->
+          <% if (order_details[0]?.order_status != 1 && order_details[0]?.order_status != 2) { %>
+          <a
+            href="/cart_product/<%= seller_details.id %>/<%= order_details[0]?.user_id %>/<%= order_details[0]?.order_id %>">
+            <button class="btn btn-outline-primary mx-2">Add Product</button>
+          </a>
+          <% } %>
+          <% if (order_details[0]?.order_status == 3) { %>
+          <% if (order_details[0]?.request_review == 0 && order_details[0]?.is_paid != 0) { %>
+          <% if (!canShip) { %>
+          <button class="btn btn-outline-success" onclick="alert('You have 100 pending orders to ship')">Ship
+            Order</button>
+          <% } else { %>
+          <a href="/order_details/<%= order_details[0]?.order_id %>/4">
+            <button class="btn btn-outline-success">Ship Order</button>
+          </a>
+          <% } %>
+          <% } else if (order_details[0]?.request_review && !order_details[0]?.seller_confirm) { %>
+          <a href="/order_details/<%= order_details[0]?.order_id %>/3">
+            <button class="btn btn-outline-success">Available</button>
+          </a>
+          <% } %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+<script>
+  function printDiv(divId) {
+    var printContents = document.getElementById(divId).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+  }
+</script>
+
+<script>
+  let editAddress = document.getElementById('edit_address').value = '<%= order.address %>';
+  let editCharge = document.getElementById('edit_charge').value = '<%= order.deliveryCharge %>';
+  let orderId = document.getElementById('order_id').value = '<%= order.order_id %>';
+</script>
+
+
+<script>
+  function printDiv(divId) {
+    var printContents = document.getElementById(divId).innerHTML;
+    var excludedDivIds = ['buttons_remove', 'control_remove', 'stockOut_remove', 'buttons_remove_delivery', 'container-hide'];
+    var originalContents = document.body.innerHTML;
+
+    excludedDivIds.forEach(function (divIdToRemove) {
+      var excludedDiv = document.getElementById(divIdToRemove);
+      if (excludedDiv) {
+        printContents = printContents.replace(excludedDiv.outerHTML, '');
+      }
+    });
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script>
+$(document).ready(function() {
+  $('input[name="update_quantity"]').on('input', function() {
+    var max = parseInt($(this).attr('max'));
+    if ($(this).val() > max || $(this).val() < 1) {
+      $(this).val(max);
+    }
+  });
+});
+</script> -->
+
+<%- include('footer-one'); -%>

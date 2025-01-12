@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body style="font-family: Arial, sans-serif; padding: 20px;">
+        <h2 style="font-size: 24px; color: #333; border-bottom: 1px solid #333; padding-bottom: 10px;">Orders</h2>
+        <div>
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <div style="flex: 1; margin: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">
+                    <p style="font-size: 16px; font-weight: bold;">Customer Name:
+                        ${row.children[4].textContent.split('\n')[2].trim()}</p>
+                    <p style="font-size: 16px;">Mobile Number: ${row.children[4].textContent.split('\n')[3].trim()}</p>
+                    <p style="font-size: 16px;">Address: </p>
+                </div>
+                <div style="flex: 1; margin: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">
+                    <p style="font-size: 16px; font-weight: bold;">Order Id: ${row.children[1].textContent}</p>
+                    <p style="font-size: 16px;">Placed Date: ${row.children[3].textContent}</p>
+                    <p style="font-size: 16px;">Delivery Date: ${row.children[2].textContent}</p>
+                    <p style="font-size: 16px;">Status: ${row.children[8].getAttribute('data-status')}</p>
+                </div>
+            </div>
+        </div>
+        <div style="width: 80%; margin: 0 auto;">
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="padding: 10px; background-color: #f9f9f9;">Product Name</th>
+                        <th style="padding: 10px; background-color: #f9f9f9;">Quantity</th>
+                        <th style="padding: 10px; background-color: #f9f9f9;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px;">${row.children[9].textContent.trim().replace(/\s*\n\s*/g, ',
+                            ').replace(/,\s*,/g, ',')}</td>
+                        <td style="padding: 10px;">Quantity</td>
+                        <td style="padding: 10px;">Price</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding: 10px; font-weight: bold; text-align: right;">Total Price:
+                            ${row.children[5].textContent}</td>
+                        <td style="padding: 10px;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding: 10px; text-align: right;">Delivery Price:
+                            ${row.children[6].textContent}</td>
+                        <td style="padding: 10px;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding: 10px; font-weight: bold; text-align: right;">Sum of Total Price:
+                            ${row.children[7].textContent}
+                        </td>
+                        <td style="padding: 10px;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+
+</html>

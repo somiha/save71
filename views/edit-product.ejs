@@ -1,0 +1,282 @@
+<%- include('header'); -%>
+<!-- Upload Product Section -->
+<div class="bg-body-secondary flex-grow-1 py-5">
+  <div class="container d-flex justify-content-center align-items-center mt-3">
+    <div class="card bg-white p-3" style="width: 40rem">
+      <div class="card-body">
+        <div class="cardHeader d-flex justify-content-between">
+          <h5 class="card-title">
+            <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/products">Products</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Edit
+                </li>
+              </ol>
+            </nav>
+          </h5>
+          <a href="/products" class="text-danger">Cancel</a>
+        </div>
+
+        <form action="<%= (product[0].is_branded == 1 ? '/edit_branded_product/' : '/edit_product/' )%><%= product[0].product_id  %>" method="POST" enctype="<%= (product[0].is_branded == 1 ? '' : 'multipart/form-data' )%>" class="d-flex flex-column" onsubmit="disableSubmitButton()">
+          <div class="mb-3">
+            <label for="productName" class="form-label fw-medium">Product Name</label>
+            <input type="text" maxlength="100" class="form-control bg-body-secondary border-0 py-3" id="productName" placeholder="Order" name="product_name" value="<%= product[0].product_name  %>" />
+            <small class="text-danger" id="charCount">100</small><small class="text-danger">/100</small>
+          </div>
+
+          <div class="mb-3">
+            <label for="productCategory" class="form-label fw-medium">Product Category</label>
+            <select class="form-select bg-body-secondary border-0 py-3" id="productCategory" name="category" onchange="showPriceWarning(this)" <%= (product[0].is_branded == 1 ? 'disabled' : '')  %>>
+              <option>Select Category</option>
+              <% for (var i = 0; i < extraCat.length; i++) {%>
+              <option value="<%= extraCat[i].extra_cat_id %>" data-deduct-amount="<%= shop_type == 1 ? extraCat[i].manufacturer_deduct_percentage : extraCat[i].retailer_deduct_percentage %>" <%= (extraCat[i].extra_cat_id == product[0].product_cat_id ? "selected" : "") %>><%= extraCat[i].extra_cat_name %></option>
+              <% } %>
+            </select>
+            <div id="priceWarning" style="color: red;"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="productPrice" class="form-label fw-medium">Product Price (<%= currencyCode %>)</label>
+            <input type="number" class="form-control bg-body-secondary border-0 py-3" placeholder="" name="product_price" min="0" value="<%= (product[0].product_price * currRate).toFixed(2)  %>" />
+            <small id="descCharCount" class="text-danger">150</small><small class="text-danger">/150</small>
+          </div>
+
+          <div class="mb-3">
+            <label for="productDescription" class="form-label fw-medium">Product Short Description</label>
+            <textarea maxlength="150" class="form-control bg-body-secondary border-0 py-3" style="height: 100px" id="productShortDescription" name="product_short_des" placeholder="Product Description" value="<%= product[0].product_short_des  %>" <%= (product[0].is_branded == 1 ? 'readonly' : '')  %>><%= product[0].product_short_des  %></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="productDescription" class="form-label fw-medium">Product Detail Description</label>
+            <% if (product[0].is_branded != 1) { %>
+            <%- include('richText', {des : product[0].product_details_des}); %>
+            <% } else { %>
+            <input class="form-control bg-body-secondary border-0 py-3" style="height: 100px" id="productDetailDescription" name="product_detail_des" placeholder="Product Detail Description" value="<%- product[0].product_details_des  %>" <%= (product[0].is_branded == 1 ? 'readonly' : '')  %>>
+            <% } %>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium text-danger">Product Previous Images</label>
+            <div class="d-flex flex-wrap my-2">
+              <% for (var i = 0; i < images.length; i++) { %>
+              <div class="d-flex flex-column align-items-center mb-2 mr-2">
+                <img src="<%= images[i].product_image_url %>" width="100px" height="100px" class="align-self-left" />
+                <div class="mt-2">
+                  <input type="radio" name="featured_index" value="<%= images[i].id %>" data-product-id="<%= images[i].product_id %>" <%=(images[i].featured_image == 1 ? 'checked' : '')%> />
+
+
+                  <button type="button" class="btn btn-link text-danger" onclick="removeImage('<%= images[i].id %>')">
+                    <!-- <span>&times;</span> -->
+                    <i class="bi bi-trash-fill"></i>
+                  </button>
+
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
+
+
+          <% if (product[0].is_branded != 1) { %>
+          <label for="product_images">Product Images:</label>
+          <p class="my-2 text-primary">
+            <small class="font-italic">(To set new picture as featured, First upload new picture and save, then edit again and change the featured now and save)</small>
+          </p>
+          <div id="imagePreviewContainer"></div>
+          <input class="form-control" type="file" name="productImages" accept="image/jpeg,image/png,image/jpg" id="productImages" multiple>
+          <% } %>
+
+
+          <div class="mb-3">
+            <label class="form-label fw-medium text-danger">Product Previous Video</label>
+            <% if (video[0] != undefined) { %>
+            <div>
+              <video src="<%= video[0] == undefined ? "" : video[0].product_video_url %>" controls="" style="width: 100%;"></video>
+            </div>
+            <% } %>
+            <br>
+            <% if (product[0].is_branded != 1) { %>
+            <label class="form-label fw-medium">Product New Video</label>
+            <div id="videoPreviewContainer"></div>
+            <div class="mb-4">
+              <label for="productVideo" class="form-label fw-medium"></label>
+              <input type="file" id="productVideo" name="product_video" class="form-control" accept="video/*">
+            </div>
+            <% } %>
+          </div>
+
+          <button type="submit" class="btn text-white fw-bold py-3" style="background-color: #2874a6" id="submitBtn">
+            Update
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showPriceWarning(selectElement) {
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    var deductAmount = parseFloat(selectedOption.getAttribute('data-deduct-amount'));
+
+    var priceWarningElement = document.getElementById('priceWarning');
+
+    if (!isNaN(deductAmount) && deductAmount > 0) {
+      priceWarningElement.textContent = deductAmount.toFixed(2) + '% will be deducted from the price !';
+    } else {
+      priceWarningElement.textContent = 'No Price Will be deducted from the price !';
+    }
+  }
+</script>
+
+<!-- Image preview -->
+<script>
+  var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+  var fileInput = document.getElementById('productImages');
+  var row = document.createElement('div');
+  row.className = 'row';
+  fileInput.addEventListener('change', function(e) {
+    imagePreviewContainer.innerHTML = '';
+    for (var i = 0; i < e.target.files.length; i++) {
+      var file = e.target.files[i];
+      var reader = new FileReader();
+      reader.onload = (function(i) {
+        return function(event) {
+          var img = new Image();
+          img.src = event.target.result;
+          img.onload = function() {
+            var column = document.createElement('div');
+            column.className = 'col-md-3 mb-3';
+            var container = document.createElement('div');
+            container.className = 'mb-3 d-flex flex-column align-items-center';
+            var imagePreview = document.createElement('img');
+            imagePreview.src = img.src;
+            imagePreview.className = 'img-thumbnail';
+            imagePreview.style.width = '100px';
+            imagePreview.style.height = '100px';
+            var buttonGroup = document.createElement('div');
+            buttonGroup.className = 'btn-group';
+            var featuredRadioBtn = document.createElement('input');
+            featuredRadioBtn.type = 'radio';
+            featuredRadioBtn.name = 'featured_index';
+            featuredRadioBtn.disabled = true;
+            featuredRadioBtn.value = i;
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn text-danger p-1 m-2';
+            removeButton.innerHTML = '<i class="bi bi-trash-fill"></i>';
+            removeButton.addEventListener('click', function() {
+              column.remove();
+            });
+            buttonGroup.appendChild(featuredRadioBtn);
+            buttonGroup.appendChild(removeButton);
+            container.appendChild(imagePreview);
+            container.appendChild(buttonGroup);
+            column.appendChild(container);
+            row.appendChild(column);
+          };
+        };
+      })(i);
+      reader.readAsDataURL(file);
+    }
+    imagePreviewContainer.appendChild(row);
+  });
+
+
+
+
+  document.getElementById('productVideo').addEventListener('change', function(e) {
+    var videoPreviewContainer = document.getElementById('videoPreviewContainer');
+    videoPreviewContainer.innerHTML = '';
+
+    var file = e.target.files[0];
+
+    if (file) {
+      var videoPreview = document.createElement('video');
+      videoPreview.src = URL.createObjectURL(file);
+      videoPreview.controls = true;
+      videoPreview.style.width = '100%';
+
+      videoPreviewContainer.appendChild(videoPreview);
+    }
+  });
+</script>
+
+
+<%- include('footer'); -%>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- remove image -->
+<script>
+  function removeImage(index) {
+    // Assuming 'images' is an array containing your image data
+    const imageToRemove = index;
+
+    // Show a SweetAlert confirmation dialog
+    Swal.fire({
+      title: 'Access Denied',
+      text: 'You can\'t delete this image!',
+      icon: 'warning',
+    })
+  }
+</script>
+
+<!-- Change featured Image -->
+<script>
+  function handleRadioButtonChange(newFeaturedIndex, productId) {
+    fetch(`/featuredImage/${productId}/${newFeaturedIndex}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          console.error('Failed to update the featured image.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error while sending the POST request:', error);
+      });
+  }
+
+  // Add an event listener to all radio buttons
+  const radioButtons = document.querySelectorAll('input[name="featured_index"]');
+  radioButtons.forEach((radioButton) => {
+    radioButton.addEventListener('change', function(event) {
+      const newFeaturedIndex = event.target.value;
+      const productId = event.target.getAttribute('data-product-id');
+      handleRadioButtonChange(newFeaturedIndex, productId);
+    });
+  });
+</script>
+
+<script>
+  function disableSubmitButton() {
+    var submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Uploading...';
+  }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#charCount').text(100 - $('#productName').val().length);
+    $('#productName').on('input', function() {
+      var remaining = 100 - $(this).val().length;
+      $('#charCount').text(remaining);
+    });
+  });
+
+  $(document).ready(function() {
+    $('#descCharCount').text(150 - $('#productShortDescription').val().length);
+    $('#productShortDescription').on('input', function() {
+      var remaining = 150 - $(this).val().length;
+      $('#descCharCount').text(remaining);
+    });
+  });
+</script>

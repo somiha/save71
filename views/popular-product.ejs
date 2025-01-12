@@ -1,0 +1,136 @@
+<%- include('header'); -%>
+
+
+<script>
+  const categoryLinks = document.querySelectorAll('a[href^="#"]');
+  categoryLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const categoryElement = document.querySelector(event.target.hash);
+      categoryElement?.scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+
+
+<!-- Shops Nearby Section -->
+<div class="container mb-5">
+
+
+  <!-- Category Section -->
+
+
+  <div class="d-flex flex-column mb-5">
+    <div class="d-flex flex-lg-row flex-column gap-2 mt-5">
+
+      <!-- Sidebar -->
+      <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
+        <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1">
+          Categories
+          <i class="bi bi-chevron-right d-lg-none"></i>
+        </h1>
+        <div class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container">
+          <a id="all" href="#allProducts" class="fs-6 w-100 d-flex align-items-center justify-content-between mb-2"
+            type="button" onclick="updateDisplay(this.id)">
+            All Products
+          </a>
+          <% for (var i=0; i < extraCat.length; i++) { %>
+          <a id="<%= extraCat[i].extra_cat_id %>" href="#all"
+            class="fs-6 w-100 d-flex align-items-center justify-content-between mb-2" type="button"
+            onclick="updateDisplay(this.id)">
+            <%= extraCat[i].extra_cat_name %>
+          </a>
+          <% } %>
+        </div>
+      </div>
+
+
+
+      <!-- All products start -->
+      <div class="products flex-grow-1">
+        <div class="container mb-5">
+          <div class="products flex-grow-1">
+            <div id="allProducts" class="w-100 row row-cols-2 row-cols-lg-4 gap-2 row-gap-3">
+              <!-- Per product start -->
+              <% for (var i=0; i < sortedShops.length; i++) { %>
+              <!-- New Product Card -->
+              <div class="col">
+                <%- include('./components/product_card.ejs', {
+                  product_details: sortedShops[i],
+                })  -%>
+              </div>
+              <% } %>
+              <!-- Per product end -->
+            </div>
+
+            <!-- All products End -->
+
+
+            <!-- Particular category Products Section -->
+            <div id="notAll" style="display: none;">
+              <% for (var i=0; i < extraCat.length; i++) { %>
+              <div id="display_<%= extraCat[i].extra_cat_id %>" class="w-100 mb-5 extraCatProduct"
+                style="display: none">
+                <div class=" flex-grow-1">
+                  <div class="w-100 d-flex align-items-center justify-content-between mb-0">
+                    <h3 class="fs-4" id="<%= extraCat[i].extra_cat_id %>">
+                      <%= extraCat[i].extra_cat_name %>
+                    </h3>
+                    <!-- Load more button -->
+                    <a href="/product/<%= extraCat[i].extra_cat_id %>?name=<%= extraCat[i].extra_cat_name %>"
+                      class="btn fw-medium text-primary fs-5">See
+                      All</a>
+                  </div>
+                  <!-- Product start -->
+                  <div class="w-100 row row-cols-2 row-cols-lg-4 gap-2 row-gap-3">
+                    <% for (var j=0; j < sortedShops.length; j++) { %>
+                    <% if (sortedShops[j].product_cat_id==extraCat[i].extra_cat_id) { %>
+                    <!-- New Product Card -->
+                    <div class="col">
+                      <%- include('./components/product_card.ejs', {
+                        product_details: sortedShops[j],
+                      }) -%>
+                    </div>
+                    <% } %>
+                    <% } %>
+                  </div>
+                  <!-- Product End -->
+                </div>
+              </div>
+              <% } %>
+            </div>
+            <!-- Not all section -->
+          </div>
+        </div>
+      </div>
+      <!-- All large device products start end -->
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<script>
+  function updateDisplay(id) {
+    const allProductElement = document.getElementById('allProducts')
+    const otherProductsElement = document.getElementById('notAll')
+    if (id == 'all') {
+      otherProductsElement.style.display = 'none'
+      allProductElement.style.display = 'flex'
+    } else {
+      const catProductsClass = document.querySelectorAll('.extraCatProduct')
+      const catProductElement = document.getElementById('display_' + id)
+      allProductElement.style.display = 'none'
+      otherProductsElement.style.display = 'flex'
+      catProductsClass.forEach(elements => {
+        elements.style.display = 'none'
+      })
+      catProductElement.style.display = 'flex'
+    }
+  }
+</script>
+<%- include('footer'); -%>

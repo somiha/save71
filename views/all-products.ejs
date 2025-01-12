@@ -1,0 +1,156 @@
+<%- include('header', {ogImage, ogTitle, ogUrl}); -%>
+<!-- <meta property="og:title" content="All <%= extra_cat[0].extra_cat_name %> Products | Empower Your Business Journey with Save71 - Affordable Excellence for Everyone, from Beginners to Wholesalers">
+<meta property="og:site_name" content="Save-71">
+<meta property="og:url" content="https://save71.com/product/<%= extraId %>">
+<meta property="og:description" content="At Save71, we're your go-to destination for hassle-free and budget-friendly business solutions. Whether you're just starting out or managing a wholesale operation, we've got the perfect services for you. Our platform is designed to be super beginner-friendly, ensuring a seamless experience for all. Explore, succeed, and save with Save71 – where affordable excellence is accessible to every entrepreneur, from beginners to seasoned wholesalers.">
+<meta property="og:type" content="business.business">
+<meta property="og:image" content="<%= extra_cat[0].extra_cat_image_url %>"> -->
+<!-- Hero Section -->
+
+<style>
+  /* Adjust button position for mobile */
+  @media (max-width: 767px) {
+    .search {
+      position: relative;
+      /* Ensure relative positioning for the button */
+    }
+
+    .search-btn {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      /* Adjust as needed */
+      height: 100%;
+    }
+
+    .nav-search {
+      padding-right: 30px;
+      /* Adjust to make space for the button */
+    }
+  }
+</style>
+<div class="w-100 position-relative" style="
+		height: 10rem;
+		background-image: url('https://save71.com/images/Rectangle/27.png');
+		background-size: cover;
+	">
+  <div class="position-absolute w-100 h-100 top-0" style="background: rgba(26, 99, 166, 0.9); z-index: 1"></div>
+  <div class="px-5 h-100 d-flex justify-content-center" style="z-index: 100">
+    <div
+      class="h-100 w-50 text-white d-flex flex-column justify-content-center align-items-center products-page-search-div">
+      <h1 class="fs-3 text-white" style="z-index: 100">
+        <%= extra_cat[0].extra_cat_name %>
+      </h1>
+      <div class="w-100 d-flex rounded-3"
+        style="z-index: 100; border: 1px solid white; color: white; max-width: 500px;">
+        <input type="text" class="form-control bg-transparent border grocery-search border-0 w-100" style="color: #fff;"
+          placeholder="Search Products..." />
+        <a class="btn rounded-start-0 px-4" style="background: #fff; color: #1a63a6;">Search</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Products Section -->
+<div class="container d-flex flex-column">
+  <div class="d-flex flex-lg-row flex-column column-gap-5">
+    <!-- Side Category bar -->
+    <div class="sidebar d-flex flex-column fs-6 all-products-sidebar position-relative  pt-5 rounded-2"
+      style=" align-self: stretch; ">
+      <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1" style="user-select: none">
+        <%= extra_cat[0].sub_cat_name %> Categories
+        <i class="bi bi-chevron-right d-lg-none"></i>
+      </h1>
+      <div class="dropdown-container w-100 p-4 p-lg-0 all-products-sidebar-dropdown-container"
+        style="max-height: 90vh; overflow-y: auto;">
+
+        <!-- Search Box -->
+        <div class="position-relative d-lg-flex align-items-center flex-grow-1 header-search-container"
+          style="max-width: 100%;">
+          <div class="search d-flex w-100">
+            <input class="form-control bg-transparent rounded-2 nav-search py-2"
+              style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Search" aria-label="Search"
+              id="search-box" name="q" autocomplete="off" />
+            <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
+              style="right: 0%;" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </div>
+        <% for (var i=0; i < allExtraCat.length; i++) { %>
+        <% if (allExtraCat[i].extra_cat_ref==extra_cat[0].sub_cat_id) { %>
+        <!-- href="/product/<%= //allExtraCat[i].extra_cat_id %>" -->
+        <a class="fs-6 w-100 py-1 d-flex align-items-center justify-content-between mb-2 category-item"
+          data-name="<%= extraCat[i].extra_cat_name %>" type="button" id="dropdown-btn"
+          href="/product/<%= allExtraCat[i].extra_cat_id %>">
+          <%= allExtraCat[i].extra_cat_name %>
+          <!-- <i class="bi bi-chevron-right" style="font-size: 0.7rem"></i> -->
+        </a>
+        <% } %>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <!-- Add "d-md-block" -->
+    <div class="products container justify-content-center my-5">
+      <div class="header w-100 d-flex justify-content-between">
+        <p>
+          <%= products==undefined ? "0" : products.length %> products
+        </p>
+      </div>
+
+      <div class="row row-cols-lg-4 g-4 row-cols-2 row-cols-md-3 d-none d-md-flex">
+        <% for (var i=0; i < (products==undefined ? 0 : products.length); i++ ) { %>
+        <div class="col">
+          <%- include('./components/product_card.ejs', {
+            product_details: products[i]
+          }); -%>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- Products Section for mobile screen -->
+      <div class="w-100 d-flex flex-wrap d-md-none ">
+        <% for (var i=0; i < (products==undefined ? 0 : products.length); i++ ) { %>
+        <!-- Mobile per product -->
+        <div class="w-50 p-2">
+          <!-- Product_card Design Fix Needed -->
+          <%- include('./components/product_card.ejs', {
+              product_details: products[i]
+              }); -%>
+        </div>
+        <% } %>
+
+        <!-- Mobile per product -->
+      </div>
+      <!-- Load more button -->
+      <a href="#" class="btn align-self-center mt-5 text-white p-4 py-2" style="background: #1a63a6;">Load More</a>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchBox = document.getElementById('search-box');
+    const categoryItems = document.querySelectorAll('.category-item');
+
+    searchBox.addEventListener('input', function () {
+      const searchText = searchBox.value.toLowerCase();
+      categoryItems.forEach(item => {
+        const categoryName = item.getAttribute('data-name').toLowerCase();
+        if (categoryName.includes(searchText)) {
+          item.classList.remove('d-none');
+          item.classList.add('d-flex');
+        } else {
+          item.classList.remove('d-flex');
+          item.classList.add('d-none');
+        }
+      });
+    });
+  });
+</script>
+<%- include('footer'); -%>
