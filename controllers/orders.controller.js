@@ -154,6 +154,11 @@ exports.orders = async (req, res, next) => {
       "SELECT * FROM `shop_due_details` WHERE `shop_id` = ? AND `is_paid` = 0 AND `last_date` < CURDATE()";
     const shopDueDetails = await queryAsync(shopDueDetailsQuery, [seller_id]);
 
+    const shopBalance = await queryAsync(
+      "SELECT * FROM `shop_balance` WHERE `shop_id` = ?",
+      [seller_id]
+    );
+
     var encImages = images.map((image) => {
       image.product_id = crypto.smallEncrypt(image.product_id);
       return image;
@@ -164,8 +169,8 @@ exports.orders = async (req, res, next) => {
     });
 
     // If no due is pending, redirect to balance page
-    if (shopDueDetails.length > 0) {
-      return res.redirect("/balance");
+    if (shopBalance[0].due_payment >= 0.1) {
+      return res.redirect("/balance?isDuePending=true");
     }
 
     const orderNotes = {};

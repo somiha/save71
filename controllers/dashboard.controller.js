@@ -6,6 +6,9 @@ exports.dashboard = async (req, res) => {
   var isLogged = crypto.decrypt(req.cookies.login_status || "");
   if (isLogged) {
     try {
+      if (!req.cookies.currencyCode) {
+        return res.redirect("/logout");
+      }
       const userId = crypto.decrypt(req.cookies.userId);
       const currencyCode = crypto.decrypt(req.cookies.currencyCode);
       const [fetchFeaturedImages, currRate, notification] = await Promise.all([

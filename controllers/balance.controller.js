@@ -8,6 +8,10 @@ exports.balance = async (req, res) => {
   var isLogged = crypto.decrypt(req.cookies.login_status || "");
   if (isLogged) {
     try {
+      const isDuePending = req.query.isDuePending || false;
+      if (!req.cookies.currencyCode) {
+        return res.redirect("/logout");
+      }
       const userId = crypto.decrypt(req.cookies.userId);
       const currencyCode = crypto.decrypt(req.cookies.currencyCode);
       const [currRate, tax, notification] = await Promise.all([
@@ -46,6 +50,7 @@ exports.balance = async (req, res) => {
                             menuId: "shop-owner-balance",
                             name: "My balance",
                             balance: res1,
+                            isDuePending,
                             trans: res2,
                             history: res3,
                             minWithDraw,
@@ -81,6 +86,9 @@ exports.balance = async (req, res) => {
 
 exports.filter = async (req, res) => {
   try {
+    if (!req.cookies.currencyCode) {
+      return res.redirect("/logout");
+    }
     const currencyCode = crypto.decrypt(req.cookies.currencyCode);
     const [currRate, tax] = await Promise.all([
       catModel.fetchCurrencyRate(currencyCode),
@@ -112,6 +120,9 @@ exports.filter = async (req, res) => {
 
 exports.getTableInfo = async (req, res) => {
   try {
+    if (!req.cookies.currencyCode) {
+      return res.redirect("/logout");
+    }
     const currencyCode = crypto.decrypt(req.cookies.currencyCode);
     const [currRate, tax] = await Promise.all([
       catModel.fetchCurrencyRate(currencyCode),
@@ -245,17 +256,23 @@ exports.getTableInfo = async (req, res) => {
 
 exports.getTableInfoDue = async (req, res) => {
   try {
-    const currencyCode = crypto.decrypt(req.cookies.currencyCode);
+    if (!req.cookies.currencyCode) {
+      return res.redirect("/logout");
+    }
+    let currencyCode = "";
+    if (!req.cookies.currencyCode) {
+      currencyCode = "BDT";
+    } else {
+      console.log("cookie", req.cookies.currencyCode);
+      currencyCode = crypto.decrypt(req.cookies.currencyCode);
+    }
+
     const [currRate, tax] = await Promise.all([
       catModel.fetchCurrencyRate(currencyCode),
       catModel.fetchTaxRate(currencyCode),
     ]);
-    var uID = crypto.decrypt(req.cookies.userId);
     var seller_id = crypto.decrypt(req.cookies.seller_id);
     var isLogged = crypto.decrypt(req.cookies.login_status);
-    var oID = crypto.decrypt(req.cookies.order_id || "");
-    var userImage = crypto.decrypt(req.cookies.userImage || "");
-    var userName = crypto.decrypt(req.cookies.userName);
 
     if (isLogged) {
       db.query(
@@ -274,7 +291,10 @@ exports.getTableInfoDue = async (req, res) => {
                   if (!err2) {
                     const totalSales = {};
                     result.forEach((row) => {
-                      totalSales[row.order_id] = row.total_sales;
+                      totalSales[row.order_id] = totalSales[row.order_id]
+                        ? Number(totalSales[row.order_id]) +
+                          Number(row.total_sales)
+                        : Number(row.total_sales);
                     });
 
                     const data = {
@@ -364,6 +384,9 @@ exports.getTableInfoDue = async (req, res) => {
 
 exports.getTableInfoWithdraw = async (req, res) => {
   try {
+    if (!req.cookies.currencyCode) {
+      return res.redirect("/logout");
+    }
     const currencyCode = crypto.decrypt(req.cookies.currencyCode);
     const [currRate, tax] = await Promise.all([
       catModel.fetchCurrencyRate(currencyCode),
@@ -420,74 +443,5 @@ exports.getTableInfoWithdraw = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
-  }
-};
-
-exports.checkValidity = (req, res) => {
-  console.log("validity checking");
-  var uID = crypto.decrypt(req.cookies.userId);
-  var seller_id = crypto.decrypt(req.cookies.seller_id);
-  var isLogged = crypto.decrypt(req.cookies.login_status || "");
-  var oID = crypto.decrypt(req.cookies.order_id || "");
-  var userImage = crypto.decrypt(req.cookies.userImage || "");
-  var userName = crypto.decrypt(req.cookies.userName);
-
-  if (isLogged) {
-    db.query(
-      "SELECT * FROM `shop_due_details` INNER JOIN `shop_balance` ON `shop_balance`.`shop_id` = `shop_due_details`.`shop_id`  WHERE `shop_due_details`.`shop_id` = ? AND `shop_due_details`.`is_paid` = 0",
-      [seller_id],
-      (err1, res1) => {
-        console.log("res1", res1);
-        if (!err1) {
-          if (res1.length > 0) {
-            if (res1[0].own_balance >= res1[0].due_payment) {
-              res1.forEach((item) => {
-                item.last_date = new Date(item.last_date);
-              });
-              const today = new Date();
-              const expiredDues = res1.filter((item) => item.last_date < today);
-
-              console.log({ expiredDues });
-              if (expiredDues.length > 0) {
-                const expiredDueIds = expiredDues.map((item) => item.due_id);
-                console.log({ expiredDueIds });
-
-                const handleRedirect = (index) => {
-                  if (index < expiredDueIds.length) {
-                    const dueId = expiredDueIds[index];
-                    console.log({ dueId });
-                    res.redirect(`/payDue/${dueId}/1`);
-
-                    return;
-                  } else {
-                    const validity = true;
-                    console.log({ validity });
-                    res.send(validity);
-                  }
-                };
-                handleRedirect(0);
-              } else {
-                const validity = true;
-                res.send(validity);
-              }
-            } else {
-              res.send(false);
-              return;
-            }
-          } else {
-            res.send(true);
-            return;
-          }
-        } else {
-          console.log({ err1 });
-          res
-            .status(500)
-            .send("An error occurred while getting shop_due_details.");
-          return;
-        }
-      }
-    );
-  } else {
-    res.redirect("/login");
   }
 };

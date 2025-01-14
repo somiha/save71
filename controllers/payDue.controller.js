@@ -2,6 +2,7 @@ const { query } = require("express");
 const db = require("../config/database.config");
 const catModel = require("../middlewares/cat");
 const crypto = require("../middlewares/crypto");
+const { queryAsync, queryAsyncWithoutValue } = require("../config/helper");
 
 // exports.payDue = (req, res) => {
 //   var isLogged = crypto.decrypt(req.cookies.login_status || '');
@@ -461,6 +462,129 @@ exports.payDue = (req, res) => {
             );
           }
         );
+      } else {
+        return res
+          .status(404)
+          .send(
+            '<script>alert("Verification Failed !"); window.history.go(-1);</script>'
+          );
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send("Internal Server Error");
+    }
+  } else {
+    res.redirect("/login");
+  }
+};
+
+exports.paydue_v2 = async (req, res) => {
+  var isLogged = crypto.decrypt(req.cookies.login_status || "");
+  if (isLogged) {
+    try {
+      const dueId = req.params.dueId;
+      const verificationMethod = req.params.verificationMethod;
+      const userId = crypto.decrypt(req.cookies.userId);
+      if (verificationMethod || 1) {
+        const shopDueDetails = await queryAsync(
+          "SELECT * FROM `shop_due_details` WHERE `due_id` = ?",
+          [dueId]
+        );
+
+        if (shopDueDetails[0].length == 0) {
+          return res
+            .status(404)
+            .send(
+              '<script>alert("Invalid Due ID"); window.history.go(-1);</script>'
+            );
+        }
+
+        if (shopDueDetails[0].is_paid == 1) {
+          return res
+            .status(404)
+            .send(
+              '<script>alert("Already Paid"); window.history.go(-1);</script>'
+            );
+        }
+
+        const shopBalance = await queryAsync(
+          "SELECT * FROM `shop_balance` WHERE `shop_id` = ?",
+          [shopDueDetails[0].shop_id]
+        );
+
+        const order = await queryAsync(
+          "SELECT * FROM `orders` WHERE `order_id` = ?",
+          [shopDueDetails[0].order_id]
+        );
+
+        const refBalance = await queryAsync(
+          "SELECT * FROM `shop_balance` WHERE `shop_id` = ?",
+          [shopDueDetails[0].ref_id]
+        );
+
+        const customerShop = await queryAsync(
+          "SELECT * FROM `shop` WHERE `seller_user_id` = ?",
+          [order[0].user_id]
+        );
+
+        if (
+          Number(shopBalance[0].own_balance) <
+          Number(shopDueDetails[0].due_amount)
+        ) {
+          return res
+            .status(404)
+            .send(
+              '<script>alert("Not Enough Balance!"); window.history.go(-1);</script>'
+            );
+        }
+
+        const deduct_price = Number(shopDueDetails[0].due_amount);
+
+        let value1 =
+          Number(refBalance[0].own_balance) + Number(deduct_price / 2);
+        await queryAsync(
+          "UPDATE `shop_balance` SET `own_balance` = ? WHERE `shop_id` = ?",
+          [value1, shopDueDetails[0].ref_id]
+        );
+
+        await queryAsync(
+          "INSERT INTO `fund_transfer` (`fund_transfer_id`, `sender_id`, `receiver_id`, `amount`, `ref_id` ) VALUES (NULL, ?, ?, ?, ?)",
+          [
+            shopDueDetails[0].shop_id,
+            refBalance[0].shop_id,
+            deduct_price / 2,
+            customerShop[0].id,
+          ]
+        );
+
+        const admin_balance = await queryAsyncWithoutValue(
+          "SELECT * FROM `admin_balance` WHERE `admin_id` = 1"
+        );
+
+        await queryAsync(
+          "UPDATE `admin_balance` SET `admin_balance` = ? WHERE `admin_id` = 1",
+          [admin_balance[0].admin_balance + deduct_price / 2]
+        );
+
+        await queryAsync(
+          "INSERT INTO `fund_transfer` (`fund_transfer_id`, `sender_id`, `receiver_id`, `amount`, `ref_id` ) VALUES (NULL, ?, ?, ?, ?)",
+          [shopDueDetails[0].shop_id, 0, deduct_price / 2, customerShop[0].id]
+        );
+
+        let value3 = Number(shopBalance[0].own_balance) - deduct_price;
+        let value4 = Number(shopBalance[0].due_payment) - deduct_price;
+        console.log({ value3 });
+        await queryAsync(
+          "UPDATE `shop_balance` SET `own_balance` = ?, `due_payment` = ? WHERE `shop_id` = ?",
+          [value3, value4, shopBalance[0].shop_id]
+        );
+
+        await queryAsync(
+          "UPDATE `shop_due_details` SET `is_paid` = '1' WHERE `due_id` = ?",
+          [dueId]
+        );
+
+        res.redirect("back");
       } else {
         return res
           .status(404)

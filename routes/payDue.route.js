@@ -1,7 +1,7 @@
 const express = require("express");
-const { payDue } = require("../controllers/payDue.controller");
+const { payDue, paydue_v2 } = require("../controllers/payDue.controller");
 const router = express.Router();
 
-router.get("/payDue/:dueId/:verificationMethod", payDue);
+router.get("/payDue/:dueId/:verificationMethod", paydue_v2);
 
 module.exports = router;

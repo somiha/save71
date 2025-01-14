@@ -513,43 +513,6 @@
     })
   </script>
 
-
-  <!-- Function to auto cut due payment  -->
-  <script>
-      (function () {
-        function checkValidity() {
-          $.ajax({
-            url: '/checkValidity',
-            method: 'POST',
-            dataType: 'json',
-            data: {},
-            success: function (response) {
-              if (response === true) {
-                $('#duePaymentWarning').css('visibility', 'hidden');
-              } else {
-                $('#duePaymentWarning').css('visibility', 'visible');
-              }
-            },
-            error: function (error) {
-              // Handle errors using SweetAlert
-              Swal.fire({
-                icon: 'error',
-                title: 'Error checking validity',
-                text: 'An error occurred while checking the validity. Please try again later.',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-              });
-              console.error('Error checking validity:', error);
-            }
-          });
-        }
-
-        $(document).ready(function () {
-          checkValidity();
-        });
-      })();
-  </script>
-
   <!-- Location update script -->
   <!-- Confirm Before Updating shop location -->
   <script>
