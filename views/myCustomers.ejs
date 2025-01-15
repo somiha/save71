@@ -15,7 +15,7 @@
         <i class="bi bi-person-circle fs-2" style="color: #1a63a6"></i>
         <p class="py-2 m-0">Total Customers</p>
         <p class="fw-bold fs-3 text-black m-0">
-          <%= customers ? customers.length : "0" %>
+          <%= response ? response.length : "0" %>
         </p>
       </div>
     </div>
@@ -39,30 +39,29 @@
             <th scope="col">Customer Name</th>
             <th scope="col">Customer Number</th>
             <th scope="col">Completed Order</th>
+            <th scope="col">Received Orders</th>
             <th scope="col">Total Earning (<%= currencyCode %>)</th>
           </tr>
         </thead>
         <tbody id="customerTableBody">
-          <% for (var i=0; i < customers.length; i++) { %>
+          <% for (var i=0; i < response.length; i++) { %>
           <tr>
             <td>
-              <%= customers[i].user_name %>
+              <%= response[i].user_name %>
             </td>
             <td>
-              <%= customers[i].phone %>
+              <%= response[i].phone %>
             </td>
 
             <td>
-              <%= customers[i].completedOrders %>
+              <%= response[i].completedOrders %>
             </td>
-            <% var earned=0 %>
-            <% for (var j=0; j < earning.length; j++) { %>
-            <% if (earning[j].ref_user_id==customers[i].user_id) { %>
-            <% earned=earned + earning[j].amount %>
-            <% } %>
-            <% } %>
+
             <td>
-              <%= earned * currRate %>
+              <%= response[i].reveived %>
+            </td>
+            <td>
+              <%= (response[i].earning * currRate).toFixed(2) %>
             </td>
           </tr>
           <% } %>
