@@ -241,7 +241,7 @@
                         </div>
                         <div class="">
                             <p class="fw-6">
-                                + <%= (parseFloat(order.deliveryCharge)).toFixed(2) %> <%= currencyCode  %>
+                                + <%= (parseFloat(order.deliveryCharge) * currRate).toFixed(2) %> <%= currencyCode  %>
                             </p>
                         </div>
                     </div>
@@ -252,7 +252,8 @@
                         </div>
                         <div class="">
                             <p class="fw-semibold">
-                                = <%= ((Number(total_price)) + parseFloat(order.deliveryCharge)).toFixed(2) %>
+                                =
+                                <%= ((Number(total_price)) + parseFloat(order.deliveryCharge) * currRate).toFixed(2) %>
                                 <%= currencyCode  %>
                             </p>
                         </div>

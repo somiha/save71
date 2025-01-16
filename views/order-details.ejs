@@ -359,7 +359,7 @@
             </div>
             <div class="">
               <p class="fw-semibold">
-                = <%= ((Number(total_price)) + Number(order.deliveryCharge)).toFixed(2) %>
+                = <%= ((Number(total_price)) + (Number(order.deliveryCharge * currRate))).toFixed(2) %>
                 <%= currencyCode  %>
               </p>
             </div>

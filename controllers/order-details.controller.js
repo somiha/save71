@@ -19,6 +19,15 @@ exports.orderDetails = async (req, res) => {
     const seller_id = crypto.decrypt(req.cookies.seller_id);
     console.log("Seller ID : ", seller_id);
 
+    const shopBalance = await queryAsync(
+      "SELECT * FROM `shop_balance` WHERE `shop_id` = ?",
+      [seller_id]
+    );
+
+    if (shopBalance[0].due_payment >= 1) {
+      return res.redirect("/balance?isDuePending=true");
+    }
+
     const [images, currRate, users] = await Promise.all([
       catModel.fetchFeaturedImages(),
       catModel.fetchCurrencyRate(currencyCode),

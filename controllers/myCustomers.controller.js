@@ -34,41 +34,47 @@ exports.myCustomers = async (req, res) => {
 
       const customerIds = myCustomers.map((customer) => customer.user_id);
 
-      const coustomersShopIds = await queryAsync(
-        "SELECT id, seller_user_id FROM `shop` WHERE `seller_user_id` IN (?)",
-        [customerIds]
-      );
+      console.log("customerIds", customerIds);
 
-      const customerShopIds = coustomersShopIds.map((shop) => shop.id);
+      let customersWithOrders = [];
 
-      const myEarning = await queryAsync(
-        "SELECT ref_id, SUM(amount) as total_amount, COUNT(*) as count FROM `fund_transfer` WHERE `ref_id` IN (?) AND `receiver_id` = ? GROUP BY ref_id",
-        [customerShopIds, seller_id]
-      );
-
-      const customersCompletedOrders = await queryAsync(
-        "SELECT user_id, COUNT(*) as completedOrders FROM `orders` WHERE `user_id` IN (?) AND `order_status` = 1 GROUP BY user_id",
-        [customerIds]
-      );
-
-      const customersWithOrders = myCustomers.map((customer) => {
-        const orders = customersCompletedOrders.find(
-          (order) => order.user_id === customer.user_id
+      if (customerIds.length > 0) {
+        const coustomersShopIds = await queryAsync(
+          "SELECT id, seller_user_id FROM `shop` WHERE `seller_user_id` IN (?)",
+          [customerIds]
         );
-        const customerSellerId = coustomersShopIds.find(
-          (shop) => shop.seller_user_id === customer.user_id
+
+        const customerShopIds = coustomersShopIds.map((shop) => shop.id);
+
+        const myEarning = await queryAsync(
+          "SELECT ref_id, SUM(amount) as total_amount, COUNT(*) as count FROM `fund_transfer` WHERE `ref_id` IN (?) AND `receiver_id` = ? GROUP BY ref_id",
+          [customerShopIds, seller_id]
         );
-        const earning = myEarning.find(
-          (earning) => earning.ref_id === customerSellerId.id
+
+        const customersCompletedOrders = await queryAsync(
+          "SELECT user_id, COUNT(*) as completedOrders FROM `orders` WHERE `user_id` IN (?) AND `order_status` = 1 GROUP BY user_id",
+          [customerIds]
         );
-        return {
-          ...customer,
-          completedOrders: orders ? orders.completedOrders : 0,
-          customerSellerId: customerSellerId ? customerSellerId.id : null,
-          earning: earning ? earning.total_amount : 0,
-          reveived: earning ? earning.count : 0,
-        };
-      });
+
+        customersWithOrders = myCustomers.map((customer) => {
+          const orders = customersCompletedOrders.find(
+            (order) => order.user_id === customer.user_id
+          );
+          const customerSellerId = coustomersShopIds.find(
+            (shop) => shop.seller_user_id === customer.user_id
+          );
+          const earning = myEarning.find(
+            (earning) => earning.ref_id === customerSellerId.id
+          );
+          return {
+            ...customer,
+            completedOrders: orders ? orders.completedOrders : 0,
+            customerSellerId: customerSellerId ? customerSellerId.id : null,
+            earning: earning ? earning.total_amount : 0,
+            reveived: earning ? earning.count : 0,
+          };
+        });
+      }
 
       return res.render("myCustomers", {
         ogImage: "https://admin.save71.com/images/logo-og.webp",

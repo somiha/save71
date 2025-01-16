@@ -169,7 +169,7 @@ exports.orders = async (req, res, next) => {
     });
 
     // If no due is pending, redirect to balance page
-    if (shopBalance[0].due_payment >= 0.1) {
+    if (shopBalance[0].due_payment >= 1) {
       return res.redirect("/balance?isDuePending=true");
     }
 
