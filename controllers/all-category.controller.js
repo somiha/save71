@@ -35,6 +35,7 @@ exports.allCategory = async (req, res) => {
             item.product_id = crypto.smallEncrypt(item.product_id);
             return item;
           });
+
           res.render("all-category", {
             ogImage: "https://admin.save71.com/images/logo-og.webp",
             ogTitle: "Save71 Connects You and the World through Business.",

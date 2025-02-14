@@ -53,11 +53,11 @@
   </div>
 </div>
 
-<div class="container d-flex justify-content-center mb-5" style="margin-top: 7%">
+<!-- <div class="container d-flex justify-content-center mb-5" style="margin-top: 7%">
   <a href="/all-category" class="text-center btn d-flex align-items-center gap-2 all-category" style="border: 1px solid #02436a; color: #02436a">All Category
     <i class="bi bi-arrow-right" style="line-height: 0"></i>
   </a>
-</div>
+</div> -->
 
 <!-- Nearest Manufacturer show at mobile devices only -->
 <div class="container w-100  d-md-none my-5">
@@ -75,16 +75,16 @@
   <div class="d-flex flex-wrap w-100 gy-4">
     <!-- Mobile per product -->
     <% for (var i = 0; (i < sortedShops.length); i++) { %>
-      <div class="w-50 p-2 ">
-          <!-- Product_card Design Fix Needed -->
-          <%- include('./components/product_card.ejs', {
+    <div class="w-50 p-2 ">
+      <!-- Product_card Design Fix Needed -->
+      <%- include('./components/product_card.ejs', {
           product_details: sortedShops[i],
           }); %>
-      </div>
+    </div>
     <% } %>
-      </div>
-    <!-- Mobile per product -->
   </div>
+  <!-- Mobile per product -->
+</div>
 </div>
 
 <!-- Popular Manufacturer show at mobile devices only -->
@@ -116,4 +116,3 @@
 
 
 <%- include('footer', {cart: cart}); -%>
-

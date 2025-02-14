@@ -2,11 +2,11 @@
 
 <div class="container d-md-block justify-content-center d-none my-5">
 
-  <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
+  <nav class="d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
     <div>
       <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Nearest Products</p>
     </div>
-    <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist" style="overflow: auto;">
+    <div class="d-flex justify-content-start gap-2 pb-3" id="nav-tab" role="tablist" style="overflow: auto;">
       <a href="/nearest-products" style="color: #1a63a6; font-weight: bold;">See All
         <!-- <i class="bi bi-arrow-right "></i> -->
       </a>
@@ -47,6 +47,41 @@
       })  %>
     </div>
     <% }) %>
+    <!-- per product End -->
+  </div>
+</div>
+
+<div class="container d-md-block justify-content-center d-none my-5">
+  <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
+    <div>
+      <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Popular Categories</p>
+    </div>
+    <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist" style="overflow: auto">
+      <a href="/all-extra-category" style="color: #1a63a6; font-weight: bold;">See All
+        <!-- <i class="bi bi-arrow-right "></i> -->
+      </a>
+    </div>
+  </nav>
+
+  <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3" id="all-category-container">
+    <!-- per product -->
+    <% for (var i=0; i < 10; i++) {%>
+    <a href="/product/<%= extraCat[i].extra_cat_id  %>?name=<%= extraCat[i].extra_cat_name %>">
+      <div class="col mb-5">
+        <div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+          <div style="height: 20rem">
+            <img src="<%= extraCat[i].extra_cat_image_url %>" class="card-img h-100 rounded-2"
+              style="object-fit: cover" />
+          </div>
+          <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+            <h5 class="card-title text-white text-center">
+              <%= extraCat[i].extra_cat_name %>
+            </h5>
+          </div>
+        </div>
+      </div>
+    </a>
+    <% } %>
     <!-- per product End -->
   </div>
 </div>
@@ -109,6 +144,50 @@
     <% }) %>
     <!-- per product End -->
   </div>
+
+
+
+</div>
+
+<div class="container w-100  d-md-none my-5">
+  <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
+    <div>
+      <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Popular Categories</p>
+    </div>
+    <div class="d-flex justify-content-start gap-2 right-0 mb-3 pb-3" id="nav-tab" role="tablist"
+      style="overflow: auto">
+      <a href="/all-extra-category" style="color: #1a63a6; margin-left: 300px; font-weight: bold;">See All
+        <!-- <i class="bi bi-arrow-right "></i> -->
+      </a>
+    </div>
+  </nav>
+
+  <div class="d-flex flex-wrap w-100 gy-4">
+    <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3" id="all-category-container">
+      <!-- per product -->
+      <% for (var i=0; i < 10; i++) {%>
+      <a href="/product/<%= extraCat[i].extra_cat_id  %>?name=<%= extraCat[i].extra_cat_name %>">
+        <div class="col mb-5">
+          <div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+            <div style="height: 20rem">
+              <img src="<%= extraCat[i].extra_cat_image_url %>" class="card-img h-100 rounded-2"
+                style="object-fit: cover" />
+            </div>
+            <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+              <h5 class="card-title text-white text-center">
+                <%= extraCat[i].extra_cat_name %>
+              </h5>
+            </div>
+          </div>
+        </div>
+      </a>
+      <% } %>
+      <!-- per product End -->
+    </div>
+  </div>
+
+
+
 </div>
 
 

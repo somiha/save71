@@ -81,7 +81,7 @@ exports.uploadOwnProduct = async (req, res) => {
                       notification: notification,
                       shop_type: res3[0].shop_type,
                       menuId: "shop-owner-products",
-                      pic_url: res2[0].pic_url,
+                      pic_url: res2[0]?.pic_url,
                     });
                   }
                 );
@@ -137,7 +137,7 @@ exports.uploadOwnProductPost = async (req, res) => {
 
       product_name = product_name.trim().slice(0, 100);
       product_short_des = product_short_des.trim().slice(0, 150);
-
+      console.log("Uploaded files:", req.files); // Debugging
       var picUrls = [];
       var featured_image_index = 0;
       if (req.files["productImages"]) {

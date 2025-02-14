@@ -1,6 +1,8 @@
 const express = require("express");
 const {
-  uploadOwnProduct, uploadOwnProductPost, addProductFromStore
+  uploadOwnProduct,
+  uploadOwnProductPost,
+  addProductFromStore,
 } = require("../controllers/upload-own-product.controller");
 const router = express.Router();
 

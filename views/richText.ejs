@@ -1,4 +1,5 @@
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
 <!-- Include Quill CSS -->
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>
@@ -32,13 +33,13 @@
           'list': 'ordered'
         }], // Number list option
         [{
-            'script': 'sub',
-            'icon': 'bi bi-type-subscript'
-          }, // Subscript option
-          {
-            'script': 'super',
-            'icon': 'bi bi-type-superscript'
-          } // Superscript option
+          'script': 'sub',
+          'icon': 'bi bi-type-subscript'
+        }, // Subscript option
+        {
+          'script': 'super',
+          'icon': 'bi bi-type-superscript'
+        } // Superscript option
         ],
       ],
     }
@@ -52,7 +53,7 @@
     return delta
   })
 
-  quill.on('text-change', function() {
+  quill.on('text-change', function () {
     var html = quill.root.innerHTML;
     document.getElementById('product-des-input').value = html;
   });

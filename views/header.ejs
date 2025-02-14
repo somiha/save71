@@ -31,6 +31,7 @@
   <link rel="icon" sizes="325x325" href="https://save71.com/images/save71_icon.webp">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+
   <title>Save 71</title>
 </head>
 
@@ -117,12 +118,26 @@
     });
   });
 </script>
+<script>
+  window.onload = function () {
+    var currentPath = window.location.pathname;
+    if (currentPath === '/all-category') {
+      console.log(currentPath)
+      document.getElementById('all-category-container').classList.add('all-category-hide');
+    }
+  };
 
+
+</script>
 
 <style>
   .profile-image {
     width: 50px;
     height: 50px;
+  }
+
+  .all-category-hide {
+    display: none ! important;
   }
 </style>
 
@@ -155,6 +170,7 @@
       </div>
 
       <!-- All Category Button (hidden on large devices) -->
+
       <div class="d-none d-lg-flex align-items-center ms-3 d-lg-none">
         <a href="/all-category" class="text-center btn d-flex align-items-center gap-2 all-category"
           style="border: 1px solid #02436a; color: #02436a;">
@@ -258,7 +274,7 @@
     </div>
 
     <!-- Search and All Category for mobile view -->
-    <div class="position-relative d-flex container d-lg-none flex-grow-1 px-3 w-100">
+    <div class="position-relative d-flex container d-lg-none flex-grow-1 px-[10px] w-100">
       <div class="d-flex w-100">
         <form class="d-flex w-100 position-relative" role="search" id="search-form" action="/search" method="GET">
           <div class="search d-flex w-100">
@@ -274,7 +290,7 @@
       </div>
 
       <!-- All Category Button (for mobile view) -->
-      <div class="d-flex align-items-center ms-2 d-lg-none">
+      <div class="d-flex align-items-center d-lg-none" id="all-category-container">
         <a href="/all-category" class="text-center btn d-flex align-items-center gap-2 all-category"
           style="border: 1px solid #02436a; color: #02436a; height: 100%; padding: 0.5rem 1rem;">
           All Category

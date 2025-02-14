@@ -4,6 +4,7 @@ const multer = require("multer");
 const mult_upload = require("../config/multer_product.config");
 const catModel = require("../middlewares/cat");
 const crypto = require("../middlewares/crypto");
+const DOMPurify = require("dompurify")();
 
 exports.edit_product = async (req, res) => {
   var isLogged = crypto.decrypt(req.cookies.login_status || "");
@@ -67,7 +68,12 @@ exports.edit_product = async (req, res) => {
                                     );
                                     return image;
                                   });
-
+                                  var images1 = images.map((image) => {
+                                    image.product_id = crypto.smallDecrypt(
+                                      image.product_id
+                                    );
+                                    return image;
+                                  });
                                   var products = res2.map((product) => {
                                     product.product_id = crypto.smallEncrypt(
                                       product.product_id
@@ -91,6 +97,7 @@ exports.edit_product = async (req, res) => {
                                     currencyCode,
                                     currRate,
                                     images: images,
+                                    images1: images1,
                                     userImage: userImage,
                                     userName: userName,
                                     cart: encCart,
@@ -352,6 +359,8 @@ exports.edit_productPost = async (req, res) => {
         product_short_des,
         featured_index,
       } = req.body;
+      // const product_des1 = product_des.replace(/<\/?[^>]+(>|$)/g, "");
+
       product_name = product_name.trim().slice(0, 100);
       product_short_des = product_short_des.trim().slice(0, 150);
       var featured_image_index = parseInt(featured_index);
@@ -549,6 +558,8 @@ exports.changeFeatured = async (req, res) => {
     [productId],
     (err1, res1) => {
       if (!err1) {
+        console.log("Pic changed : ", productId, " -> ", newId);
+
         db.query(
           "UPDATE `product_image` SET `featured_image` = '1' WHERE `product_image`.`id` = ?",
           [newId],

@@ -99,16 +99,83 @@
           <div class="d-flex gap-2 fs-6 products-tab" id="nav-tab" role="tablist">
             <a class="nav-link active btn p-2 px-3" id="nav-description-tab" data-bs-toggle="tab"
               data-bs-target="#order" type="button" aria-controls="order" aria-selected="true">
-              Order
-            </a>
-            <a class="nav-link btn p-2 px-3" id="nav-reviews-tab" data-bs-toggle="tab" data-bs-target="#reference"
-              type="button" aria-controls="reference" aria-selected="false">
-              Reference
+              Shop Transactions
             </a>
             <!-- <a class="nav-link btn p-2 px-3" id="nav-questions-tab" data-bs-toggle="tab" data-bs-target="#sent_money" type="button" aria-controls="sent_money" aria-selected="false">
               Sent Money
             </a> -->
           </div>
+
+          <table class="table table-bordered table-hover" style="font-size: 14px; line-height: 1;">
+            <thead>
+              <tr>
+                <th scope="col">Sender</th>
+                <th scope="col">Receiver</th>
+                <th scope="col">Reference</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i = 0; i < fundTranferData.length; i++) { %>
+              <tr>
+                <td><%= fundTranferData[i].sender_name %></td>
+                <td><%= fundTranferData[i].receiver_name %></td>
+                <td><%= fundTranferData[i].referrer_name %></td>
+                <td>
+                  <%= fundTranferData[i].sender_id == shopId ? "-" : "+" %>
+                  <%= (fundTranferData[i].amount * currRate).toFixed(4) %>
+                </td>
+                <td><%= new Date(fundTranferData[i].created_at).toLocaleString('en-US', { 
+                    year: 'numeric', month: '2-digit', day: '2-digit', 
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hour12: false
+                }) %></td>
+
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+
+          <div class="d-flex gap-2 fs-6 products-tab" id="nav-tab" role="tablist">
+            <a class="nav-link active btn p-2 px-3" id="nav-description-tab" data-bs-toggle="tab"
+              data-bs-target="#order" type="button" aria-controls="order" aria-selected="true">
+              Add or Withdraw Transactions
+            </a>
+            <!-- <a class="nav-link btn p-2 px-3" id="nav-questions-tab" data-bs-toggle="tab" data-bs-target="#sent_money" type="button" aria-controls="sent_money" aria-selected="false">
+                        Sent Money
+                      </a> -->
+          </div>
+
+          <table class="table table-bordered table-hover" style="font-size: 14px; line-height: 1;">
+            <thead>
+              <tr>
+                <th scope="col">Transection Id</th>
+                <th scope="col">Is Withdraw</th>
+                <th scope="col">Is Add</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i = 0; i < trans.length; i++) { %>
+              <tr>
+                <td><%= trans[i].transaction_id %></td>
+                <td><%= trans[i].is_withdraw  ? "Yes" : "" %></td>
+                <td><%= trans[i].is_withdraw  ? "" : "Yes" %></td>
+                <td>
+                  <%= (trans[i].amount * currRate).toFixed(4) %>
+                </td>
+                <td><%= new Date(trans[i].date).toLocaleString('en-US', { 
+                              year: 'numeric', month: '2-digit', day: '2-digit', 
+                              hour: '2-digit', minute: '2-digit', second: '2-digit',
+                              hour12: false
+                          }) %></td>
+
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
         </nav>
 
         <!-- Total Balance content -->
@@ -118,6 +185,7 @@
           </div>
           <div class="tab-pane fade rounded-3" id="reference" role="tabpanel" tabindex="0">
             <!-- Reference table content goes here -->
+
           </div>
           <!-- <div class="tab-pane fade rounded-3" id="sent_money" role="tabpanel" tabindex="0">
             Sent Money table content goes here
@@ -252,14 +320,6 @@
               ) {
                 // Hide all tables by default
                 $('#order, #reference, #sent_money').addClass('d-none');
-
-                createAndAppendTable(
-                  response.orderTable,
-                  ['Order ID', 'Delivery Date', 'Amount (<%= currencyCode %>)'],
-                  'order',
-                  response.currRate,
-                  1
-                );
                 createAndAppendTable(
                   response.refTable,
                   ['Phone Number', 'Ref Date', 'Ref Amount'],

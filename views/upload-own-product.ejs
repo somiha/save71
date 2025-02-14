@@ -1,6 +1,9 @@
 <%- include('header'); -%>
+<!-- Quill.js CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-
+<!-- Quill.js JS -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
 <!-- Upload Product Section -->
 <div class="bg-body-secondary flex-grow-1 py-4">
@@ -73,8 +76,12 @@
 
           <div class="mb-3">
             <label for="productDescription" class="form-label fw-medium">Product Long Description</label>
-            <!-- <textarea class="form-control bg-body-secondary border-0 py-3" style="height: 100px" id="productDescription" name="product_des" placeholder="Product Description" required></textarea> -->
-            <%- include('richText', {des : null}); %>
+
+            <!-- Quill Editor Container -->
+            <div id="editor-container" style="height: 200px;"></div>
+
+            <!-- Hidden input to store Quill content -->
+            <input type="hidden" id="productDescription" name="product_des">
           </div>
 
           <div class="">
@@ -115,7 +122,36 @@
 </div>
 
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var quill = new Quill("#editor-container", {
+      theme: "snow",
+      placeholder: "Write product details here...",
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ["bold", "italic", "underline"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["link"]
+        ]
+      }
+    });
 
+    // Load existing product description
+    var hiddenInput = document.getElementById("productDescription");
+    quill.root.innerHTML = hiddenInput.value;
+
+    // Update hidden input when Quill content changes
+    quill.on("text-change", function () {
+      hiddenInput.value = quill.root.innerHTML;
+    });
+
+    // Ensure the value is saved before form submission
+    document.querySelector("form").addEventListener("submit", function () {
+      hiddenInput.value = quill.root.innerHTML;
+    });
+  });
+</script>
 <script>
   function disableSubmitButton() {
     var submitBtn = document.getElementById('submitBtn');
@@ -143,55 +179,68 @@
 <script>
   var imagePreviewContainer = document.getElementById('imagePreviewContainer');
   var fileInput = document.getElementById('productImages');
-  var row = document.createElement('div');
-  row.className = 'row';
+
   fileInput.addEventListener('change', function (e) {
-    imagePreviewContainer.innerHTML = '';
+    imagePreviewContainer.innerHTML = ''; // Clear previous previews
+    var row = document.createElement('div'); // Move row creation inside
+
     for (var i = 0; i < e.target.files.length; i++) {
       var file = e.target.files[i];
       var reader = new FileReader();
-      reader.onload = (function (i) {
-        return function (event) {
-          var img = new Image();
-          img.src = event.target.result;
-          img.onload = function () {
-            var column = document.createElement('div');
-            column.className = 'col-md-3 mb-3';
-            var container = document.createElement('div');
-            container.className = 'mb-3 d-flex flex-column align-items-center';
-            var imagePreview = document.createElement('img');
-            imagePreview.src = img.src;
-            imagePreview.className = 'img-thumbnail';
-            imagePreview.style.width = '100px';
-            imagePreview.style.height = '100px';
-            var buttonGroup = document.createElement('div');
-            buttonGroup.className = 'btn-group';
-            var featuredRadioBtn = document.createElement('input');
-            featuredRadioBtn.type = 'radio';
-            featuredRadioBtn.name = 'featured_index';
-            featuredRadioBtn.value = i;
-            // featuredRadioBtn.select = 'btn-check';
 
-            var removeButton = document.createElement('button');
-            removeButton.type = 'button';
-            removeButton.className = 'btn text-danger p-1 m-2';
-            removeButton.innerHTML = '<i class="bi bi-trash-fill"></i>';
-            removeButton.addEventListener('click', function () {
-              column.remove();
-            });
-            buttonGroup.appendChild(featuredRadioBtn);
-            buttonGroup.appendChild(removeButton);
-            container.appendChild(imagePreview);
-            container.appendChild(buttonGroup);
-            column.appendChild(container);
-            row.appendChild(column);
-          };
+      reader.onload = (function (fileIndex) {
+        return function (event) {
+          var column = document.createElement('div');
+          column.className = 'col-md-3 mb-3';
+
+          var container = document.createElement('div');
+          container.className = 'mb-3 d-flex flex-column align-items-center';
+
+          var imagePreview = document.createElement('img');
+          imagePreview.src = event.target.result;
+          imagePreview.className = 'img-thumbnail';
+          imagePreview.style.width = '100px';
+          imagePreview.style.height = '100px';
+
+          var buttonGroup = document.createElement('div');
+          buttonGroup.className = 'btn-group';
+
+          var featuredRadioBtn = document.createElement('input');
+          featuredRadioBtn.type = 'radio';
+          featuredRadioBtn.name = 'featured_index';
+          featuredRadioBtn.value = fileIndex;
+
+
+          var label = document.createElement('label');
+          label.className = 'btn btn-outline-primary';
+          label.textContent = 'Feature Image';
+          label.style.fontSize = 'small';
+          label.style.marginLeft = '10px';
+          label.style.marginTop = '10px';
+
+          var removeButton = document.createElement('button');
+          removeButton.type = 'button';
+          removeButton.className = 'btn text-danger p-1 m-2';
+          removeButton.innerHTML = '<i class="bi bi-trash-fill"></i>';
+          removeButton.addEventListener('click', function () {
+            column.remove();
+          });
+
+          buttonGroup.appendChild(featuredRadioBtn);
+          buttonGroup.appendChild(label);
+          buttonGroup.appendChild(removeButton);
+          container.appendChild(imagePreview);
+          container.appendChild(buttonGroup);
+          column.appendChild(container);
+          row.appendChild(column);
         };
       })(i);
+
       reader.readAsDataURL(file);
     }
     imagePreviewContainer.appendChild(row);
   });
+
   /*
     document.getElementById('productVideo').addEventListener('change', function(e) {
       var videoPreviewContainer = document.getElementById('videoPreviewContainer');
@@ -273,7 +322,6 @@
 
 <script>
   $(document).ready(function () {
-    console.log('dropdown clicked')
     $('#productCategory').selectpicker();
   })
 </script>

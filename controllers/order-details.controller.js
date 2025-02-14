@@ -148,7 +148,12 @@ exports.order_status_complete_v2 = async (req, res) => {
 
     console.log({ referer_shop });
 
-    const totalPrice = orderDetails[0].total_price.toFixed(8);
+    const totalPrice =
+      Number(orderDetails[0].total_price.toFixed(8)) +
+      Number(order[0].deliveryCharge.toFixed(8));
+
+    console.log("totalPrice: ", totalPrice);
+
     const deduct_price = orderDetails[0].total_deduct_price.toFixed(8);
 
     const customerShop = await queryAsync(
@@ -205,7 +210,8 @@ exports.order_status_complete_v2 = async (req, res) => {
         let value =
           Number(sellerShopBalance[0].own_balance) +
           Number(totalPrice) -
-          Number(deduct_price);
+          Number(deduct_price) -
+          Number(order[0].deliveryCharge);
         await queryAsync(
           "UPDATE `shop_balance` SET `own_balance` = ? WHERE `shop_id` = ?",
           [value, sellerShop[0].id]

@@ -25,20 +25,20 @@
 		%>
 	<div class="px-5 flex-grow-1 py-5">
 		<div class="row-cols-sm-12 mb-5 row row-cols-1 row-cols-lg-5 gap-lg-5 gap-2 align-items-stretch">
-			<a href="/orders#newOrder" class="text-white col-12 col-lg border rounded p-3"
-				style="background-color: #1a63a6; height: 120px;">
+			<a href="/orders#newOrder" class="col-12 col-lg border rounded p-3"
+				style="background-color: #1a63a6; height: 120px; color: #fff;">
 				<p class="py-2 m-0">New Orders (<%= orderCount[2] %>)</p>
 				<p class="py-2 m-0">[<%= (totalPrice[2] * currRate).toFixed(2) %> <%= currencyCode %> ]</p>
 			</a>
 
-			<a href="/orders#accepted-order" class="text-white col-12 col-lg border rounded p-3"
-				style="background-color: #ffd166; height: 120px;">
+			<a href="/orders#accepted-order" class="col-12 col-lg border rounded p-3"
+				style="background-color: #ffd166; height: 120px; color:black">
 				<p class="py-2 m-0">Shipped Orders (<%= orderCount[3] %>)</p>
 				<p class="py-2 m-0">[<%= (totalPrice[3] * currRate).toFixed(2) %> <%= currencyCode %> ]</p>
 			</a>
 
-			<a href="/orders#confirmed-order" class="text-white col-12 col-lg border rounded p-3"
-				style="background-color: #06d6a0; height: 120px;">
+			<a href="/orders#confirmed-order" class="col-12 col-lg border rounded p-3"
+				style="background-color: #06d6a0; height: 120px ; color:black">
 				<p class="py-2 m-0">Confirmed Orders (<%= orderCount[0] %>)</p>
 				<p class="py-2 m-0">[<%= (totalPrice[0] * currRate).toFixed(2) %> <%= currencyCode %> ]</p>
 			</a>

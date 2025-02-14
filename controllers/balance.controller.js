@@ -1,4 +1,5 @@
 const db = require("../config/database.config");
+const { queryAsync, queryAsyncWithoutValue } = require("../config/helper");
 const catModel = require("../middlewares/cat");
 const crypto = require("../middlewares/crypto");
 
@@ -13,12 +14,32 @@ exports.balance = async (req, res) => {
         return res.redirect("/logout");
       }
       const userId = crypto.decrypt(req.cookies.userId);
+      const shopId = crypto.decrypt(req.cookies.seller_id);
+      console.log({ shopId });
       const currencyCode = crypto.decrypt(req.cookies.currencyCode);
       const [currRate, tax, notification] = await Promise.all([
         catModel.fetchCurrencyRate(currencyCode),
         catModel.fetchTaxRate(currencyCode),
         catModel.fetchAllNotifications(userId),
       ]);
+
+      const fundTranferData = await queryAsync(
+        `SELECT ft.*, 
+      COALESCE(senderShop.shop_name, 'No Sender') AS sender_name, 
+      COALESCE(receiverShop.shop_name, 'Commission') AS receiver_name, 
+      COALESCE(referrerShop.shop_name, 'No Referrer') AS referrer_name
+  FROM fund_transfer AS ft
+  LEFT JOIN shop AS senderShop ON ft.sender_id = senderShop.id
+  LEFT JOIN shop AS receiverShop ON ft.receiver_id = receiverShop.id
+  LEFT JOIN shop AS referrerShop ON ft.ref_id = referrerShop.id
+  WHERE ft.receiver_id = ? 
+         OR ft.sender_id = ?
+  ORDER BY ft.created_at DESC`,
+        [shopId, shopId]
+      );
+
+      // console.log({ fundTranferData });
+
       var isLogged = crypto.decrypt(req.cookies.login_status || "");
       if (isLogged) {
         // Minimum withDrawal value
@@ -33,6 +54,7 @@ exports.balance = async (req, res) => {
                 "SELECT * FROM `shop_transaction` WHERE `shop_transaction`.`shop_id` = ?",
                 [seller_id],
                 (err2, res2) => {
+                  console.log({ res2 });
                   if (!err2) {
                     db.query(
                       "SELECT * FROM `payment_history` WHERE `payment_history`.`shop_id` = ? ORDER BY `payment_history`.`history_id` DESC",
@@ -56,6 +78,8 @@ exports.balance = async (req, res) => {
                             minWithDraw,
                             tax,
                             notification: notification,
+                            fundTranferData,
+                            shopId,
                           });
                         } else {
                           res.send(err3);

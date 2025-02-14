@@ -8,6 +8,17 @@
     padding: 1rem;
   }
 
+
+  .profile-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .all-category-hide {
+    display: none;
+  }
+
+
   @media (min-width: 768px) and (max-width: 991px) {
     .cart-products {
       width: 80%;
@@ -30,21 +41,57 @@
       margin: 0 auto;
       max-width: 400px;
     }
+
+  }
+
+  .cart-height {
+    height: 100vh;
+  }
+
+
+
+  @media only screen and (max-width: 768px) {
+    .cart-height {
+      height: 80vh;
+    }
   }
 </style>
-<footer class="text-light py-4" style="border-top: 1px solid #f0f0f0; background-color: #f0f0f0;">
+<!-- <footer class="text-light py-4" style="border-top: 1px solid #f0f0f0; background-color: #f0f0f0;">
   <div class="container">
     <div class="d-flex justify-content-between">
 
-      <h5 style="color:#1a63a6; font-weight: 600;">Popular Categories</h5>
+      <h5 style="color:#1a63a6; font-weight: bold; font-size: 20px; margin-bottom: 50px;">Popular Categories</h5>
       <a href="/all-extra-category" style="color:#1a63a6">
         See All
         <i class="bi bi-arrow-right"></i>
       </a>
     </div>
 
+    <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3" id="all-category-container">
+
+      <% for (var i=0; i < 10; i++) {%>
+      <a href="/product/<%= extraCat[i].extra_cat_id  %>?name=<%= extraCat[i].extra_cat_name %>">
+        <div class="col mb-5">
+          <div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+            <div style="height: 20rem">
+              <img src="<%= extraCat[i].extra_cat_image_url %>" class="card-img h-100 rounded-2"
+                style="object-fit: cover" />
+            </div>
+            <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+              <h5 class="card-title text-white text-center">
+                <%= extraCat[i].extra_cat_name %>
+              </h5>
+            </div>
+          </div>
+        </div>
+      </a>
+      <% } %>
+
+    </div>
+
     </br>
-    <div class="row">
+
+    <div class="row" id="all-category-container1">
       <% for (var j = 0; j < (extraCat.length < 5 ? extraCat.length : 5); j++) { %>
       <% for (var i = 0; i < 6; i++) { %>
       <div class="col-md-2">
@@ -58,7 +105,10 @@
       <% } %>
     </div>
 
-</footer>
+
+
+
+</footer> -->
 
 <!-- Footer Section -->
 <div class="footer"
@@ -146,22 +196,22 @@
         <h1 class="fs-6 mb-4 w-50 ">Dashboard</h1>
         <ul class="px-0 text-white fw-light footer-list w-50 gap-2 d-flex flex-column" style="list-style: disc;">
           <li class="d-flex w-100">
-            <a class="text-white" href="#">Products</a>
+            <a class="text-white" href="/products">Products</a>
           </li>
           <li class="d-flex w-100">
-            <a class="text-white" href="#">Selling</a>
+            <a class="text-white" href="/orders">Selling</a>
           </li>
           <li class="d-flex w-100">
-            <a class="text-white" href="#">Purchases</a>
+            <a class="text-white" href="/user_order">Purchases</a>
           </li>
           <li class="d-flex w-100">
-            <a class="text-white" href="#">Balance</a>
+            <a class="text-white" href="/balance">Balance</a>
           </li>
           <li class="d-flex w-100">
-            <a class="text-white" href="#">Customers</a>
+            <a class="text-white" href="/myCustomers">Customers</a>
           </li>
           <li class="d-flex w-100">
-            <a class="text-white" href="#">Settings & Privacy</a>
+            <a class="text-white" href="/settings">Settings & Privacy</a>
           </li>
         </ul>
       </div>
@@ -171,8 +221,9 @@
 </div>
 
 <!-- Cart section -->
-<div class="cart bg-white border border-secondary-subtle hidden"
-  style="z-index: 200; overflow-y: auto; max-height: 100vh ;">
+<div class="cart bg-white border border-secondary-subtle hidden cart-height" style="z-index: 200; overflow-y: auto; ">
+
+
   <div class="w-100 d-flex flex-column position-relative ">
     <div class="ps-3 d-flex justify-content-between align-items-center" style="background-color: #003F63;">
       <h1 class=" fs-6 mt-3 text-white">
@@ -293,7 +344,56 @@
 
 
 </body>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var currentPath = window.location.pathname;
+    console.log('Current path:', currentPath);
+    if (currentPath === '/all-extra-category') {
+      console.log('Hiding all-category-container');
+      var container = document.getElementById('all-category-container');
+      if (container) {
+        console.log('Element found');
+        container.style.display = 'none';
+      } else {
+        console.log('Element not found');
+      }
+    }
+  });
+</script>
 
+<script>
+  window.onload = function () {
+    var currentPath = window.location.pathname;
+    console.log('Current path:', currentPath);
+    if (currentPath === '/') {
+      console.log('Hiding all-category-container1');
+      var container = document.getElementById('all-category-container1');
+      if (container) {
+        console.log('Element found1');
+        container.style.visibility = 'hidden';
+      } else {
+        console.log('Element not found1');
+      }
+    }
+  };
+</script>
+
+<script>
+  window.onload = function () {
+    var currentPath = window.location.pathname;
+    console.log('Current path:', currentPath);
+    if (currentPath === '/all-extra-category/') {
+      console.log('Hiding all-category-container');
+      var container = document.getElementById('all-category-container');
+      if (container) {
+        console.log('Element found');
+        container.style.visibility = 'hidden';
+      } else {
+        console.log('Element not found');
+      }
+    }
+  };
+</script>
 
 <script>
   async function getCurrentLocationName(latitude, longitude) {
