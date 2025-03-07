@@ -39,9 +39,9 @@ exports.products = async (req, res) => {
                     });
 
                     var products = res1.map((product) => {
-                      product.product_id = crypto.smallEncrypt(
-                        product.product_id
-                      );
+                      // product.product_id = crypto.smallEncrypt(
+                      product.product_id;
+                      // );
                       return product;
                     });
 

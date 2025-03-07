@@ -219,7 +219,7 @@
             <div class="col-12 col-md-4 p-2">
               <div class="fw-6 text-black <%= order_details[i].stock_out ? 'text-decoration-line-through' : '' %>"
                 style="display: flex; align-items: center;">
-                <%= (order_details[i].product_price * currRate).toFixed(2) %>
+                <%= ( (order_details[i].product_total_price / order_details[i].product_quantity) * currRate).toFixed(2) %>
                 <% if (order.seller_confirm == 0 || order_details[i].order_status === 4) { %>
                 <form method="POST"
                   action="/updateOrder/<%= order_details[i].order_details_id %>/<%= order_details[i].product_cat_id %>/1"
@@ -263,7 +263,7 @@
             <!-- Column 3: Total price -->
             <div class="col-12 col-md-2 p-2">
               <p class="fw-6 text-black <%= order_details[i].stock_out? " text-decoration-line-through" : "" %>">
-                <%= (order_details[i].product_price * order_details[i].product_quantity * currRate).toFixed(2) %>
+                <%= (order_details[i].product_total_price * currRate).toFixed(2) %>
               </p>
             </div>
           </div>
@@ -284,7 +284,7 @@
               <% var total_price = 0 %>
               <% for (var i = 0; i < order_details.length; i++) { %>
               <% if (order_details[i].stock_out == 0) { %>
-              <% total_price = ((parseFloat(total_price) + parseFloat(order_details[i].product_price) * parseFloat(order_details[i].product_quantity) * currRate)).toFixed(2) %>
+              <% total_price = ((parseFloat(total_price) + parseFloat(order_details[i].product_total_price) * currRate)).toFixed(2) %>
               <tr>
                 <td><% for (var k = 0; k < image.length; k++) { %>
                   <% if (image[k].product_id == order_details[i].product_id) { %>
@@ -294,7 +294,7 @@
                   <% } %> <%= order_details[i].product_name %>
                 </td>
                 <td><%= order_details[i].product_quantity %></td>
-                <td><%= (order_details[i].product_price * order_details[i].product_quantity * currRate).toFixed(2) %>
+                <td><%= (order_details[i].product_total_price * currRate).toFixed(2) %>
                 </td>
               </tr>
               <% } %>

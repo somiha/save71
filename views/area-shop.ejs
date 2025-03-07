@@ -38,8 +38,8 @@
   <!-- Category Section -->
 
 
-  <div class="px-2 px-lg-0 d-flex flex-column mb-5">
-    <div class="d-flex flex-lg-row flex-column gap-5 mt-5">
+  <div class="px-2 px-lg-0 d-flex flex-column mb-3">
+    <div class="d-flex flex-lg-row flex-column column-gap-5 mt-3">
 
       <!-- Sidebar -->
       <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
@@ -48,7 +48,7 @@
           <i class="bi bi-chevron-right d-md-none"></i>
         </h1>
         <div class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container">
-          <!-- Search Box -->
+
           <div class="position-relative d-lg-flex align-items-center flex-grow-1 header-search-container"
             style="max-width: 100%;">
             <div class="search d-flex w-100">
@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <!-- Categories List -->
+
           <% for (var i = 0; i < extraCat.length; i++) { %>
           <a href="/product/<%= extraCat[i].extra_cat_id %>?name=<%= extraCat[i].extra_cat_name %>"
             class="fs-6 w-100 py-1 d-flex align-items-center justify-content-between mb-2 category-item"
@@ -86,8 +86,18 @@
         <div class=" mb-5">
           <!--  only area shops -->
           <!-- Products Of a category Section -->
+
+
+          <% for (var i = 0; i < extraCat.length; i++) { %>
+          <% var product_count = 0 %>
+          <% for (var j = 0; j < products.length; j++) { %>
+          <% if (products[j].product_cat_id == extraCat[i].extra_cat_id) { %>
+          <% product_count++ %>
+          <% } %>
+          <% } %>
+          <% if (product_count > 0) { %>
           <div class="products flex-grow-1">
-            <div class="w-100 d-flex align-items-center justify-content-between mb-2">
+            <div class="w-100 d-flex align-items-center justify-content-between mb-2 mt-3">
               <h3 class="fs-4" id="<%= extraCat[i].extra_cat_id %>">
                 <%= extraCat[i].extra_cat_name %>
               </h3>
@@ -98,63 +108,60 @@
             </div>
             <!-- Product start -->
             <div class="row row-cols-lg-4 g-4 row-cols-2 row-cols-md-3 d-none d-md-flex">
-              <% var product_count = 0 %>
-              <% // for (var k=0; k < shops.length; k++) { %>
-              <% // if (product_count > 6) break;%>
-              <% for (var j=0; j < products.length; j++) { %>
-              <% if (product_count > 6) break;%>
-              <% if (products[j].product_cat_id==extraCat[i].extra_cat_id) { %>
-              <% product_count++ %>
+              <% var count = 0 %>
+              <% for (var j = 0; j < products.length; j++) { %>
+              <% if (products[j].product_cat_id == extraCat[i].extra_cat_id) { %>
+              <% if (count < 8) { %>
               <!-- New Product Card Design -->
               <div class="col">
                 <%- include('./components/product_card.ejs', {
-                  product_details: {
-                    product_id: products[j].product_id,
-                    product_name: products[j].product_name,
-                    product_image_url: products[j].product_image_url,
-                    product_price: products[j].product_price,
-                    distanceKm: products[j].shop.distanceKm,
-                    distanceMeters: products[j].shop.distanceMeters,
-                    seller_id: products[j].seller_id
-                  }
-                }); %>
+                          product_details: {
+                            product_id: products[j].product_id,
+                            product_name: products[j].product_name,
+                            product_image_url: products[j].product_image_url,
+                            product_price: products[j].product_price,
+                            distanceKm: products[j].shop.distanceKm,
+                            distanceMeters: products[j].shop.distanceMeters,
+                            seller_id: products[j].seller_id
+                          }
+                        }); %>
               </div>
+              <% count++ %>
               <% } %>
               <% } %>
-              <%// } %>
+              <% } %>
             </div>
             <!-- Product End -->
-
             <!-- Products Section for mobile screen -->
             <div class="w-100 d-flex flex-wrap d-md-none ">
-              <% var product_count = 0 %>
-              <% // for (var k=0; k < shops.length; k++) { %>
-              <% // if (product_count > 6) break;%>
-              <% for (var j=0; j < products.length; j++) { %>
-              <% if (product_count > 6) break;%>
-              <% if (products[j].product_cat_id==extraCat[i].extra_cat_id) { %>
-              <% product_count++ %>
+              <% var count = 0 %>
+              <% for (var j = 0; j < products.length; j++) { %>
+              <% if (products[j].product_cat_id == extraCat[i].extra_cat_id) { %>
+              <% if (count < 8) { %>
               <!-- Mobile per product -->
               <div class="w-50 p-2">
                 <!-- Product_card Design Fix Needed -->
                 <%- include('./components/product_card.ejs', {
-                  product_details: {
-                  product_id: products[j].product_id,
-                  product_name: products[j].product_name,
-                  product_image_url: products[j].product_image_url,
-                  product_price: products[j].product_price,
-                  distanceKm: products[j].shop.distanceKm,
-                  distanceMeters: products[j].shop.distanceMeters,
-                  seller_id: products[j].seller_id
-                  }
-                  }); %>
+                          product_details: {
+                            product_id: products[j].product_id,
+                            product_name: products[j].product_name,
+                            product_image_url: products[j].product_image_url,
+                            product_price: products[j].product_price,
+                            distanceKm: products[j].shop.distanceKm,
+                            distanceMeters: products[j].shop.distanceMeters,
+                            seller_id: products[j].seller_id
+                          }
+                        }); %>
               </div>
+              <% count++ %>
               <% } %>
               <% } %>
-              <%// } %>
-              <!-- Mobile per product -->
+              <% } %>
             </div>
           </div>
+          <% } %>
+          <% } %>
+
         </div>
 
         <% } %>

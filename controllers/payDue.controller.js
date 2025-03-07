@@ -485,7 +485,7 @@ exports.paydue_v2 = async (req, res) => {
       const dueId = req.params.dueId;
       const verificationMethod = req.params.verificationMethod;
       const userId = crypto.decrypt(req.cookies.userId);
-      if (verificationMethod || 1) {
+      if (verificationMethod == 1) {
         const shopDueDetails = await queryAsync(
           "SELECT * FROM `shop_due_details` WHERE `due_id` = ?",
           [dueId]

@@ -415,7 +415,17 @@ exports.emailVerificationPostByUserId = (req, res) => {
                                 [decUserId],
                                 async (err2, res2) => {
                                   if (!err2) {
-                                    return res.redirect("/login");
+                                    db.query(
+                                      "DELETE FROM `user_demo` WHERE `user_id` = ?",
+                                      [decUserId],
+                                      (err3, res3) => {
+                                        if (!err3) {
+                                          return res.redirect("/login");
+                                        } else {
+                                          return res.send(err3);
+                                        }
+                                      }
+                                    );
                                   } else {
                                     return res.send(err2);
                                   }

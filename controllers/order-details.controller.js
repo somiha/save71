@@ -95,7 +95,7 @@ exports.orderDetails = async (req, res) => {
       "SELECT * FROM `notes` WHERE `order_id` = ?",
       [oID]
     );
-
+    console.log({ notes });
     return res.render("order-details", {
       ogImage: "https://admin.save71.com/images/logo-og.webp",
       ogTitle: "Save71 Connects You and the World through Business.",

@@ -511,13 +511,17 @@ https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js
             <div class="mb-3">
               <label class="form-label">Regular Price (<%= currencyCode %>)</label>
               <input type="number" class="form-control" name="regular_price"
-                value="<%= (product[0].regular_price * currRate).toFixed(2) %>" required />
+                value="<%= (!isNaN(product[0]?.regular_price * currRate) ? (product[0].regular_price * currRate).toFixed(2) : '') %>"
+                step="0.01" required />
             </div>
+
 
             <div class="mb-3">
               <label class="form-label">Selling Price (<%= currencyCode %>)</label>
               <input type="number" class="form-control" name="product_price"
-                value="<%= (product[0].product_price * currRate).toFixed(2) %>" required />
+                value="<%= (!isNaN(product[0]?.product_price * currRate) ? (product[0].product_price * currRate).toFixed(2) : '') %>"
+                step="0.01" required />
+
             </div>
 
             <div class="mb-3">

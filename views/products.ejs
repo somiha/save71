@@ -115,11 +115,12 @@
                       <% var statName = ['','','Pending', 'Rejected'] %>
                       <span class="badge rounded-pill fs-6 text-bg-danger"><%= statName[products[i].status-1] %></span>
                       <% if (!products[i].admin_published) { %>
-                      <span class="badge rounded-pill text-bg-secondary fs-6"
+                      <span class="badge rounded-pill" style="font-size: 8px; background-color: #ffd166; color: grey;"
                         title="Admin will review">Unpublished</span>
                       <% } %>
                       <% if (products[i].status != 1) { %>
-                      <span class="badge rounded-pill text-bg-secondary fs-6" title="Admin will review">In Review</span>
+                      <span class="badge rounded-pill" style="font-size: 8px; background-color: #06d6a0; color: grey;"
+                        title="Admin will review">In Review</span>
                       <% } %>
                       <% if (products[i].is_branded == 1) { %>
                       <!-- <span class="badge rounded-pill text-bg-warning fs-6" title="It's a branded product">Branded</span> -->

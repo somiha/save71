@@ -88,7 +88,7 @@ exports.cart_product = async (req, res) => {
           product.product_id = crypto.smallEncrypt(product.product_id);
           product.product_image_url = images.filter(
             (image) => image.product_id == product.product_id
-          )[0].product_image_url;
+          )[0]?.product_image_url;
           return product;
         });
 

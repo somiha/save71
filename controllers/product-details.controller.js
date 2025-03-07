@@ -140,7 +140,7 @@ exports.productDetails = async (req, res) => {
                                                         product.product_image_url =
                                                           image
                                                             ? image[0]
-                                                                .product_image_url
+                                                                ?.product_image_url
                                                             : "";
                                                         product.distanceMeters =
                                                           sortedShops.find(

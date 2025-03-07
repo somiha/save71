@@ -218,66 +218,6 @@ exports.getTableInfo = async (req, res) => {
   }
 };
 
-// exports.getTableInfoDue = async (req, res) => {
-//   try {
-//     const currencyCode = crypto.decrypt(req.cookies.currencyCode);
-//     const [currRate, tax] = await Promise.all([
-//       catModel.fetchCurrencyRate(currencyCode),
-//       catModel.fetchTaxRate(currencyCode),
-//     ]);
-//     var uID = crypto.decrypt(req.cookies.userId);
-//     var seller_id = crypto.decrypt(req.cookies.seller_id);
-//     var isLogged = crypto.decrypt(req.cookies.login_status);
-//     var oID = crypto.decrypt(req.cookies.order_id || "");
-//     console.log("oid", oID);
-//     var userImage = crypto.decrypt(req.cookies.userImage || "");
-//     var userName = crypto.decrypt(req.cookies.userName);
-
-//     if (isLogged) {
-//       db.query(
-//         "SELECT * FROM `shop_due_details` WHERE `shop_id` = ? ORDER BY `shop_due_details`.`due_id` DESC",
-//         [seller_id],
-//         (err1, dueTable) => {
-//           console.log("due", dueTable[0].order_id);
-//           if (!err1) {
-//             db.query(
-//               "SELECT product_total_price AS sales FROM `order_details` WHERE `order_id` = ?",
-//               [dueTable[0].order_id],
-//               (err2, result) => {
-//                 if (!err2) {
-//                   const totalSales = result[0].sales || 0;
-//                   const data = {
-//                     dueTable,
-//                     totalSales,
-//                     currRate,
-//                     tax,
-//                   };
-//                   res.send(data);
-//                 } else {
-//                   console.error(err2);
-//                   res
-//                     .status(500)
-//                     .send("An error occurred while calculating total sales.");
-//                 }
-//               }
-//             );
-//           } else {
-//             console.error(err1);
-//             res
-//               .status(500)
-//               .send("An error occurred while getting due details.");
-//           }
-//         }
-//       );
-//     } else {
-//       res.redirect("/login");
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
-
 exports.getTableInfoDue = async (req, res) => {
   try {
     if (!req.cookies.currencyCode) {
@@ -361,50 +301,6 @@ exports.getTableInfoDue = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
-// exports.getTableInfoDue = async (req, res) => {
-//   try {
-//     const currencyCode = crypto.decrypt(req.cookies.currencyCode);
-//     const [currRate, tax] = await Promise.all([
-//       catModel.fetchCurrencyRate(currencyCode),
-//       catModel.fetchTaxRate(currencyCode),
-//     ]);
-//     var uID = crypto.decrypt(req.cookies.userId);
-//     var seller_id = crypto.decrypt(req.cookies.seller_id);
-//     var isLogged = crypto.decrypt(req.cookies.login_status);
-//     var oID = crypto.decrypt(req.cookies.order_id || "");
-//     var userImage = crypto.decrypt(req.cookies.userImage || "");
-//     var userName = crypto.decrypt(req.cookies.userName);
-//     if (isLogged) {
-//       db.query(
-//         "SELECT * FROM `shop_due_details` WHERE `shop_id` = ?  ORDER BY `shop_due_details`.`due_id` DESC",
-//         [seller_id],
-//         (err1, dueTable) => {
-//           if (!err1) {
-//             const data = {
-//               dueTable,
-//               currRate,
-//               tax,
-//             };
-//             // console.log(data)
-//             res.send(data);
-//           } else {
-//             console.error(err1);
-//             res
-//               .status(500)
-//               .send("An error occurred while getting order Details.");
-//             return;
-//           }
-//         }
-//       );
-//     } else {
-//       res.redirect("/login");
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
 
 exports.getTableInfoWithdraw = async (req, res) => {
   try {

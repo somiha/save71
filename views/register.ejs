@@ -322,6 +322,28 @@
         }
       };
     </script>
+
+    <script>
+      // Function to get the user's location
+      function setLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function (position) {
+              document.getElementById("latitude").value = position.coords.latitude;
+              document.getElementById("longitude").value = position.coords.longitude;
+            },
+            function (error) {
+              console.error("Error getting location: ", error);
+            }
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
+        }
+      }
+
+      // Call the function when the page loads
+      window.onload = setLocation;
+    </script>
     <!-- <script>
       window.onload = function () {
         const urlParams = new URLSearchParams(window.location.search);

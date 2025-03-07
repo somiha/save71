@@ -1,118 +1,154 @@
 <%- include('header', {subCat: subCat, mainCat: mainCat, extraCat: extraCat, userImage: userImage});-%>
 
-<div class="container d-md-block justify-content-center d-none my-5">
+<div class="container  mb-5">
+  <div class="px-2 px-lg-0 d-flex flex-column mb-5">
+    <div class="d-flex flex-lg-row flex-column column-gap-5 mt-3">
 
-  <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
-    <div>
-      <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Nearest Manufacturer</p>
-    </div>
-    <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist" style="overflow: auto">
-      <a href="/nearest-manufacturer" style="color: #1a63a6;">See All
-        <i class="bi bi-arrow-right "></i>
-      </a>
-    </div>
-  </nav>
+      <!-- Sidebar -->
+      <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
+        <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1 ps-2">
+          Categories
+          <i class="bi bi-chevron-right d-md-none"></i>
+        </h1>
+        <div class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container">
+          <!-- Search Box -->
+          <div class="position-relative d-lg-flex align-items-center flex-grow-1 header-search-container"
+            style="max-width: 100%;">
+            <div class="search d-flex w-100">
+              <input class="form-control bg-transparent rounded-2 nav-search py-2"
+                style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Search"
+                aria-label="Search" id="search-box" name="q" autocomplete="off" />
+              <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
+                style="right: 0%;" type="submit">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
 
-  <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3">
-    <!-- per product -->
-    <% for (var i = 0; (i < sortedShops.length); i++) { %>
-    <div class="col">
-      <!-- Product_card Design Fix Needed -->
-      <%- include('./components/product_card.ejs', {
+          <!-- Categories List -->
+          <% for (var i = 0; i < extraCat.length; i++) { %>
+          <a href="/product/<%= extraCat[i].extra_cat_id %>?name=<%= extraCat[i].extra_cat_name %>"
+            class="fs-6 w-100 py-1 d-flex align-items-center justify-content-between mb-2 category-item"
+            data-name="<%= extraCat[i].extra_cat_name %>" type="button" id="dropdown-btn">
+            <%= extraCat[i].extra_cat_name %>
+          </a>
+          <% } %>
+        </div>
+      </div>
+      <div class="products flex-grow-1">
+
+        <div class="container d-md-block justify-content-center d-none mb-5">
+
+
+
+          <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
+            <div>
+              <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Nearest Manufacturer</p>
+            </div>
+            <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist"
+              style="overflow: auto">
+              <a href="/nearest-manufacturer" style="color: #1a63a6;">See All
+                <i class="bi bi-arrow-right "></i>
+              </a>
+            </div>
+          </nav>
+
+          <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3">
+            <!-- per product -->
+            <% for (var i = 0; (i < sortedShops.length); i++) { %>
+            <div class="col">
+              <!-- Product_card Design Fix Needed -->
+              <%- include('./components/product_card.ejs', {
         product_details: sortedShops[i],
       }); %>
-    </div>
-    <% } %>
-    <!-- per product End -->
-  </div>
-</div>
+            </div>
+            <% } %>
+            <!-- per product End -->
+          </div>
+        </div>
 
-<!-- Popular Manufacturer -->
-<div class="container d-md-block justify-content-center d-none my-5">
-  <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
-    <div>
-      <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Popular Manufacturer</p>
-    </div>
-    <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist" style="overflow: auto">
-      <a href="/popular-manufacturer" style="color: #1a63a6;">See All
-        <i class="bi bi-arrow-right "></i>
-      </a>
-    </div>
-  </nav>
-  <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3">
-    <!-- per product -->
-    <% for (var p = 0; (p < sortedShopsByPopularity.length); p++) { %>
-    <div class="col">
-      <!-- Product_card Design Fix Needed -->
-      <%- include('./components/product_card.ejs', {
+        <!-- Popular Manufacturer -->
+        <div class="container d-md-block justify-content-center d-none my-5">
+          <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
+            <div>
+              <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Popular Manufacturer</p>
+            </div>
+            <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist"
+              style="overflow: auto">
+              <a href="/popular-manufacturer" style="color: #1a63a6;">See All
+                <i class="bi bi-arrow-right "></i>
+              </a>
+            </div>
+          </nav>
+          <div class="row row-cols-lg-5 g-4 row-cols-2 row-cols-md-3">
+            <!-- per product -->
+            <% for (var p = 0; (p < sortedShopsByPopularity.length); p++) { %>
+            <div class="col">
+              <!-- Product_card Design Fix Needed -->
+              <%- include('./components/product_card.ejs', {
         product_details: sortedShopsByPopularity[p],
       }); %>
-    </div>
-    <% } %>
-    <!-- per product End -->
-  </div>
-</div>
+            </div>
+            <% } %>
+            <!-- per product End -->
+          </div>
+        </div>
 
-<!-- <div class="container d-flex justify-content-center mb-5" style="margin-top: 7%">
+        <!-- <div class="container d-flex justify-content-center mb-5" style="margin-top: 7%">
   <a href="/all-category" class="text-center btn d-flex align-items-center gap-2 all-category" style="border: 1px solid #02436a; color: #02436a">All Category
     <i class="bi bi-arrow-right" style="line-height: 0"></i>
   </a>
 </div> -->
 
-<!-- Nearest Manufacturer show at mobile devices only -->
-<div class="container w-100  d-md-none my-5">
-  <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
-    <div>
-      <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Nearest Manufacturer</p>
-    </div>
-    <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist" style="overflow: auto">
-      <a href="/nearest-manufacturer" style="color: #1a63a6;">See All
-        <i class="bi bi-arrow-right "></i>
-      </a>
-    </div>
-  </nav>
+        <!-- Nearest Manufacturer show at mobile devices only -->
+        <div class="container w-100  d-md-none mb-3 mt-3">
 
-  <div class="d-flex flex-wrap w-100 gy-4">
-    <!-- Mobile per product -->
-    <% for (var i = 0; (i < sortedShops.length); i++) { %>
-    <div class="w-50 p-2 ">
-      <!-- Product_card Design Fix Needed -->
-      <%- include('./components/product_card.ejs', {
+          <nav class="d-flex flex-row justify-content-between align-items-center px-2 pb-2">
+            <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Nearest Manufacturer</p>
+            <a href=" /nearest-manufacturer" style="color: #1a63a6; font-weight: bold;">See All</a>
+          </nav>
+
+          <div class="d-flex flex-wrap w-100 gy-4">
+            <!-- Mobile per product -->
+            <% for (var i = 0; (i < sortedShops.length); i++) { %>
+            <div class="w-50 p-2 ">
+              <!-- Product_card Design Fix Needed -->
+              <%- include('./components/product_card.ejs', {
           product_details: sortedShops[i],
           }); %>
-    </div>
-    <% } %>
-  </div>
-  <!-- Mobile per product -->
-</div>
-</div>
+            </div>
+            <% } %>
+          </div>
+          <!-- Mobile per product -->
+        </div>
+      </div>
 
-<!-- Popular Manufacturer show at mobile devices only -->
-<div class="container w-100  d-md-none my-5">
-  <nav class="mb-2 d-flex flex-column flex-md-row justify-content-between gap-4 row-gap-2">
-    <div>
-      <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Popular Manufacturer</p>
-    </div>
-    <div class="d-flex justify-content-start gap-2 mb-3 pb-3" id="nav-tab" role="tablist" style="overflow: auto">
-      <a href="/popular-manufacturer" style="color: #1a63a6;">See All
-        <i class="bi bi-arrow-right "></i>
-      </a>
-    </div>
-  </nav>
+      <!-- Popular Manufacturer show at mobile devices only -->
+      <div class="container w-100  d-md-none mb-3 mt-3">
 
-  <div class="d-flex flex-wrap w-100 gy-4">
-    <!-- Mobile per product -->
-    <% for (var p = 0; (p < sortedShopsByPopularity.length); p++) { %>
-    <div class="w-50 p-2 ">
-      <!-- Product_card Design Fix Needed -->
-      <%- include('./components/product_card.ejs', {
+
+        <nav class="d-flex flex-row justify-content-between align-items-center px-2 pb-2">
+          <p class="m-0 fs-4" style="color: #1a63a6; font-weight: 600;">Popular Manufacturer</p>
+          <a href=" /popular-manufacturer" style="color: #1a63a6; font-weight: bold;">See All</a>
+        </nav>
+
+        <div class="d-flex flex-wrap w-100 gy-4">
+          <!-- Mobile per product -->
+          <% for (var p = 0; (p < sortedShopsByPopularity.length); p++) { %>
+          <div class="w-50 p-2 ">
+            <!-- Product_card Design Fix Needed -->
+            <%- include('./components/product_card.ejs', {
       product_details: sortedShopsByPopularity[p],
       }); %>
+          </div>
+          <% } %>
+          <!-- per product End -->
+        </div>
+      </div>
     </div>
-    <% } %>
-    <!-- per product End -->
   </div>
 </div>
+
 
 
 <%- include('footer', {cart: cart}); -%>

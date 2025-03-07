@@ -13,6 +13,12 @@
         <link rel="stylesheet" href="/css/responsive.css" />
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
+    <style>
+        .iti {
+            width: 100%;
+            display: block ! important;
+        }
+    </style>
 
     <body class="bg-gray-100 flex items-center justify-center min-h-screen">
         <div class="d-flex justify-content-center align-items-center border min-vh-100 login-page-div"
@@ -21,11 +27,11 @@
                 <img src="https://save71.com/images/logo.webp" class="p-2 mb-3 me-10"
                     style="width: 50%; align-self: center;" />
 
-                <div class="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-lg">
+                <div class="max-w-md p-8 space-y-4 bg-white rounded-lg shadow-lg">
 
                     <h2 class="text-2xl font-bold text-center text-gray-800">Employee Login</h2>
 
-                    <form class="space-y-6" action="/employee-login" method="POST">
+                    <form class="d-flex flex-column row-gap-4" action="/employee-login" method="POST">
                         <!-- Mobile Number -->
 
                         <div class="position-relative">
@@ -35,12 +41,19 @@
                                 </h5>
                                 <label for="inputEmail1" class="form-label fw-bold">Mobile Number</label>
                             </div>
+
+
+
+
                             <input type="tel" class="form-control py-3" id="phone" aria-describedby="phonelHelp"
-                                placeholder="Enter Your Phone Number" name="mobile_number"
-                                style="width: 170% !important;" />
+                                placeholder="Enter Your Phone Number" name="mobile_number" style="
+								box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.08),
+									-2px -2px 4px rgba(0, 0, 0, 0.08);" />
                             <div id="error-msg" style="color: red; margin-top: 5px;"></div>
                             <div id="valid-msg" style="color: green; margin-top: 5px;"></div>
+
                         </div>
+
                         <!-- <div>
                             <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile Number</label>
                             <input type="text" id="mobile" name="mobile_number" placeholder="Enter your mobile number"
@@ -48,20 +61,21 @@
                         </div> -->
 
                         <!-- Password -->
-                        <div>
-                            <label for="password" class="form-label fw-bold">Password</label>
-                            <div style="position:relative;">
-                                <input type="password" id="password" name="password" placeholder="Enter your password"
-                                    class="w-full form-control py-3">
+                        <div class="position-relative ">
+                            <label for="inputPassword" class="form-label fw-bold">Password</label>
+                            <div class="position-relative">
+
+                                <input type="password" class="form-control py-3 inputPassword" id="inputPassword"
+                                    placeholder="Password" name="password" style="
+                        								box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.08),
+                                        -2px -2px 4px rgba(0, 0, 0, 0.08);
+                                        " />
                                 <p class="password-show-btn"
-                                    style="position:absolute; right:2%; top:50%; transform: translateY(-50%); cursor:pointer; z-index: 1;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                        <path
-                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                    </svg>
+                                    style="position:absolute; right:2%; top:50%; transform: translateY(-50%); cursor:pointer">
+                                    <i class="bi bi-eye-fill"></i>
                                 </p>
+
+
                             </div>
                         </div>
 

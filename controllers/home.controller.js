@@ -4,6 +4,7 @@ const Shop = require("../middlewares/shop");
 const crypto = require("../middlewares/crypto");
 const locationOptimizedDistance = require("../middlewares/locationOptimizedDistance");
 const moment = require("moment");
+const { queryAsyncWithoutValue } = require("../config/helper");
 
 exports.home = async (req, res) => {
   db.query(
@@ -56,6 +57,7 @@ exports.home = async (req, res) => {
         fetchFeaturedImages,
         currRate,
         notification,
+        trendingCat,
       ] = await Promise.all([
         catModel.fetchMainCat(),
         catModel.fetchSubCat(),
@@ -64,7 +66,23 @@ exports.home = async (req, res) => {
         catModel.fetchFeaturedImages(),
         catModel.fetchCurrencyRate(currencyCode),
         catModel.fetchAllNotifications(userId),
+        queryAsyncWithoutValue(
+          "SELECT \
+    ec.extra_cat_id, \
+    ec.extra_cat_name, \
+    ec.extra_cat_image_url, \
+    SUM(od.product_quantity) AS total_sold_quantity \
+FROM order_details od \
+JOIN products p ON od.product_id = p.product_id \
+JOIN extra_cat ec ON p.product_cat_id = ec.extra_cat_id \
+WHERE od.created_at >= NOW() - INTERVAL 7 DAY \
+GROUP BY ec.extra_cat_id, ec.extra_cat_name, ec.extra_cat_image_url \
+ORDER BY total_sold_quantity DESC \
+LIMIT 10; \
+"
+        ),
       ]);
+      console.log("trendingCat : ", trendingCat);
 
       const Shops = await Shop.getShops();
 
@@ -189,6 +207,7 @@ exports.home = async (req, res) => {
                   notification: notification,
                   base_pCount: 20, // total show 20 products
                   pPerShop: 5, // 4 products per shop
+                  trendingCat,
                 });
               } else {
                 res.send(err2);

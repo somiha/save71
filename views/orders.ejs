@@ -152,7 +152,7 @@ for (var i = 0; i < orders.length; i++) {
                         <% var current_order_details = order_details.filter(detail => detail.order_id === orders[i].order_id) %>
                         <% for (var j=0; j < current_order_details.length; j++) { %>
                         <% if (current_order_details[j].stock_out==0) { %>
-                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_price) * parseFloat(current_order_details[j].product_quantity)  * currRate)).toFixed(2) %>
+                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_total_price) * currRate)).toFixed(2) %>
                         <% } %>
                         <% } %>
                         <p><%= total_price %></p>
@@ -277,7 +277,7 @@ for (var i = 0; i < orders.length; i++) {
                         <% var current_order_details = order_details.filter(detail => detail.order_id === orders[i].order_id) %>
                         <% for (var j=0; j < current_order_details.length; j++) { %>
                         <% if (current_order_details[j].stock_out==0) { %>
-                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_price) * parseFloat(current_order_details[j].product_quantity)  * currRate)).toFixed(2) %>
+                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_total_price) * currRate)).toFixed(2) %>
                         <% } %>
                         <% } %>
                         <p><%= total_price %></p>
@@ -400,7 +400,7 @@ for (var i = 0; i < orders.length; i++) {
                         <% var current_order_details = order_details.filter(detail => detail.order_id === orders[i].order_id) %>
                         <% for (var j=0; j < current_order_details.length; j++) { %>
                         <% if (current_order_details[j].stock_out==0) { %>
-                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_price) * parseFloat(current_order_details[j].product_quantity)  * currRate)).toFixed(2) %>
+                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_total_price) * currRate)).toFixed(2) %>
                         <% } %>
                         <% } %>
                         <p><%= total_price %></p>
@@ -528,7 +528,7 @@ for (var i = 0; i < orders.length; i++) {
                         <% var current_order_details = order_details.filter(detail => detail.order_id === orders[i].order_id) %>
                         <% for (var j=0; j < current_order_details.length; j++) { %>
                         <% if (current_order_details[j].stock_out==0) { %>
-                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_price) * parseFloat(current_order_details[j].product_quantity)  * currRate)).toFixed(2) %>
+                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_total_price) * currRate)).toFixed(2) %>
                         <% } %>
                         <% } %>
                         <p><%= total_price %></p>
@@ -694,7 +694,7 @@ for (var i = 0; i < orders.length; i++) {
                         <% var current_order_details = order_details.filter(detail => detail.order_id === orders[i].order_id) %>
                         <% for (var j=0; j < current_order_details.length; j++) { %>
                         <% if (current_order_details[j].stock_out==0) { %>
-                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_price) * parseFloat(current_order_details[j].product_quantity)  * currRate)).toFixed(2) %>
+                        <% total_price= ((parseFloat(total_price) + parseFloat(current_order_details[j].product_total_price) * currRate)).toFixed(2) %>
                         <% } %>
                         <% } %>
                         <p><%= total_price %></p>

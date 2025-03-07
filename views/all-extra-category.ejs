@@ -1,41 +1,74 @@
 <%- include('header'); -%>
 
+<style>
+  @media (max-width: 768px) {
+    .header-search-container {
+      max-width: 100% !important;
+    }
+  }
+
+  ::placeholder {
+    color: #9c9b9b !important;
+  }
+</style>
+
 <!-- Breadcrumb -->
 <div class="mb-4 fs-5 rounded p-2 border-bottom py-4">
   <div class="container">
     <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
-      <ol class="breadcrumb m-0">
+      <div class="w-100 p-2 p-lg-0">
+        <div class="position-relative d-lg-flex align-items-center flex-grow-1 header-search-container"
+          style="max-width: 40%;">
+          <div class="search d-flex w-100">
+            <input class="form-control bg-transparent rounded-2 nav-search py-2"
+              style="border-color: #1A63A6; padding-right: 50px;" type="search" placeholder="Search Categories"
+              aria-label="Search" id="search-box" name="q" autocomplete="off" />
+            <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
+              style="right: 0%;" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="category-list" id="category-list" style="display: none;">
+          <% for (var i = 0; i < extraCat.length; i++) { %>
+          <a href="/product/<%= extraCat[i].extra_cat_id %>?name=<%= extraCat[i].extra_cat_name %>"
+            class="fs-6 w-100 py-1 d-flex align-items-center justify-content-between mb-2 category-item"
+            data-name="<%= extraCat[i].extra_cat_name %>" type="button" id="dropdown-btn">
+            <%= extraCat[i].extra_cat_name %>
+          </a>
+          <% } %>
+        </div>
+      </div>
+      <!-- <ol class="breadcrumb m-0">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item">
           <a href="/all-category">All Categories</a>
         </li>
 
-      </ol>
+      </ol> -->
     </nav>
   </div>
 </div>
 
 <!-- Categories Section -->
 <div class="container mb-5">
-  <h1 class="fs-4 fw-medium mb-5" style="color: #1a63a6">Popular Categories</h1>
+  <h1 class="fs-4 fw-medium mb-5" style="color: #1a63a6">Popular Categories </h1>
   <div class="row row-cols-2 row-cols-md-3 row-cols-md-6" id="categoryContainer">
-    <% for (var i=0; i < (extraCat.length < 100 ? extraCat.length : 100); i++) {%>
-    <a href="/product/<%= extraCat[i].extra_cat_id  %>?name=<%= extraCat[i].extra_cat_name %>">
+    <!-- <% if (Array.isArray(trendingCat)) { %>
+    <% for (var i = 0; i < trendingCat.length; i++) { %>
+    <a href="/product/<%= trendingCat[i].extra_cat_id %>?name=<%= trendingCat[i].extra_cat_name %>">
       <div class="col mb-5">
         <div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
           <div style="height: 20rem">
-            <img src="<%= extraCat[i].extra_cat_image_url %>" class="card-img h-100 rounded-2"
-              style="object-fit: cover" />
-          </div>
-          <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
-            <h5 class="card-title text-white text-center">
-              <%= extraCat[i].extra_cat_name %>
-            </h5>
+            <img src="<%= trendingCat[i].extra_cat_image_url %>" alt="<%= trendingCat[i].extra_cat_name %>">
           </div>
         </div>
       </div>
     </a>
     <% } %>
+    <% } %> -->
+
   </div>
   <div class="text-center">
     <button id="seeMoreBtn" class="btn btn-primary">See More</button>
@@ -43,59 +76,100 @@
 </div>
 
 <!-- Add this script to your HTML -->
+<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script>
   $(document).ready(function () {
-    var extraCat = [];
-    var currentCategoryIndex = 100;
-    var categoriesPerPage = 20;
-    var extraCat_length = 100;
-    currentCategoryIndex = (currentCategoryIndex >= extraCat_length) ? extraCat_length : currentCategoryIndex;
+    let extraCat = [];
+    let currentCategoryIndex = 100;
+    const categoriesPerPage = 20;
 
-    function loadCategories() {
-      for (var i = 0;
-        (i < categoriesPerPage) && (currentCategoryIndex < extraCat.length); i++) {
-        console.log('Current Index: ', currentCategoryIndex + i);
-        var category = extraCat[currentCategoryIndex + i];
-        var categoryHtml = `
-						<a href="/product/${category.extra_cat_id}">
-								<div class="col mb-5">
-										<div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
-										  <div style="height: 20rem">
-										    <img src="${category.extra_cat_image_url}" class="card-img h-100 rounded-2" style="object-fit: cover" />
-										  </div>
-										  <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
-										    <h5 class="card-title text-white text-center">${category.extra_cat_name}</h5>
-										  </div>
-										</div>
-								</div>
-						</a>
-				`;
-        $("#categoryContainer").append(categoryHtml);
-      }
-      if (currentCategoryIndex >= extraCat.length) {
-        $("#seeMoreBtn").hide();
-      }
-      currentCategoryIndex = currentCategoryIndex + categoriesPerPage;
-    }
-
-
-
-    // Handle "See More" button click
-    // Fetch the categories from the server initially
+    // Fetch categories initially
     $.get('/api/all-extra-category', function (data) {
       extraCat = data.extraCat;
-      extraCat_length = extraCat.length;
       loadCategories();
     });
 
-    // Handle "See More" button click
+    // Load Categories
+    function loadCategories() {
+      let categoryContainer = $("#categoryContainer");
+      for (let i = 0; i < categoriesPerPage && currentCategoryIndex < extraCat.length; i++) {
+        let category = extraCat[currentCategoryIndex + i];
+        categoryContainer.append(createCategoryHTML(category));
+      }
+      currentCategoryIndex += categoriesPerPage;
+      if (currentCategoryIndex >= extraCat.length) $("#seeMoreBtn").hide();
+    }
+
+    // Create Category HTML
+    function createCategoryHTML(category) {
+      return `
+        <a href="/product/${category.extra_cat_id}">
+          <div class="col mb-5">
+            <div class="card rounded-2 bg-transparent overlay-container" style="border-color: #1a63a6">
+              <div style="height: 20rem">
+                <img src="${category.extra_cat_image_url}" class="card-img h-100 rounded-2" style="object-fit: cover" />
+              </div>
+              <div class="rounded-2 position-absolute overlay d-flex justify-content-center align-items-end pb-3">
+                <h5 class="card-title text-white text-center">${category.extra_cat_name}</h5>
+              </div>
+            </div>
+          </div>
+        </a>`;
+    }
+
+    // Handle "See More" Button Click
     $("#seeMoreBtn").on("click", function () {
       loadCategories();
     });
+
+    // Search Functionality with Debouncing
+    let debounceTimer;
+    $("#search-box").on("input", function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const searchTerm = this.value.trim().toLowerCase();
+        if (searchTerm.length > 0) {
+          filterCategories(searchTerm);
+        } else {
+          $("#category-list").hide();
+        }
+      }, 300);
+    });
+
+    // Filter and Show Matching Categories
+    function filterCategories(searchTerm) {
+      let filteredCategories = extraCat.filter(cat =>
+        cat.extra_cat_name.toLowerCase().includes(searchTerm)
+      );
+
+      let categoryList = $("#category-list");
+      categoryList.empty();
+
+      if (filteredCategories.length > 0) {
+        filteredCategories.forEach(category => {
+          categoryList.append(`<a href="/product/${category.extra_cat_id}" 
+            class="fs-6 w-100 py-1 d-flex align-items-center justify-content-between mb-2 category-item"
+            data-name="${category.extra_cat_name}">
+            ${category.extra_cat_name}
+
+          </a>`);
+        });
+        categoryList.show();
+      } else {
+        categoryList.hide();
+      }
+    }
+
+    // Highlight Matching Text
+    function highlightMatch(text, searchTerm) {
+      let regex = new RegExp(`(${searchTerm})`, "gi");
+      return text.replace(regex, "<span style='background-color:yellow;'>$1</span>");
+    }
   });
 </script>
+
 
 
 <%- include('footer'); -%>
