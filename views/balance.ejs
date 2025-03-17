@@ -4,8 +4,19 @@
   <%- include('dashboard-topbar'),{menuId:menuId}; -%>
 
   <style>
-    .active {
-      background-color: transparent !important;
+    #totalBalance.active {
+      background-color: #1a63a6 !important;
+      border: 1px solid #000 !important;
+    }
+
+    #dueBalance.active {
+      background-color: #ffd166 !important;
+      border: 1px solid #072542 !important;
+    }
+
+    #withdrawBalance.active {
+      background-color: #06d6a0 !important;
+      border: 1px solid #072542 !important;
     }
 
     .modal {
@@ -24,14 +35,55 @@
   <% } %>
 
   <div class="my-5 px-5 d-flex flex-column">
-    <div style="align-self: flex-end" class="mb-3">
+    <!-- <div style="align-self: flex-end" class="mb-3">
       <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
         class="border-0 rounded-3 fw-bold py-3 px-4 add-btn">
         Custom Filter
       </button>
-    </div>
+    </div> -->
     <!-- Balance Section -->
-    <div class="rounded linear-background text-black mb-5">
+    <div class="px-5 flex-grow-1 py-5" id="nav-tab" role="tablist">
+      <div class="row-cols-sm-12 mb-5 row row-cols-1 row-cols-lg-5 gap-lg-5 gap-2 align-items-stretch">
+        <div class="col-12 col-lg border rounded p-3" id="totalBalance" data-bs-toggle="tab"
+          data-bs-target="#total-balance"
+          style="background-color: #1a63a6; height: 120px; color: #fff; cursor: pointer;">
+          <p class="py-2 m-0">Total Balance</p>
+          <p class="py-2 m-0"><%= ((balance.length> 0) ? (balance[0].own_balance *
+                      currRate).toFixed(2) : "0") %> <%= currencyCode %></p>
+        </div>
+
+        <div class="col-12 col-lg border rounded p-3" id="dueBalance" data-bs-toggle="tab" data-bs-target="#due-balance"
+          style="background-color: #ffd166; height: 120px; color:black">
+          <p class="py-2 m-0">Due Balance</p>
+          <p class="py-2 m-0"><%= ((balance.length> 0) ? (balance[0].due_payment *
+                      currRate).toFixed(2) : "0") %> <%= currencyCode %></p>
+        </div>
+
+        <div class="col-12 col-lg border rounded p-3" id="withdrawBalance" data-bs-toggle="tab"
+          data-bs-target="#withdraw" style="background-color: #06d6a0; height: 120px ; color:black">
+          <p class="py-2 m-0">Withdraw</p>
+          <p class="py-2 m-0"><%= ((balance.length> 0) ? (balance[0].withdraw *
+                      currRate).toFixed(2) : "0") %> <%= currencyCode %></p>
+        </div>
+
+        <div class="text-white col-12 border rounded p-3 col-lg" style="background-color: #fff;">
+          <div class="mb-2">
+            <button type="button" class="border-0 rounded-5 py-2 fs-6 px-4 withdraw-btn text-white"
+              style="background-color: #ef476f;" data-bs-toggle="modal" data-bs-target="#withDrawMoneyModal">
+              Withdraw
+            </button>
+          </div>
+          <div class="mb-2">
+            <button type="button" class="border-0 rounded-5 py-2 fs-6 px-4 add-btn text-white"
+              style="background-color: #ef476f;" data-bs-toggle="modal" data-bs-target="#addMoneyModal">
+              Add Balance
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- <div class="rounded linear-background text-black mb-5">
       <div
         class="d-flex justify-content-evenly align-items-center row-gap-4 text-white rounded-3 py-5 px-3 row row-cols-3"
         style="
@@ -89,7 +141,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- tab content part -->
     <div class="tab-content w-100" id="nav-tabContent">

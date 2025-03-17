@@ -34,14 +34,17 @@ exports.products = async (req, res) => {
                 (err2, res2) => {
                   if (!err2) {
                     var images = res2.map((image) => {
-                      image.product_id = crypto.smallEncrypt(image.product_id);
+                      // image.product_id = crypto.smallEncrypt(image.product_id);
+
+                      image.product_id = image.product_id;
+
                       return image;
                     });
 
                     var products = res1.map((product) => {
                       // product.product_id = crypto.smallEncrypt(
                       product.product_id;
-                      // );
+
                       return product;
                     });
 

@@ -138,10 +138,6 @@ exports.manufacturerHome = async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   } else {
-    res.render("loadingHome", {
-      ogImage: "https://admin.save71.com/images/logo-og.webp",
-      ogTitle: "Save71 Connects You and the World through Business.",
-      ogUrl: "https://admin-save71.lens-ecom.store",
-    });
+    res.redirect("/login");
   }
 };

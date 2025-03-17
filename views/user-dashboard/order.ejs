@@ -1,4 +1,5 @@
 <%- include('../header-one'),{menuId:menuId}; -%>
+
 <!-- Main Body Section -->
 <div class="w-100 bg-light">
   <!-- Header Section -->
@@ -37,8 +38,51 @@
 
 
   <!-- tab section -->
-  <div class=" my-5 px-2 mt-5">
-    <nav class="mb-4 w-100 px-lg-5 py-5 py-lg-0 overflow-x-auto">
+  <div class=" my-3 px-2">
+    <nav class="mb-4 w-100 px-lg-5 py-1 py-lg-0 overflow-x-auto">
+
+      <div class="px-3 flex-grow-1 py-1">
+        <div
+          class="row-cols-sm-12 mb-5 row row-cols-1 row-cols-lg-2 gap-lg-1 gap-2 align-items-center products-tab d-flex flex-column"
+          id="nav-tab" role="tablist">
+
+          <a class="nav-link active col-12 col-lg-6 border rounded p-1" id="nav-description-tab" data-bs-toggle="tab"
+            data-bs-target="#review-order" type="button" style="height: 50px; text-align: center">
+            <p class="py-2 m-0">Pending [ <%= review %> ]</p>
+
+          </a>
+
+          <a class="nav-link col-12 col-lg-6 border rounded p-1" id="nav-reviews-tab" data-bs-toggle="tab"
+            data-bs-target="#new-order" type="button" style="height: 50px; text-align: center"">
+            <p class=" py-2 m-0">Accept (<%= orderCount[2] %>) [<%= (totalPrice[3] * currRate).toFixed(2) %>
+            <%= currencyCode %> ]</p>
+
+          </a>
+
+          <a class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab" data-bs-target="#accept-order"
+            type="button" style="height: 50px; text-align: center">
+            <p class=" py-2 m-0">Shipped (<%= orderCount[3] %>) [<%= (totalPrice[0] * currRate).toFixed(2) %>
+              <%= currencyCode %> ]</p>
+
+          </a>
+
+          <a class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab" data-bs-target="#confirmed-order"
+            type="button" style="height: 50px; text-align: center">
+            <p class="py-2 m-0">Completed (<%= orderCount[0] %>) [<%= (totalPrice[1] * currRate).toFixed(2) %>
+              <%= currencyCode %> ]</p>
+
+          </a>
+
+          <a class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab" data-bs-target="#rejected-order"
+            type="button" style="height: 50px; text-align: center">
+            <p class="py-2 m-0">Cancel (<%= orderCount[1] %>) [<%= (totalPrice[1] * currRate).toFixed(2) %>
+              <%= currencyCode %> ]</p>
+
+          </a>
+
+        </div>
+
+      </div>
 
       <div class="row">
         <div class="col-sm-3 text-start">
@@ -60,7 +104,7 @@
         </div>
       </div>
 
-      <div class="d-flex gap-2 fs-6 products-tab " id="nav-tab" role="tablist">
+      <!-- <div class="d-flex gap-2 fs-6 products-tab " id="nav-tab" role="tablist">
         <a class="nav-link active btn p-2 px-3" id="nav-description-tab" data-bs-toggle="tab"
           data-bs-target="#review-order" type="button">
           Pending (<%= review %>)
@@ -84,12 +128,8 @@
           Cancel (<%= orderCount[1]  %>) </br> [<%= (totalPrice[1] * currRate).toFixed(2) %>
           <%= currencyCode  %> ]
         </a>
-        <!-- <a class="nav-link btn p-2 px-3" id="nav-questions-tab" data-bs-toggle="tab" data-bs-target="#returned-order"
-          type="button">
-          Returned (<%= orderCount[4]  %>) </br> [<%= (totalPrice[4] * currRate).toFixed(2) %>
-          <%= currencyCode  %> ]
-        </a> -->
-      </div>
+       
+      </div> -->
 
     </nav>
     <div class="tab-content w-100 px-5" id="nav-tabContent">
@@ -130,7 +170,7 @@
                   <% if (order[i].in_cart == 0) { %>
                   <% var oID=0 %>
                   <% if (order[i].request_review==1 && order[i].order_status==3) { %>
-                  <tr>
+                  <tr class="order">
 
                     <!-- <td style="vertical-align: middle;">
                       <label class="checkbox-wrap checkbox-primary m-2">
@@ -138,11 +178,11 @@
                         <span class="checkmark"></span>
                       </label>
                     </td> -->
-                    <td style="vertical-align: middle;">
+                    <td class="order_id" style="vertical-align: middle;">
                       <%= order[i].order_id %>
                     </td>
 
-                    <td style="vertical-align: middle;">
+                    <td id="order_date" style="vertical-align: middle;">
                       <%= order[i].placed_date.toISOString().split('T')[0] %></td>
                     <!-- <td style="vertical-align: middle;">
                       <%= order[i].delivery_date.toISOString().split('T')[0] %></td> -->
@@ -355,14 +395,14 @@
                     <!-- <% if (order[i].in_cart == 0) { %>
                     <% var oID=0 %> -->
                     <% if (order[i].order_status==3 && order[i].in_cart == 0 && order[i].request_review==0 && orderCount[2]) { %>
-                    <tr>
+                    <tr class="order">
 
 
-                      <td style="vertical-align: middle;">
+                      <td class="order_id" style="vertical-align: middle;">
                         <%= order[i].order_id %>
                       </td>
 
-                      <td style="vertical-align: middle;">
+                      <td id="order_date" style="vertical-align: middle;">
                         <%= order[i].placed_date.toISOString().split('T')[0] %></td>
                       <!-- <td style="vertical-align: middle;">
                         <%= order[i].delivery_date.toISOString().split('T')[0] %></td> -->
@@ -550,14 +590,14 @@
                     <!-- <% if (order[i].in_cart == 0) { %>
                     <% var oID=0 %> -->
                     <% if (order[i].order_status==4 && order[i].request_review==0) { %>
-                    <tr>
+                    <tr class="order">
 
 
-                      <td style="vertical-align: middle;">
+                      <td class="order_id" style="vertical-align: middle;">
                         <%= order[i].order_id %>
                       </td>
 
-                      <td style="vertical-align: middle;">
+                      <td id="order_date" style="vertical-align: middle;">
                         <%= order[i].placed_date.toISOString().split('T')[0] %></td>
                       <!-- <td style="vertical-align: middle;">
                         <%= order[i].delivery_date.toISOString().split('T')[0] %></td> -->
@@ -745,14 +785,14 @@
                     <!-- <% if (order[i].in_cart == 0) { %>
                     <% var oID=0 %> -->
                     <% if (order[i].order_status==1 && order[i].request_review==0 && orderCount[0]) { %>
-                    <tr>
+                    <tr class="order">
 
 
-                      <td style="vertical-align: middle;">
+                      <td class="order_id" style="vertical-align: middle;">
                         <%= order[i].order_id %>
                       </td>
 
-                      <td style="vertical-align: middle;">
+                      <td id="order_date" style="vertical-align: middle;">
                         <%= order[i].placed_date.toISOString().split('T')[0] %></td>
                       <td style="vertical-align: middle;">
                         <%= order[i].complete_date ? order[i].complete_date.toISOString().split('T')[0] : 'null' %>
@@ -929,14 +969,14 @@
                     <!-- <% if (order[i].in_cart == 0) { %>
                                         <% var oID=0 %> -->
                     <% if (order[i].order_status==2 && order[i].request_review==0 && orderCount[1]) { %>
-                    <tr>
+                    <tr class="order">
 
 
-                      <td style="vertical-align: middle;">
+                      <td class="order_id" style="vertical-align: middle;">
                         <%= order[i].order_id %>
                       </td>
 
-                      <td style="vertical-align: middle;">
+                      <td id="order_date" style="vertical-align: middle;">
                         <%= order[i].placed_date.toISOString().split('T')[0] %></td>
                       <!-- <td style="vertical-align: middle;">
                         <%= order[i].delivery_date.toISOString().split('T')[0] %></td> -->
@@ -1154,14 +1194,14 @@
                     <!-- <% if (order[i].in_cart == 0) { %>
                               <% var oID=0 %> -->
                     <% if (order[i].order_status==5 && order[i].request_review==0) { %>
-                    <tr>
+                    <tr class="order">
 
 
-                      <td style="vertical-align: middle;">
+                      <td class="order_id" style="vertical-align: middle;">
                         <%= order[i].order_id %>
                       </td>
 
-                      <td style="vertical-align: middle;">
+                      <td id="order_date" style="vertical-align: middle;">
                         <%= order[i].placed_date.toISOString().split('T')[0] %></td>
                       <td style="vertical-align: middle;">
                         <%= order[i].delivery_date.toISOString().split('T')[0] %></td>
@@ -1374,7 +1414,7 @@
       console.log(searchVal)
       $('#review-order, #returned-order, #rejected-order, #confirmed-order, #accepted-order, #new-order').each(function () {
         $(this).find('.order').each(function () {
-          var orderId = $(this).find('#order_id').text();
+          var orderId = $(this).find('.order_id').text();
           console.log(orderId)
           console.log(searchVal, ' - ', orderId, ' | ', orderId.includes(searchVal))
           if (orderId.includes(searchVal)) {

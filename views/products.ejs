@@ -29,8 +29,8 @@
         <div class="d-flex mb-3 align-items-center">
           <!-- Input group with search box and search button -->
 
-          <input type="text" class="form-control" id="search_text" placeholder="Search Number or Order ID"
-            aria-label="Search" style="max-width: 70%;">
+          <input type="text" class="form-control" id="search_text" placeholder="Search by product ID or product name"
+            aria-label="Search" style="max-width: 70%; font-size: 12px;">
 
 
           <!-- View Shop button with margin to separate it from the input group -->
@@ -86,11 +86,11 @@
 
       <% for (var i=0; i < products.length; i++) { %>
       <% if (products[i].quantity !=-1) { %>
-      <div class="d-flex align-items-center mt-0 mb-0 py-0 border-bottom published_product individual_product">
+      <div class="d-flex align-items-center mt-0 mb-0 py-0 border-bottom published_product individual_product px-0">
         <div class="w-100">
-          <div class="d-flex align-items-center justify-content-between py-0 ">
+          <div class="d-flex align-items-center justify-content-between py-0 px-0">
 
-            <div class="container">
+            <div class="container ps-0">
               <div class="row">
                 <div class="col col-md-6 mb-3">
                   <% for (var k = 0; k < images.length; k++) { %>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="fw-medium">
-                    <p class="fs-6 fw-medium">
+                    <p class="fs-6 fw-medium product_name">
                       <% if (products[i].is_branded == 1) { %>
                       <i class="bi bi-patch-check-fill branded_badge"></i>
                       <% } else { %>
@@ -216,7 +216,7 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="fw-medium">
-                    <p class="fs-5 fw-medium">
+                    <p class="fs-5 fw-medium product_name">
                       <%= products[i].product_name %>
                       <% var statName = ['','','Pending', 'Rejected'] %>
                       <span class="badge rounded-pill fs-6 text-bg-danger"><%= statName[products[i].status-1] %></span>
@@ -298,6 +298,8 @@
   $(document).ready(function () {
     // Get the query parameter from the URL
     var urlParams = new URLSearchParams(window.location.search);
+    console.log({ urlParams });
+    console.log("search", window.location.search);
     var queryParam = urlParams.get('pID');
 
     // If query parameter is present, set the search box value and filter products
@@ -328,7 +330,8 @@
       // Filter and show the individual products that match the search value
       $(".individual_product").filter(function () {
         var productId = $(this).find(".product_id").text().toLowerCase();
-        return productId.includes(searchVal);
+        var productName = $(this).find(".product_name").text().toLowerCase();
+        return productId.includes(searchVal) || productName.includes(searchVal);
       }).attr('style', 'display: block !important');
     }
   });

@@ -10,6 +10,11 @@
 
 
 <style>
+  #search-box::placeholder {
+    color: grey !important;
+    opacity: 1;
+  }
+
   /* Adjust button position for mobile */
   @media (max-width: 767px) {
     .search {
@@ -45,7 +50,7 @@
       <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
         <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1">
           Categories
-          <i class="bi bi-chevron-right d-md-none"></i>
+          <i class="bi bi-search d-md-none"></i>
         </h1>
         <div class="dropdown-container w-100 p-2 p-lg-0 all-products-sidebar-dropdown-container">
 
