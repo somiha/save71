@@ -1,4 +1,11 @@
 <%- include('header', {subCat: subCat, mainCat: mainCat, extraCat: extraCat, userImage: userImage});-%>
+<style>
+  #search-box::placeholder {
+    color: grey !important;
+    opacity: 1;
+    font-size: 12px;
+  }
+</style>
 
 <div class="container  mb-5">
   <div class="px-2 px-lg-0 d-flex flex-column mb-5">
@@ -6,7 +13,7 @@
 
       <!-- Sidebar -->
       <div class="sidebar w-25 d-flex flex-column fs-6 all-products-sidebar position-relative">
-        <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1 ps-2">
+        <h1 class="fs-5 mb-lg-4 mb-0 all-products-sidebar-h1 ps-2 d-lg-none">
           Categories
           <i class="bi bi-search d-md-none"></i>
         </h1>
@@ -16,7 +23,7 @@
             style="max-width: 100%;">
             <div class="search d-flex w-100">
               <input class="form-control bg-transparent rounded-2 nav-search py-2"
-                style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Search"
+                style="border-color: #1A63A6; padding-right: 50px" type="search" placeholder="Categories"
                 aria-label="Search" id="search-box" name="q" autocomplete="off" />
               <button class="btn px-3 bg-transparent position-absolute rounded-start-0 rounded-end-2 search-btn h-100"
                 style="right: 0%;" type="submit">

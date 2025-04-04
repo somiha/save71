@@ -12,7 +12,7 @@ exports.favouriteProducts = (req, res) => {
     [sID],
     (err1, fProducts) => {
       res.render("favourite-product", {
-        ogImage: "https://admin.save71.com/images/logo-og.webp",
+        ogImage: "https://admin.saveneed.com/images/logo-og.webp",
         ogTitle: "Save71 Connects You and the World through Business.",
         ogUrl: "https://admin-save71.lens-ecom.store",
         menuId: "shop-owner-fv-products",

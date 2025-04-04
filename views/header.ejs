@@ -28,15 +28,16 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
-  <link rel="icon" sizes="325x325" href="https://save71.com/images/save71_icon.webp">
+  <link rel="icon" sizes="325x325" href="https://saveneed.com/images/save71_icon.webp">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
-  <title>Save 71</title>
+  <title>Save Need</title>
   <style>
     #search_text::placeholder {
       color: grey !important;
       opacity: 1;
+      font-size: 12px;
     }
 
     #search-large::placeholder {
@@ -161,6 +162,12 @@
   .all-category-hide {
     display: none ! important;
   }
+
+  @media screen and (max-width: 768px) {
+    .logo {
+      width: 120px;
+    }
+  }
 </style>
 
 <body class="position-relative min-vh-100">
@@ -170,7 +177,7 @@
         <button class="btn border d-flex d-lg-none" id="sidebar-btn">
           <i class="bi bi-list fs-4"></i>
         </button>
-        <a href="/"><img src="/images/saveneed.png" width="70" height="70" /></a>
+        <a href="/"><img src="/images/saveneed1.png" width="200px" class="logo" /></a>
       </div>
 
       <!-- Search and All Category (visible on large devices) -->
@@ -203,16 +210,16 @@
 
       <!-- Other navigation links -->
       <ul
-        class="column-gap-3 px-0 align-self-center mb-0 d-flex align-items-center justify-content-lg-around fs-3 header-links"
+        class="column-gap-lg-2 px-0 align-self-center mb-0 d-flex align-items-center justify-content-lg-around fs-3 header-links"
         style="max-width: 50%;">
-        <li class="nav-item">
+        <li class="nav-item me-1">
           <a class="nav-link active d-none d-lg-flex align-items-center gap-2" aria-current="page"
             href="<%= login_status? "/dashboard" : "/login"  %>">
             <% // console.log("UImg: ", userImage) %>
             <% if (typeof userImage !== 'undefined' && userImage != 'null' && userImage != null) { %>
             <img src="<%= userImage %>" class="profile-image rounded-circle" alt="Profile Image">
             <% } else { %>
-            <img src="https://save71.com/images/user_header.webp" alt="Profile Image" height="40px" width="40px">
+            <img src="https://saveneed.com/images/user_header.webp" alt="Profile Image" height="40px" width="40px">
             <% } %>
             <p class="m-0 fs-6 hidden-sm" style="color: #1A63A6;"><%= login_status? userName : "Sign In"  %></p>
           </a>
@@ -221,13 +228,13 @@
             <% if (typeof userImage !== 'undefined' && userImage != 'null' && userImage != null) { %>
             <img src="<%= userImage %>" class="profile-image rounded-circle" alt="Profile Image">
             <% } else { %>
-            <img src="https://save71.com/images/user_header.webp" alt="Profile Image" height="40px" width="40px">
+            <img src="https://saveneed.com/images/user_header.webp" alt="Profile Image" height="40px" width="40px">
             <% } %>
             <!-- <img src="./images/placeholder" class="profile-image rounded-circle" alt="Profile Image" style="width:100% ; height: fit-content;"> -->
             <!-- <i class="bi bi-person-circle fs-2"></i> -->
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item me-1">
           <a class="nav-link d-flex gap-2 position-relative cart-btn" href="#">
             <img src="/images/shopping-cart.webp" alt="" srcset="">
             <!-- If no product in cart mute this -->
@@ -240,7 +247,7 @@
         </li>
 
         <!-- Notification -->
-        <li class="nav-item" style="position: relative;">
+        <li class="nav-item me-1" style="position: relative;">
           <a class="nav-link d-flex gap-2 position-relative notification-btn" href="#">
             <i class="bi bi-bell" style="font-size: 22px; color: #1A63A6;"></i>
             <%

@@ -87,8 +87,10 @@
           <div class="">
             <!-- Image section -->
             <div id="imagePreviewContainer"></div>
-            <label for="product_images" class="btn btn-main-outline"
-              onclick="document.getElementById('productImages').click()"><i class="bi bi-upload me-2"></i>Upload Image
+            <p>Upload Multiple Images At a Time</p>
+            <label for="product_images" class="btn btn-main-outline mb-2"
+              onclick="document.getElementById('productImages').click()"><i class="bi bi-upload me-2"></i>Upload
+              Image
               [1:1]</label>
             <input class="form-control" style="display:none;" type="file" name="productImages" id="productImages"
               accept="image/*" multiple required>
@@ -183,6 +185,8 @@
   fileInput.addEventListener('change', function (e) {
     imagePreviewContainer.innerHTML = ''; // Clear previous previews
     var row = document.createElement('div'); // Move row creation inside
+    row.style.display = 'flex';
+    row.style.flexWrap = "wrap"
 
     for (var i = 0; i < e.target.files.length; i++) {
       var file = e.target.files[i];
@@ -190,8 +194,14 @@
 
       reader.onload = (function (fileIndex) {
         return function (event) {
+
+          // Ensure the container has the correct class
+          imagePreviewContainer.className = 'd-flex flex-wrap justify-content-start row';
+
           var column = document.createElement('div');
-          column.className = 'col-md-3 mb-3';
+          column.className = 'col-lg-4 col-md-4 col-sm-6 d-flex flex-column align-items-center mb-3';
+          // var column = document.createElement('div');
+          // column.className = 'col-md-3 mb-3';
 
           var container = document.createElement('div');
           container.className = 'mb-3 d-flex flex-column align-items-center';

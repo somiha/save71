@@ -26,6 +26,11 @@
     .modal-backdrop {
       display: none;
     }
+
+    .add-btn:hover {
+      transform: scale(1.01) translateY(-0.1vw);
+      box-shadow: 0vw 2vw 5vw rgba(0, 0, 0, 0.7);
+    }
   </style>
 
   <% if ( isDuePending ) { %>
@@ -66,16 +71,16 @@
                       currRate).toFixed(2) : "0") %> <%= currencyCode %></p>
         </div>
 
-        <div class="text-white col-12 border rounded p-3 col-lg" style="background-color: #fff;">
+        <div class="text-white col-12 border rounded p-3 col-lg">
           <div class="mb-2">
-            <button type="button" class="border-0 rounded-5 py-2 fs-6 px-4 withdraw-btn text-white"
-              style="background-color: #ef476f;" data-bs-toggle="modal" data-bs-target="#withDrawMoneyModal">
+            <button type="button" class="border-0 rounded-5 py-2 fs-6 px-4 withdraw-btn text-white w-100"
+              style="background-color: #267ecf;" data-bs-toggle="modal" data-bs-target="#withDrawMoneyModal">
               Withdraw
             </button>
           </div>
           <div class="mb-2">
-            <button type="button" class="border-0 rounded-5 py-2 fs-6 px-4 add-btn text-white"
-              style="background-color: #ef476f;" data-bs-toggle="modal" data-bs-target="#addMoneyModal">
+            <button type="button" class="border-0 rounded-5 py-2 fs-6 px-4 add-btn text-white w-100"
+              style="background-color: #267ecf;" data-bs-toggle="modal" data-bs-target="#addMoneyModal">
               Add Balance
             </button>
           </div>

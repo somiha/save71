@@ -180,10 +180,10 @@
               <a href="#" title="Delete this product" onclick="showDeleteConfirmation('<%= products[i].product_id %>')">
                 <i class="bi bi-trash btn rounded-0 border fs-5"></i>
               </a>
-              <a href="/edit_product/<%= encodeURIComponent(products[i].product_id) %>" title="Edit this product"><i
+              <a href="/edit_product/<%= products[i].product_id %>" title="Edit this product"><i
                   class="bi bi-pencil btn rounded-0 border fs-5"></i></a>
-              <a href="/unpublish_product/<%= encodeURIComponent(products[i].product_id) %>"
-                title="Unpublish this product"><i class="bi bi-eye-slash text-white btn rounded-0 border fs-5"
+              <a href="/unpublish_product/<%= products[i].product_id %>" title="Unpublish this product"><i
+                  class="bi bi-eye-slash text-white btn rounded-0 border fs-5"
                   style="background-color: #1A63A6;"></i></a>
             </div>
           </div>
@@ -216,17 +216,17 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="fw-medium">
-                    <p class="fs-5 fw-medium product_name">
+                    <p class="fs-6 fw-medium product_name">
                       <%= products[i].product_name %>
                       <% var statName = ['','','Pending', 'Rejected'] %>
                       <span class="badge rounded-pill fs-6 text-bg-danger"><%= statName[products[i].status-1] %></span>
                       <% if (!products[i].admin_published) { %>
-                      <span class="badge rounded-pill text-bg-secondary fs-6"
+                      <span class="badge rounded-pill" style="font-size: 8px; background-color: #ffd166; color: grey;"
                         title="Admin will review">Unpublished</span>
                       <% } %>
                       <% if (products[i].status != 1) { %>
-                      <span class="badge rounded-pill text-bg-secondary fs-6" title="Admin will review">In
-                        Review</span>
+                      <span class="badge rounded-pill" style="font-size: 8px; background-color: #06d6a0; color: grey;"
+                        title="Admin will review">In Review</span>
                       <% } %>
                     </p>
                     <p class="m-0 d-flex text-secondary product_id" id="<%= i %>_unpublished_pID">Product Id :
@@ -246,10 +246,10 @@
               <a href="#" title="Delete this product" onclick="showDeleteConfirmation('<%= products[i].product_id %>')">
                 <i class="bi bi-trash btn rounded-0 border fs-5"></i>
               </a>
-              <a href="/edit_product/<%= encodeURIComponent(products[i].product_id) %>" title="Edit this product"><i
+              <a href="/edit_product/<%= products[i].product_id %>" title="Edit this product"><i
                   class="bi bi-pencil btn rounded-0 border fs-5"></i></a>
-              <a href="/publish_product/<%= encodeURIComponent(products[i].product_id) %>"
-                title="Publish this product"><i class="bi bi-eye btn-danger btn rounded-0 border fs-5"></i></a>
+              <a href="/publish_product/<%= products[i].product_id %>" title="Publish this product"><i
+                  class="bi bi-eye btn-danger btn rounded-0 border fs-5"></i></a>
             </div>
           </div>
         </div>

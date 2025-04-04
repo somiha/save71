@@ -83,17 +83,17 @@
             <label class="form-label fw-medium text-danger">Product Previous Images</label>
             <div class="d-flex flex-wrap my-2">
               <% for (var i = 0; i < images.length; i++) { %>
-              <div class="d-flex flex-column align-items-center mb-2 mr-2">
+              <div class="d-flex flex-column align-items-center mb-2 mr-2" style="width: 150px;">
                 <img src="<%= images[i].product_image_url %>" width="100px" height="100px" class="align-self-left" />
                 <div class="mt-2">
                   <input type="radio" name="featured_index" value="<%= images[i].id %>"
                     data-product-id="<%= images[i].product_id %>"
                     <%=(images[i].featured_image == 1 ? 'checked' : '')%> />
 
-                  <label class="btn btn-outline-primary"
-                    style="font-size: small; margin-left: 10px; margin-top: 10px;">Feature
+                  <label class="btn btn-outline-primary" style="font-size: small; padding: 3px;">Main
                     Image</label>
-                  <button type="button" class="btn btn-link text-danger" onclick="removeImage('<%= images[i].id %>')">
+                  <button type="button" class="btn btn-link text-danger p-1"
+                    onclick="removeImage('<%= images[i].id %>')">
                     <!-- <span>&times;</span> -->
                     <i class="bi bi-trash-fill"></i>
                   </button>

@@ -15,6 +15,22 @@
       transition: 1s ease-in-out;
       /* Longer transition duration for a smoother effect */
     }
+
+    .products-tab a:hover,
+    .products-tab a.active {
+      color: white;
+      border-color: #1a63a6 !important;
+      background: #1a63a6 !important;
+      /* font-weight: normal !important; */
+    }
+
+    .products-tab a {
+      background-color: #d7edf9 !important;
+    }
+
+    #search_text {
+      font-size: 12px;
+    }
   </style>
 
   <%
@@ -50,30 +66,37 @@ for (var i = 0; i < orders.length; i++) {
           id="nav-tab" role="tablist">
 
           <a href="/orders#newOrder" class="nav-link col-12 col-lg-6 active border rounded p-1" id="nav-description-tab"
-            data-bs-toggle="tab" data-bs-target="#new-order" type="button" style="height: 50px; text-align: center;">
-            <p class="py-2 m-0">New Orders (<%= orderCount[2] %>) [<%= (totalPrice[2] * currRate).toFixed(2) %>
+            data-bs-toggle="tab" data-bs-target="#new-order" type="button"
+            style="height: 70px; text-align: center; border: #1a63a6 2px solid !important">
+            <p class="py-1 m-0">New Orders (<%= orderCount[2] %>)</p>
+            <p class="py-1 m-0">[<%= (totalPrice[2] * currRate).toFixed(2) %>
               <%= currencyCode %>]</p>
 
           </a>
 
           <a href="/orders#accepted-order" class="nav-link col-12 col-lg-6 border rounded p-1" id="nav-reviews-tab"
             data-bs-toggle="tab" data-bs-target="#accepted-order" type="button"
-            style="height: 50px; text-align: center;">
-            <p class="py-2 m-0">Shipped Orders (<%= orderCount[3] %>) [<%= (totalPrice[3] * currRate).toFixed(2) %>
+            style="height: 70px; text-align: center; border: #1a63a6 2px solid !important">
+            <p class="py-1 m-0">Shipped Orders (<%= orderCount[3] %>)</p>
+            <p class="py-1 m-0"> [<%= (totalPrice[3] * currRate).toFixed(2)%>
               <%= currencyCode %>]</p>
 
           </a>
 
           <a href="/orders#confirmed-order" class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab"
-            data-bs-target="#confirmed-order" type="button" style="height: 50px; text-align: center;">
-            <p class="py-2 m-0">Confirmed Orders (<%= orderCount[0] %>) [<%= (totalPrice[0] * currRate).toFixed(2) %>
+            data-bs-target="#confirmed-order" type="button"
+            style="height: 70px; text-align: center; border: #1a63a6 2px solid !important">
+            <p class="py-1 m-0">Confirmed Orders (<%= orderCount[0] %>)</p>
+            <p class="py-1 m-0">[<%= (totalPrice[0] * currRate).toFixed(2) %>
               <%= currencyCode %>]</p>
 
           </a>
 
           <a href="/orders#rejected-order" class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab"
-            data-bs-target="#rejected-order" type="button" style="height: 50px; text-align: center;">
-            <p class="py-2 m-0">Cancelled Orders (<%= orderCount[1] %>) [<%= (totalPrice[1] * currRate).toFixed(2) %>
+            data-bs-target="#rejected-order" type="button"
+            style="height: 70px; text-align: center; border: #1a63a6 2px solid !important">
+            <p class="py-1 m-0">Cancelled Orders (<%= orderCount[1] %>)</p>
+            <p class="py-1 m-0">[<%= (totalPrice[1] * currRate).toFixed(2) %>
               <%= currencyCode %>]</p>
 
           </a>
@@ -85,8 +108,8 @@ for (var i = 0; i < orders.length; i++) {
       <div class="row">
         <div class="col-sm-3 text-start">
           <div class="input-group mb-3">
-            <input type="text" class="form-control w-10" id="search_text" placeholder="Search Order ID"
-              aria-label="Search">
+            <input type="text" class="form-control w-10" id="search_text"
+              placeholder="Search Order ID or Customer Mobile Number" aria-label="Search">
           </div>
         </div>
         <div class="col-sm-6 text-start">
@@ -135,9 +158,12 @@ for (var i = 0; i < orders.length; i++) {
       <!-- new order -->
       <div class="tab-pane fade show active  rounded-3" id="new-order" role="tabpanel" tabindex="0">
         <section class="my-2">
-          <button id="generateCSV1" class="btn btn-primary" style="background-color: #2874a6;">Generate CSV</button>
-          <button id="downloadInvoice1" class="btn btn-primary" style="background-color: #2874a6;">Download
-            Invoice</button>
+          <div class="d-flex gap-2">
+            <button id="generateCSV1" class="btn btn-primary" style="background-color: #2874a6;">Generate CSV</button>
+            <button id="downloadInvoice1" class="btn btn-primary" style="background-color: #2874a6;">Download
+              Invoice</button>
+          </div>
+
           <div class="row">
             <div class="col-md-12">
               <div class="table-wrap individual_order" style="overflow-x: auto;">
@@ -186,7 +212,7 @@ for (var i = 0; i < orders.length; i++) {
                       <td style="vertical-align: middle;">
                         <% if (userInfo[orders[i].user_id]) { %>
                         <p><%= userInfo[orders[i].user_id].user_name %></p>
-                        <p><%= userInfo[orders[i].user_id].phone %></p>
+                        <p class="phone"><%= userInfo[orders[i].user_id].phone %></p>
                         <% } %>
                       </td>
 
@@ -314,7 +340,7 @@ for (var i = 0; i < orders.length; i++) {
                       <td style="vertical-align: middle;">
                         <% if (userInfo[orders[i].user_id]) { %>
                         <p><%= userInfo[orders[i].user_id].user_name %></p>
-                        <p><%= userInfo[orders[i].user_id].phone %></p>
+                        <p class="phone"><%= userInfo[orders[i].user_id].phone %></p>
                         <% } %>
                       </td>
 
@@ -439,7 +465,7 @@ for (var i = 0; i < orders.length; i++) {
                       <td style="vertical-align: middle;">
                         <% if (userInfo[orders[i].user_id]) { %>
                         <p><%= userInfo[orders[i].user_id].user_name %></p>
-                        <p><%= userInfo[orders[i].user_id].phone %></p>
+                        <p class="phone"><%= userInfo[orders[i].user_id].phone %></p>
                         <% } %>
                       </td>
 
@@ -569,7 +595,7 @@ for (var i = 0; i < orders.length; i++) {
                       <td style="vertical-align: middle;">
                         <% if (userInfo[orders[i].user_id]) { %>
                         <p><%= userInfo[orders[i].user_id].user_name %></p>
-                        <p><%= userInfo[orders[i].user_id].phone %></p>
+                        <p class="phone"><%= userInfo[orders[i].user_id].phone %></p>
                         <% } %>
                       </td>
 
@@ -834,8 +860,10 @@ for (var i = 0; i < orders.length; i++) {
         $(this).find('.order').each(function () {
           // Find the order_id within the <td> in the same row
           var orderIdElement = $(this).find('.order_id');
+          var orderPhoneElement = $(this).find('.phone')
           var orderId = orderIdElement.text().toLowerCase().trim();
-          if (orderId.includes(searchVal)) {
+          var orderPhone = orderPhoneElement.text().toLowerCase().trim();
+          if (orderId.includes(searchVal) || orderPhone.includes(searchVal)) {
 
             $(this).show();
           } else {

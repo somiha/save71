@@ -127,7 +127,7 @@ exports.shop_owner_product = async (req, res) => {
                         // return res.send("Under contraction")
 
                         res.render("shop-owner-products", {
-                          ogImage: "https://save71.com/images/logo-og.webp",
+                          ogImage: "https://saveneed.com/images/logo-og.webp",
                           ogTitle:
                             "Save71 Connects You and the World through Business.",
                           ogUrl: "http://localhost:3000",

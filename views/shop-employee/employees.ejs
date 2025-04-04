@@ -25,13 +25,14 @@
             <div class="d-flex flex-row">
                 <a class="btn btn-primary" id="addEmployee" style="background-color: #2874a6; margin-right: 10px;"
                     href="/add-employee">Add Employee</a>
-                <button class="btn btn-secondary" id="copyLoginLink" style="background-color: #5a6268;">Copy Employee
+                <button class="btn btn-secondary" id="copyLoginLink" style="background-color: #5a6268;"
+                    onclick="copyLoginLink()">Copy Employee
                     Login
                     Link</button>
             </div>
 
             <!-- Hidden input to store the login link temporarily -->
-            <input type="text" value="https://save71.com/employee-login" id="employeeLoginLink"
+            <input type="text" value="https://saveneed.com/employee-login" id="employeeLoginLink"
                 style="position: absolute; left: -9999px;">
 
             <!-- Message to show when copied -->
@@ -166,8 +167,11 @@
 <script>
     // Function to copy the login link
     function copyLoginLink() {
+        console.log(1);
+
         // Get the hidden input containing the login link
         var loginLink = document.getElementById("employeeLoginLink");
+        console.log(loginLink);
 
         // Select the text field
         loginLink.select();

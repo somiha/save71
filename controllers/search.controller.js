@@ -120,7 +120,7 @@ exports.search = async (req, res) => {
                   }
                 });
                 res.render("search", {
-                  ogImage: "https://admin.save71.com/images/logo-og.webp",
+                  ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                   ogTitle:
                     "Save71 Connects You and the World through Business.",
                   ogUrl: "https://admin-save71.lens-ecom.store",

@@ -28,7 +28,7 @@ exports.edit_product = async (req, res) => {
       var userImage = crypto.decrypt(req.cookies.userImage || "");
       var userName = crypto.decrypt(req.cookies.userName);
       var pID = req.params.id;
-      var usepID = crypto.smallDecrypt(pID);
+      var usepID = pID;
       db.query(
         "SELECT * FROM `orders` INNER JOIN `order_details` ON `orders`.`order_id` = `order_details`.`order_id` INNER JOIN `products` ON `products`.`product_id` = `order_details`.`product_id` WHERE `orders`.`user_id` = ? AND `orders`.`in_cart` = 1 ORDER BY `orders`.`order_id` DESC",
         [uID],
@@ -89,7 +89,7 @@ exports.edit_product = async (req, res) => {
 
                                   res.render("edit-product", {
                                     ogImage:
-                                      "https://admin.save71.com/images/logo-og.webp",
+                                      "https://admin.saveneed.com/images/logo-og.webp",
                                     ogTitle:
                                       "Save71 Connects You and the World through Business.",
                                     ogUrl:
@@ -187,11 +187,11 @@ exports.edit_product = async (req, res) => {
 //       if (req.files) {
 //         var pic_urls = req.files["productImages"]
 //           ? req.files["productImages"].map(
-//               (file) => "https://save71.com/images/products/" + file.filename
+//               (file) => "https://saveneed.com/images/products/" + file.filename
 //             )
 //           : [];
 //         var video_url = req.files["product_video"]
-//           ? "https://save71.com/images/products/" +
+//           ? "https://saveneed.com/images/products/" +
 //             req.files["product_video"][0].filename
 //           : null;
 //       }
@@ -424,11 +424,12 @@ exports.edit_productPost = async (req, res) => {
 
           var pic_urls = req.files["productImages"]
             ? req.files["productImages"].map(
-                (file) => "https://save71.com/images/products/" + file.filename
+                (file) =>
+                  "https://saveneed.com/images/products/" + file.filename
               )
             : [];
           var video_url = req.files["product_video"]
-            ? "https://save71.com/images/products/" +
+            ? "https://saveneed.com/images/products/" +
               req.files["product_video"][0].filename
             : null;
 

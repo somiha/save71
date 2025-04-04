@@ -102,7 +102,7 @@ exports.manufacturerHome = async (req, res) => {
 
                 // INNER JOIN `extra_cat` ON `products`.`product_cat_id` = `extra_cat`.`extra_cat_id`
                 res.render("manufacturerHome", {
-                  ogImage: "https://admin.save71.com/images/logo-og.webp",
+                  ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                   ogTitle:
                     "Save71 Connects You and the World through Business.",
                   ogUrl: "https://admin-save71.lens-ecom.store",

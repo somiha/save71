@@ -107,7 +107,7 @@ exports.cart_product = async (req, res) => {
       });
 
       res.render("cart-product", {
-        ogImage: "https://save71.com/images/logo-og.webp",
+        ogImage: "https://saveneed.com/images/logo-og.webp",
         ogTitle: "Save71 Connects You and the World through Business.",
         ogUrl: "http://localhost:3000",
         currRate,

@@ -70,7 +70,7 @@ exports.myEmployees = async (req, res) => {
 
       // Render the page with the fetched employees data
       res.render("shop-employee/employees", {
-        ogImage: "https://admin.save71.com/images/logo-og.webp",
+        ogImage: "https://admin.saveneed.com/images/logo-og.webp",
         ogTitle: "Save71 Connects You and the World through Business.",
         ogUrl: "https://admin-save71.lens-ecom.store",
         menuId: "shop-owner-employee",
@@ -280,7 +280,7 @@ exports.updateEmployee = async (req, res) => {
   // If a new image is uploaded, update pic_url
   if (req.files && req.files["image"]) {
     pic_url =
-      "https://save71.com/images/products/" + req.files["image"][0].filename;
+      "https://saveneed.com/images/products/" + req.files["image"][0].filename;
   }
 
   if (!isLogged) {
@@ -384,7 +384,7 @@ exports.getEmployeeLogin = async (req, res) => {
 
     // Render the shop-employee/employee-login view
     res.render("shop-employee/employee-login", {
-      ogImage: "https://admin.save71.com/images/logo-og.webp",
+      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
       ogTitle: "Save71 Connects You and the World through Business.",
       ogUrl: "https://admin-save71.lens-ecom.store",
       cart: cart,
@@ -507,7 +507,7 @@ exports.getEmployeeDashboard = async (req, res) => {
             const employee = res1[0];
 
             res.render("shop-employee/employee-dashboard", {
-              ogImage: "https://admin.save71.com/images/logo-og.webp",
+              ogImage: "https://admin.saveneed.com/images/logo-og.webp",
               ogTitle: "Save71 Connects You and the World through Business.",
               ogUrl: "https://admin-save71.lens-ecom.store",
               currRate,
@@ -584,7 +584,7 @@ exports.products = async (req, res) => {
                     });
 
                     res.render("shop-employee/emp-products", {
-                      ogImage: "https://admin.save71.com/images/logo-og.webp",
+                      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                       ogTitle:
                         "Save71 Connects You and the World through Business.",
                       ogUrl: "https://admin-save71.lens-ecom.store",
@@ -608,7 +608,7 @@ exports.products = async (req, res) => {
             } else {
               // Handle no products case
               res.render("shop-employee/emp-products", {
-                ogImage: "https://admin.save71.com/images/logo-og.webp",
+                ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                 ogTitle: "Save71 Connects You and the World through Business.",
                 ogUrl: "https://admin-save71.lens-ecom.store",
                 currRate,
@@ -698,7 +698,7 @@ exports.uploadOwnProduct = async (req, res) => {
                       return item;
                     });
                     res.render("shop-employee/emp-upload-own-product", {
-                      ogImage: "https://admin.save71.com/images/logo-og.webp",
+                      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                       ogTitle:
                         "Save71 Connects You and the World through Business.",
                       ogUrl: "https://admin-save71.lens-ecom.store",
@@ -780,7 +780,7 @@ exports.uploadOwnProductPost = async (req, res) => {
       if (req.files["productImages"]) {
         console.log("Featured index: ", featured_index);
         picUrls = req.files["productImages"].map(
-          (file) => "https://save71.com/images/products/" + file.filename
+          (file) => "https://saveneed.com/images/products/" + file.filename
         );
         featured_image_index =
           featured_index == undefined ? 0 : parseInt(featured_index);
@@ -791,7 +791,7 @@ exports.uploadOwnProductPost = async (req, res) => {
 
       // console.log("f : ", featured_image_index, " body : ", featured_index)
       var video_url = req.files["product_video"]
-        ? "https://save71.com/images/products/" +
+        ? "https://saveneed.com/images/products/" +
           req.files["product_video"][0].filename
         : null;
 
@@ -918,7 +918,7 @@ exports.uploadBrandProduct = async (req, res) => {
                   return item;
                 });
                 res.render("shop-employee/emp-upload-brand-product", {
-                  ogImage: "https://admin.save71.com/images/logo-og.webp",
+                  ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                   ogTitle:
                     "Save71 Connects You and the World through Business.",
                   ogUrl: "https://admin-save71.lens-ecom.store",
@@ -1209,7 +1209,7 @@ exports.edit_product = async (req, res) => {
 
                                   res.render("shop-employee/emp-edit-product", {
                                     ogImage:
-                                      "https://admin.save71.com/images/logo-og.webp",
+                                      "https://admin.saveneed.com/images/logo-og.webp",
                                     ogTitle:
                                       "Save71 Connects You and the World through Business.",
                                     ogUrl:
@@ -1312,11 +1312,11 @@ exports.edit_product = async (req, res) => {
 //       if (req.files) {
 //         var pic_urls = req.files["productImages"]
 //           ? req.files["productImages"].map(
-//               (file) => "https://save71.com/images/products/" + file.filename
+//               (file) => "https://saveneed.com/images/products/" + file.filename
 //             )
 //           : [];
 //         var video_url = req.files["product_video"]
-//           ? "https://save71.com/images/products/" +
+//           ? "https://saveneed.com/images/products/" +
 //             req.files["product_video"][0].filename
 //           : null;
 //       }
@@ -1543,12 +1543,12 @@ exports.edit_productPost = async (req, res) => {
 
       var pic_urls = req.files["productImages"]
         ? req.files["productImages"].map(
-            (file) => "https://save71.com/images/products/" + file.filename
+            (file) => "https://saveneed.com/images/products/" + file.filename
           )
         : [];
 
       var video_url = req.files["product_video"]
-        ? "https://save71.com/images/products/" +
+        ? "https://saveneed.com/images/products/" +
           req.files["product_video"][0].filename
         : null;
 
@@ -1787,7 +1787,7 @@ exports.selectUploadProduct = async (req, res) => {
                     });
 
                     res.render("shop-employee/emp-selectUploadProduct", {
-                      ogImage: "https://admin.save71.com/images/logo-og.webp",
+                      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                       ogTitle:
                         "Save71 Connects You and the World through Business.",
                       ogUrl: "https://admin-save71.lens-ecom.store",
@@ -1973,7 +1973,7 @@ exports.printDetails = async (req, res, next) => {
     // console.log({ userOrderAndOrderDetails });
 
     return res.status(200).render("shop-employee/emp-new_orders", {
-      ogImage: "https://admin.save71.com/images/logo-og.webp",
+      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
       ogTitle: "Save71 Connects You and the World through Business.",
       ogUrl: "https://admin-save71.lens-ecom.store",
       userImage: userImage,
@@ -2091,7 +2091,7 @@ exports.orders = async (req, res, next) => {
     }
 
     return res.status(200).render("shop-employee/emp-orders", {
-      ogImage: "https://admin.save71.com/images/logo-og.webp",
+      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
       ogTitle: "Save71 Connects You and the World through Business.",
       ogUrl: "https://admin-save71.lens-ecom.store",
       userImage: userImage,
@@ -2168,7 +2168,7 @@ exports.orderDetails = async (req, res) => {
     console.log("Seller Details : ", shop[0]);
     console.log("Order Details : ", orders[0]);
     return res.render("shop-employee/emp-order-details", {
-      ogImage: "https://admin.save71.com/images/logo-og.webp",
+      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
       ogTitle: "Save71 Connects You and the World through Business.",
       ogUrl: "https://admin-save71.lens-ecom.store",
       currRate,
@@ -2699,7 +2699,7 @@ exports.purchase = async (req, res) => {
                       );
                     });
                     res.render("shop-employee/emp-purchase", {
-                      ogImage: "https://admin.save71.com/images/logo-og.webp",
+                      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                       ogTitle:
                         "Save71 Connects You and the World through Business.",
                       ogUrl: "https://admin-save71.lens-ecom.store",
@@ -2834,7 +2834,7 @@ exports.cart_product = async (req, res) => {
       });
 
       res.render("shop-employee/emp-cart-product", {
-        ogImage: "https://save71.com/images/logo-og.webp",
+        ogImage: "https://saveneed.com/images/logo-og.webp",
         ogTitle: "Save71 Connects You and the World through Business.",
         ogUrl: "http://localhost:3000",
         currRate,

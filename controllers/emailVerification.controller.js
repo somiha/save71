@@ -165,7 +165,7 @@ exports.emailVerificationRequest = async (req, res) => {
                         sendMail(res2[0].user_email, otp, "Email Verification");
                         res.render("emailVerification", {
                           ogImage:
-                            "https://admin.save71.com/images/logo-og.webp",
+                            "https://admin.saveneed.com/images/logo-og.webp",
                           ogTitle:
                             "Save71 Connects You and the World through Business.",
                           ogUrl: "https://admin-save71.lens-ecom.store",
@@ -187,7 +187,7 @@ exports.emailVerificationRequest = async (req, res) => {
             // const localTime = helperFunctions.formatTimestampToLocale(res11[0].generate_time)
 
             res.render("emailVerification", {
-              ogImage: "https://admin.save71.com/images/logo-og.webp",
+              ogImage: "https://admin.saveneed.com/images/logo-og.webp",
               ogTitle: "Save71 Connects You and the World through Business.",
               ogUrl: "https://admin-save71.lens-ecom.store",
               verificationStatus: verificationStatus
@@ -238,7 +238,7 @@ exports.emailVerificationRequestByUserId = async (req, res) => {
                         sendMail(res2[0].user_email, otp, "Email Verification");
                         res.render("emailVerification", {
                           ogImage:
-                            "https://admin.save71.com/images/logo-og.webp",
+                            "https://admin.saveneed.com/images/logo-og.webp",
                           ogTitle:
                             "Save71 Connects You and the World through Business.",
                           ogUrl: "https://admin-save71.lens-ecom.store",
@@ -261,7 +261,7 @@ exports.emailVerificationRequestByUserId = async (req, res) => {
             // const localTime = helperFunctions.formatTimestampToLocale(res11[0].generate_time)
 
             res.render("emailVerification", {
-              ogImage: "https://admin.save71.com/images/logo-og.webp",
+              ogImage: "https://admin.saveneed.com/images/logo-og.webp",
               ogTitle: "Save71 Connects You and the World through Business.",
               ogUrl: "https://admin-save71.lens-ecom.store",
               verificationStatus: verificationStatus

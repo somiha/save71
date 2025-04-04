@@ -87,7 +87,7 @@ exports.orders = async (req, res, next) => {
     console.log(orderNotes);
 
     return res.status(200).render("orders", {
-      ogImage: "https://admin.save71.com/images/logo-og.webp",
+      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
       ogTitle: "Save71 Connects You and the World through Business.",
       ogUrl: "https://admin-save71.lens-ecom.store",
       userImage: userImage,
@@ -186,7 +186,7 @@ exports.orders1 = async (req, res, next) => {
     }
 
     return res.status(200).render("orders1", {
-      ogImage: "https://admin.save71.com/images/logo-og.webp",
+      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
       ogTitle: "Save71 Connects You and the World through Business.",
       ogUrl: "https://admin-save71.lens-ecom.store",
       userImage: userImage,

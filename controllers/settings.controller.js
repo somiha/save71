@@ -40,10 +40,10 @@ exports.settings = async (req, res) => {
                       if (!err4) {
                         console.log("IMG : ", res1[0]);
                         res.render("settings", {
-                          ogImage: "https://save71.com/images/logo-og.webp",
+                          ogImage: "https://saveneed.com/images/logo-og.webp",
                           ogTitle:
                             "Save71 Connects You and the World through Business.",
-                          ogUrl: "https://save71.com/",
+                          ogUrl: "https://saveneed.com/",
                           menuId: "shop-owner-settings",
                           name: "Settings & Privacy",
                           info: res1,
@@ -329,7 +329,7 @@ exports.picEdit = (req, res) => {
       res.redirect("/settings");
       return;
     }
-    var pic_url = "https://save71.com/images/userImg/" + req.file.filename;
+    var pic_url = "https://saveneed.com/images/userImg/" + req.file.filename;
     var uID = crypto.decrypt(req.cookies.userId);
     var query = "UPDATE `user` SET `pic_url` = ? WHERE `user`.`user_id` = ?";
     db.query(query, [pic_url, uID], (err1, res1) => {

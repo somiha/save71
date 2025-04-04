@@ -1,5 +1,23 @@
 <%- include('../header-one'),{menuId:menuId}; -%>
 
+<style>
+  .products-tab a:hover,
+  .products-tab a.active {
+    color: white;
+    border-color: #1a63a6 !important;
+    background: #1a63a6 !important;
+    /* font-weight: normal !important; */
+  }
+
+  .products-tab a {
+    background-color: #d7edf9 !important;
+  }
+
+  #search_text {
+    font-size: 12px;
+  }
+</style>
+
 <!-- Main Body Section -->
 <div class="w-100 bg-light">
   <!-- Header Section -->
@@ -47,35 +65,42 @@
           id="nav-tab" role="tablist">
 
           <a class="nav-link active col-12 col-lg-6 border rounded p-1" id="nav-description-tab" data-bs-toggle="tab"
-            data-bs-target="#review-order" type="button" style="height: 50px; text-align: center">
-            <p class="py-2 m-0">Pending [ <%= review %> ]</p>
+            data-bs-target="#review-order" type="button"
+            style="height: 70px; text-align: center; border-left: #1a63a6 5px solid !important">
+            <p class="py-1 m-0">Pending</p>
+            <p class="py-1 m-0">[ <%= review %> ]</p>
 
           </a>
 
           <a class="nav-link col-12 col-lg-6 border rounded p-1" id="nav-reviews-tab" data-bs-toggle="tab"
-            data-bs-target="#new-order" type="button" style="height: 50px; text-align: center"">
-            <p class=" py-2 m-0">Accept (<%= orderCount[2] %>) [<%= (totalPrice[3] * currRate).toFixed(2) %>
-            <%= currencyCode %> ]</p>
+            data-bs-target="#new-order" type="button"
+            style="height: 70px; text-align: center; border-left: #1a63a6 5px solid !important">
+            <p class=" py-1 m-0">Accept (<%= orderCount[2] %>)</p>
+            <p class=" py-1 m-0">[<%= (totalPrice[3] * currRate).toFixed(2) %>
+              <%= currencyCode %> ]</p>
 
           </a>
 
           <a class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab" data-bs-target="#accept-order"
-            type="button" style="height: 50px; text-align: center">
-            <p class=" py-2 m-0">Shipped (<%= orderCount[3] %>) [<%= (totalPrice[0] * currRate).toFixed(2) %>
+            type="button" style="height: 70px; text-align: center; border-left: #1a63a6 5px solid !important">
+            <p class=" py-1 m-0">Shipped (<%= orderCount[3] %>)</p>
+            <p class=" py-1 m-0">[<%= (totalPrice[0] * currRate).toFixed(2) %>
               <%= currencyCode %> ]</p>
 
           </a>
 
           <a class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab" data-bs-target="#confirmed-order"
-            type="button" style="height: 50px; text-align: center">
-            <p class="py-2 m-0">Completed (<%= orderCount[0] %>) [<%= (totalPrice[1] * currRate).toFixed(2) %>
+            type="button" style="height: 70px; text-align: center; border-left: #1a63a6 5px solid !important">
+            <p class="py-1 m-0">Completed (<%= orderCount[0] %>)</p>
+            <p class="py-1 m-0">[<%= (totalPrice[1] * currRate).toFixed(2) %>
               <%= currencyCode %> ]</p>
 
           </a>
 
           <a class="nav-link col-12 col-lg-6 border rounded p-1" data-bs-toggle="tab" data-bs-target="#rejected-order"
-            type="button" style="height: 50px; text-align: center">
-            <p class="py-2 m-0">Cancel (<%= orderCount[1] %>) [<%= (totalPrice[1] * currRate).toFixed(2) %>
+            type="button" style="height: 70px; text-align: center; border-left: #1a63a6 5px solid !important">
+            <p class="py-1 m-0">Cancel (<%= orderCount[1] %>)</p>
+            <p class="py-1 m-0">[<%= (totalPrice[1] * currRate).toFixed(2) %>
               <%= currencyCode %> ]</p>
 
           </a>
@@ -87,7 +112,7 @@
       <div class="row">
         <div class="col-sm-3 text-start">
           <div class="input-group mb-3">
-            <input id="search_text" type="text" class="form-control w-10" placeholder="Search Order ID"
+            <input id="search_text" type="text" class="form-control w-10" placeholder="Search Order ID or Shop Number"
               aria-label="Search">
           </div>
         </div>
@@ -204,7 +229,7 @@
                     <td style="vertical-align: middle;">
 
                       <p><%= order[i].shop_name %></p>
-                      <p><%= order[i].shop_number %></p>
+                      <p class="phone"><%= order[i].shop_number %></p>
 
                     </td>
 
@@ -412,7 +437,7 @@
 
 
                       </td>
-                      <td style="vertical-align: middle;">
+                      <td class="phone" style="vertical-align: middle;">
 
                         <%= order[i].shop_number %>
 
@@ -607,7 +632,7 @@
 
 
                       </td>
-                      <td style="vertical-align: middle;">
+                      <td class="phone" style="vertical-align: middle;">
 
                         <%= order[i].shop_number %>
 
@@ -803,7 +828,7 @@
 
 
                       </td>
-                      <td style="vertical-align: middle;">
+                      <td class="phone" style="vertical-align: middle;">
 
                         <%= order[i].shop_number %>
 
@@ -986,7 +1011,7 @@
 
 
                       </td>
-                      <td style="vertical-align: middle;">
+                      <td class="phone" style="vertical-align: middle;">
 
                         <%= order[i].shop_number %>
 
@@ -1211,7 +1236,7 @@
 
 
                       </td>
-                      <td style="vertical-align: middle;">
+                      <td class="phone" style="vertical-align: middle;">
 
                         <%= order[i].shop_number %>
 
@@ -1415,9 +1440,10 @@
       $('#review-order, #returned-order, #rejected-order, #confirmed-order, #accepted-order, #new-order').each(function () {
         $(this).find('.order').each(function () {
           var orderId = $(this).find('.order_id').text();
+          var orderPhone = $(this).find('.phone').text();
           console.log(orderId)
           console.log(searchVal, ' - ', orderId, ' | ', orderId.includes(searchVal))
-          if (orderId.includes(searchVal)) {
+          if (orderId.includes(searchVal) || orderPhone.includes(searchVal)) {
             $(this).show();
           } else {
             $(this).hide();

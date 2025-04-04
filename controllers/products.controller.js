@@ -49,7 +49,7 @@ exports.products = async (req, res) => {
                     });
 
                     res.render("products", {
-                      ogImage: "https://admin.save71.com/images/logo-og.webp",
+                      ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                       ogTitle:
                         "Save71 Connects You and the World through Business.",
                       ogUrl: "https://admin-save71.lens-ecom.store",
@@ -72,7 +72,7 @@ exports.products = async (req, res) => {
             } else {
               // Handle no products case
               res.render("products", {
-                ogImage: "https://admin.save71.com/images/logo-og.webp",
+                ogImage: "https://admin.saveneed.com/images/logo-og.webp",
                 ogTitle: "Save71 Connects You and the World through Business.",
                 ogUrl: "https://admin-save71.lens-ecom.store",
                 currRate,
@@ -102,7 +102,7 @@ exports.products = async (req, res) => {
 };
 
 exports.del_product = (req, res) => {
-  var pID = crypto.smallDecrypt(req.params.id);
+  var pID = req.params.id;
   var query = "DELETE FROM `products` WHERE `products`.`product_id` = ?";
   // console.log("Delete product id : " + pID);
   db.query(query, [pID], (err1, res1) => {
@@ -135,7 +135,7 @@ exports.del_product = (req, res) => {
 };
 
 exports.unpublish_product = (req, res) => {
-  var product_id = crypto.smallDecrypt(req.params.product_id);
+  var product_id = req.params.product_id;
   db.query(
     "UPDATE `products` SET `quantity` = '-1' WHERE `products`.`product_id` = ?",
     [product_id],
@@ -150,7 +150,7 @@ exports.unpublish_product = (req, res) => {
 };
 
 exports.publish_product = (req, res) => {
-  var product_id = crypto.smallDecrypt(req.params.product_id);
+  var product_id = req.params.product_id;
   db.query(
     "UPDATE `products` SET `quantity` = '0' WHERE `products`.`product_id` = ?",
     [product_id],

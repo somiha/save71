@@ -131,7 +131,7 @@ exports.areaShop = async (req, res) => {
 
       // Render the template securely
       res.render("area-shop", {
-        ogImage: "https://save71.com/images/logo-og.webp",
+        ogImage: "https://saveneed.com/images/logo-og.webp",
         ogTitle: "Save71 Connects You and the World through Business.",
         ogUrl: "http://localhost:3000",
         navId: "area-shop",

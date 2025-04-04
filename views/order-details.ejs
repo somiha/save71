@@ -6,6 +6,11 @@
     display: none;
   }
 
+  .word-break {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
 
   @media print {
     .body {
@@ -171,7 +176,7 @@
                 <% } %>
                 <% } %>
                 <h6
-                  class="fw-6 text-black pt-1 <%= order_details[i].stock_out? " text-decoration-line-through" : "" %>">
+                  class="fw-6 word-break text-black pt-1 <%= order_details[i].stock_out? " text-decoration-line-through" : "" %>">
                   <%= order_details[i].product_name %>
                 </h6>
                 <% if (order_details[i].stock_out === 0 && order_details[0]?.seller_confirm === 0 && order_details[0]?.order_status=== 3 && order_details[0]?.is_paid === 0) { %>
@@ -216,7 +221,7 @@
             </div> -->
 
             <!-- Column 2: Price x quantity and repeat button -->
-            <div class="col-12 col-md-4 p-2">
+            <div class="col-12 col-md-4 p-2 d-flex justify-content-end">
               <div class="fw-6 text-black <%= order_details[i].stock_out ? 'text-decoration-line-through' : '' %>"
                 style="display: flex; align-items: center;">
                 <%= ( (order_details[i].product_total_price / order_details[i].product_quantity) * currRate).toFixed(2) %>
@@ -261,8 +266,9 @@
             </div>
 
             <!-- Column 3: Total price -->
-            <div class="col-12 col-md-2 p-2">
-              <p class="fw-6 text-black <%= order_details[i].stock_out? " text-decoration-line-through" : "" %>">
+            <div class="col-12 col-md-2 p-2 d-flex justify-content-end">
+              <p class="fw-6 text-black <%= order_details[i].stock_out? 'text-decoration-line-through' : '' %>"
+                style="display: flex; align-items: center; margin: 0;">
                 <%= (order_details[i].product_total_price * currRate).toFixed(2) %>
               </p>
             </div>
@@ -329,10 +335,14 @@
             </div>
           </div>
 
+
+
           <div class="d-flex justify-content-between align-items-center border-bottom">
             <div>
               <p class="fs-6 text-black">Delivery Charge </p>
             </div>
+
+
             <form method="POST" action="/update-user-order-delivery-change" style="display: flex; align-items: center;">
               &nbsp;
               <input type="number" min="0" class="color1" name="charge"
